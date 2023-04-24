@@ -3,9 +3,15 @@ library(lubridate)
 library(jsonlite)
 library(tidyverse)
 
+# Indicamos el directorio de trabajo (debes indicarlo tú, está vacío por defecto)
+wd <- ""
+
+setwd(wd)
+
 # URL del archivo que deseamos descargar
 url <- url("https://valencia.opendatasoft.com/api/explore/v2.1/catalog/datasets/estacions-contaminacio-atmosferiques-estaciones-contaminacion-atmosfericas/exports/json?lang=es")
 
+# Leemos los datos
 est_contamin <- stream_in(url)
 
 # Limpiamos los datos
@@ -29,4 +35,8 @@ if (file.exists(accum_path)){
   accum_est_contamin <- est_contamin_clean
 }
 
+# Guardamos los datos 
 save(accum_est_contamin, file = accum_path)
+
+# Cerramos la sesión de R
+q()

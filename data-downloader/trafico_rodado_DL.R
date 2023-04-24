@@ -3,9 +3,15 @@ library(lubridate)
 library(jsonlite)
 library(tidyverse)
 
+# Indicamos el directorio de trabajo
+wd <- ""
+
+setwd(wd)
+
 # URL del archivo que deseamos descargar
 url <- url("https://valencia.opendatasoft.com/api/explore/v2.1/catalog/datasets/estat-transit-temps-real-estado-trafico-tiempo-real/exports/json?lang=es")
 
+# Leemos los datos
 trafico_rodado <- stream_in(url)
 
 labels_estado <- c("Fluido", "Denso", "Congestionado", "Cortado", "Sin datos",
@@ -33,4 +39,8 @@ if (file.exists(accum_path)){
   accum_trafico_rodado <- trafico_rodado_clean
 }
 
+# Guardamos los datos 
 save(accum_trafico_rodado, file = accum_path)
+
+# Cerramos la sesión de R
+q()
