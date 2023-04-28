@@ -22,10 +22,15 @@ labels_estado <- c("Fluido", "Denso", "Congestionado", "Cortado", "Sin datos",
 
 hora_actual <- Sys.time()
 
+# Guardamos datos de los tramos
+# tramos_trafico <- trafico_rodado %>% select(gid, denominacion, idtramo, geo_shape, geo_point_2d)
+# save(tramos_trafico, file = "./data/tramos_trafico.RData")
+
 # Limpiamos los datos
 trafico_rodado_clean <- trafico_rodado
 trafico_rodado_clean$estado <- factor(trafico_rodado$estado, levels = 0:9, labels = labels_estado)
 trafico_rodado_clean$fecha_carga <- ymd_hms(hora_actual)
+trafico_rodado_clean <- trafico_rodado_clean %>% select(gid, estado, fecha_carga)
 
 # Cargamos los datos acumulados para insertar los nuevos
 accum_path <- "./data/accum_trafico_rodado.RData"

@@ -14,14 +14,18 @@ url <- url("https://valencia.opendatasoft.com/api/explore/v2.1/catalog/datasets/
 # Leemos los datos
 est_contamin <- stream_in(url)
 
+# Guardamos datos de las estaciones
+# estaciones <- est_contamin %>% 
+#   mutate(tipozona = factor(tipozona),
+#          tipoemision = factor(tipoemision)) %>% 
+#   select(objectid:mediciones, globalid:geo_point_2d)
+# save(estaciones, file = "./data/estaciones.RData")
+
 # Limpiamos los datos
 est_contamin_clean <- est_contamin %>% 
-  mutate(nombre = factor(nombre),
-         direccion = factor(direccion),
-         tipozona = factor(tipozona),
-         tipoemision = factor(tipoemision),
-         calidad_ambiental = factor(calidad_ambiental),
-         fecha_carga = ymd_hms(fecha_carga))
+  mutate(calidad_ambiental = factor(calidad_ambiental),
+         fecha_carga = ymd_hms(fecha_carga)) %>%
+  select(objectid, so2:calidad_ambiental)
 
 # Cargamos los datos acumulados para insertar los nuevos
 accum_path <- "./data/accum_est_contamin.RData"
@@ -30,7 +34,6 @@ accum_path <- "./data/accum_est_contamin.RData"
 if (file.exists(accum_path)){
   load(accum_path)
   accum_est_contamin <- rbind(est_contamin_clean, accum_est_contamin)
-  
 } else {
   accum_est_contamin <- est_contamin_clean
 }
