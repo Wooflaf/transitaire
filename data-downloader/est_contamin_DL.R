@@ -28,7 +28,7 @@ est_contamin_clean <- est_contamin %>%
   select(objectid, so2:calidad_ambiental)
 
 # Cargamos los datos acumulados para insertar los nuevos
-accum_path <- "./data/accum_est_contamin.RData"
+accum_path <- "../data/accum_est_contamin.RData"
 
 # Si había datos, los cargamos y añadimos los nuevos. Si no, lo creamos.
 if (file.exists(accum_path)){
