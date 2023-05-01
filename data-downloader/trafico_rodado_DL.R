@@ -23,7 +23,8 @@ labels_estado <- c("Fluido", "Denso", "Congestionado", "Cortado", "Sin datos",
 hora_actual <- Sys.time()
 
 # Guardamos datos de los tramos
-# tramos_trafico <- trafico_rodado %>% select(gid, denominacion, idtramo, geo_shape, geo_point_2d)
+# tramos_trafico <- st_read("https://valencia.opendatasoft.com/api/explore/v2.1/catalog/datasets/estat-transit-temps-real-estado-trafico-tiempo-real/exports/geojson?lang=es") %>% 
+#   select(gid, denominacion, idtramo)
 # save(tramos_trafico, file = "./data/tramos_trafico.RData")
 
 # Limpiamos los datos
