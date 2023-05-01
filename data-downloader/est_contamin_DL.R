@@ -17,10 +17,10 @@ est_contamin <- stream_in(url)
 # Guardamos datos de las estaciones
 
 # estaciones <- st_read("https://valencia.opendatasoft.com/api/explore/v2.1/catalog/datasets/estacions-contaminacio-atmosferiques-estaciones-contaminacion-atmosfericas/exports/geojson?lang=es") %>%
-#   select(-so2:-calidad_ambiental) %>% 
+#   select(-so2:-calidad_ambiental) %>%
 #   mutate(tipozona = factor(tipozona),
 #          tipoemision = factor(tipoemision))
-# save(estaciones_sf, file = "./data/estaciones.RData")
+# save(estaciones, file = "./data/estaciones.RData")
 
 calidad_aire <- c("Buena", "Razonablemente Buena", "Regular",
                   "Desfavorable", "Muy Desfavorable",
