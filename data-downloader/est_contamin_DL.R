@@ -16,7 +16,7 @@ est_contamin <- stream_in(url)
 
 # Guardamos datos de las estaciones
 
-# estaciones <- st_read("https://valencia.opendatasoft.com/api/explore/v2.1/catalog/datasets/estacions-contaminacio-atmosferiques-estaciones-contaminacion-atmosfericas/exports/geojson?lang=es") %>%
+# estaciones <- sf::st_read("https://valencia.opendatasoft.com/api/explore/v2.1/catalog/datasets/estacions-contaminacio-atmosferiques-estaciones-contaminacion-atmosfericas/exports/geojson?lang=es") %>%
 #   select(-so2:-calidad_ambiental) %>%
 #   mutate(tipozona = factor(tipozona),
 #          tipoemision = factor(tipoemision))
@@ -34,12 +34,12 @@ est_contamin_clean <- est_contamin %>%
   select(objectid, so2:calidad_ambiental)
 
 # Cargamos los datos acumulados para insertar los nuevos
-accum_path <- "./data/accum_est_contamin.RData"
+accum_path <- "../data/accum_est_contamin.RData"
 
 # Si había datos, los cargamos y añadimos los nuevos. Si no, lo creamos.
 if (file.exists(accum_path)){
   load(accum_path)
-  repetidos <- intersect(est_contamin_clean, accum_est_contamin)
+  repetidos <- dplyr::intersect(est_contamin_clean, accum_est_contamin)
   repetidos_clean <- repetidos %>% 
     mutate(so2 = NA, no2 = NA, o3 = NA, co = NA, pm10 = NA, pm25 = NA,
            fecha_carga = hora_actual,

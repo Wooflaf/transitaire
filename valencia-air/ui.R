@@ -1,4 +1,5 @@
 ui <- dashboardPage(
+  
   dashboardHeader(title = "Valencia AQ"),
   
   dashboardSidebar(),
@@ -10,7 +11,10 @@ ui <- dashboardPage(
              box(title = "Visualización temporal",
                  width = NULL, solidHeader = TRUE,
                  uiOutput(outputId = "slider"),
+<<<<<<< HEAD
                  uiOutput("speed_value")
+=======
+>>>>>>> fef81847bc943c0bbd1ed71ade18092ea26889e2
              ),
              box(title = "Variable a mostrar",
                  width = NULL, solidHeader = TRUE,
@@ -31,4 +35,3 @@ ui <- dashboardPage(
     )
   )
 )
-

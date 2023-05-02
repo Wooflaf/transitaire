@@ -10,10 +10,10 @@ wd <- ""
 setwd(wd)
 
 #Descargamos los datos 
-url <- GET("https://www.valencia.es/web/guest/valenciaalminut/calidadaireNO2.cors")
+url <- httr::GET("https://www.valencia.es/web/guest/valenciaalminut/calidadaireNO2.cors")
 
 #Los seleccionamos
-datos <- content(url, "text", encoding = "UTF-8")
+datos <- httr::content(url, "text", encoding = "UTF-8")
 sensores <- fromJSON(datos)
 
 
@@ -48,4 +48,4 @@ for (i in 1:length(sensores[[1]])) {
 colnames(sensor_global) <- c("Fechas", nombres_sensores)
 
 #Ponemos el tipo de dato correcto
-sensor_global$Fechas <- dmy(sensor_global$Fechas)
+sensor_global$Fechas <- lubridate::dmy(sensor_global$Fechas)

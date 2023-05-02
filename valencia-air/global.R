@@ -4,6 +4,7 @@ library(leaflet)
 library(shinydashboard)
 library(tidyverse)
 library(lubridate)
+<<<<<<< HEAD
 library(sf)
 
 # Cargamos los datos
@@ -15,10 +16,26 @@ load("../data/tramos_trafico.RData")
 est_contamin <- st_as_sf(left_join(accum_est_contamin, estaciones, by = "objectid"))
 trafico <- st_as_sf(left_join(accum_trafico_rodado, tramos_trafico, by = "gid")) %>% mutate(gid = as.character(gid))
 
+=======
+
+# Cargar los datos de calidad del aire en Valencia
+# air_data <- read.csv("air_data_valencia.csv", header = TRUE)
+
+
+load("../data/accum_est_contamin.RData")
+load("../data/estaciones2.RData")
+
+est_contamin <- left_join(accum_est_contamin, estaciones2, by = c("objectid", "nombre")) %>% 
+  nest(data = -fecha_carga) %>% 
+  arrange(fecha_carga) %>% 
+  mutate(id_hora = row_number()) %>% 
+  unnest(cols = c(fecha_carga, data))
+>>>>>>> fef81847bc943c0bbd1ed71ade18092ea26889e2
 pal <- colorFactor(c("green", "blue", "orange", "red", "darkred", "purple", "black"),
                    levels = c("Buena", "Razonablemente Buena", "Regular",
                               "Desfavorable", "Muy Desfavorable",
                               "Extremadamente Desfavorable", "Sin datos"))
+<<<<<<< HEAD
 
 pal_trafico <- colorFactor(c("green", "blue", "red", "yellow", "yellow", "green", "blue", "red", "yellow", "yellow"),
                    levels = levels(trafico$estado))
@@ -146,3 +163,6 @@ window.LeafletWidget.methods.setRadius = function(layerId, radius){
 '
   ))
 )
+=======
+# trafico_rodado <- left_join(accum_trafico_rodado, tramos_trafico, by = "gid")
+>>>>>>> fef81847bc943c0bbd1ed71ade18092ea26889e2
