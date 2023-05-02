@@ -13,7 +13,7 @@ setwd(wd)
 url <- httr::GET("https://www.valencia.es/web/guest/valenciaalminut/calidadaireNO2.cors")
 
 #Los seleccionamos
-datos <- content(url, "text", encoding = "UTF-8")
+datos <- httr::content(url, "text", encoding = "UTF-8")
 sensores <- fromJSON(datos)
 
 

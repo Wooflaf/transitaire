@@ -12,7 +12,7 @@ library(lubridate)
 load("../data/accum_est_contamin.RData")
 load("../data/estaciones2.RData")
 
-est_contamin <- left_join(accum_est_contamin, estaciones2, by = "objectid") %>% 
+est_contamin <- left_join(accum_est_contamin, estaciones2, by = c("objectid", "nombre")) %>% 
   nest(data = -fecha_carga) %>% 
   arrange(fecha_carga) %>% 
   mutate(id_hora = row_number()) %>% 
