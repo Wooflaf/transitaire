@@ -34,7 +34,7 @@ trafico_rodado_clean$fecha_carga <- ymd_hms(hora_actual)
 trafico_rodado_clean <- trafico_rodado_clean %>% select(gid, estado, fecha_carga)
 
 # Cargamos los datos acumulados para insertar los nuevos
-accum_path <- "./data/accum_trafico_rodado.RData"
+accum_path <- "../data/accum_trafico_rodado.RData"
 
 # Si había datos, los cargamos y añadimos los nuevos. Si no, lo creamos.
 if (file.exists(accum_path)){
