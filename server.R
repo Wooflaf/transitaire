@@ -1,6 +1,10 @@
 # Crear el servidor
 server <- function(input, output) {
   
+  output$fecha <- renderText({
+    str_to_sentence(format(input$time, format = "%A, %e de %B de %Y %H:%M"))
+  })
+  
   air_data_var <- reactive({
     est_contamin %>%
       filter(AirPollutant == input$var) 

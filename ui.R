@@ -7,13 +7,17 @@ ui <- dashboardPage(
     fluidRow(
       leafletjs,
       column(width = 4,
-             box(title = "Visualización temporal",
+             box(title = NULL,
                  width = NULL, solidHeader = TRUE,
-                 sliderInput("time","Time",
+                 tags$style("#fecha {font-size:20px;
+                              font-family:helvetica, sans-serif;}"),
+                 textOutput("fecha"),
+                 sliderInput("time", NULL,
                              min = min(trafico$fecha_carga),
                              max =  max(trafico$fecha_carga),
                              value = min(trafico$fecha_carga), step = 3600,
-                             timezone = "+0000", animate = animationOptions(interval = 1500))
+                             timezone = "+0000", timeFormat = "%d/%m/%Y %H:%M",
+                             animate = animationOptions(interval = 1500))
              ),
              box(title = "Variable a mostrar",
                  width = NULL, solidHeader = TRUE,
