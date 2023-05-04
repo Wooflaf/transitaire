@@ -77,6 +77,46 @@ setShapeStyle <- function( map, data = getMapData(map), layerId,
   leaflet::invokeMethod(map, data, "setStyle", "shape", layerId, style);
 }
 
+setShapeLabel <- function( map, data = getMapData(map), layerId,
+                           label = NULL,
+                           options = NULL
+){
+  options <- c(list(layerId = layerId),
+               options,
+               filterNULL(list(label = label
+               )))
+  # evaluate all options
+  options <- evalFormula(options, data = data)
+  # make them the same length (by building a data.frame)
+  options <- do.call(data.frame, c(options, list(stringsAsFactors=FALSE)))
+  
+  layerId <- options[[1]]
+  label <- options[-1] # drop layer column
+  
+  # typo fixed in this line
+  leaflet::invokeMethod(map, data, "setLabel", "shape", layerId, label);
+}
+
+setCircleMarkerPopup <- function( map, data = getMapData(map), layerId,
+                           popup = NULL,
+                           options = NULL
+){
+  options <- c(list(layerId = layerId),
+               options,
+               filterNULL(list(popup = popup
+               )))
+  # evaluate all options
+  options <- evalFormula(options, data = data)
+  # make them the same length (by building a data.frame)
+  options <- do.call(data.frame, c(options, list(stringsAsFactors=FALSE)))
+  
+  layerId <- options[[1]]
+  popup <- options[-1] # drop layer column
+  
+  # typo fixed in this line
+  leaflet::invokeMethod(map, data, "setPopup", "marker", layerId, popup);
+}
+
 ### JS methods
 leafletjs <-  tags$head(
   # add in methods from https://github.com/rstudio/leaflet/pull/598
@@ -115,6 +155,42 @@ window.LeafletWidget.methods.setRadius = function(layerId, radius){
     var layer = map.layerManager.getLayer("marker", d);
     if (layer){ // or should this raise an error?
       layer.setRadius(radius[i]);
+    }
+  });
+};
+
+window.LeafletWidget.methods.setLabel = function(category, layerId, label){
+  var map = this;
+  if (!layerId){
+    return;
+  } else if (!(typeof(layerId) === "object" && layerId.length)){ // in case a single layerid is given
+    layerId = [layerId];
+  }
+
+  layerId.forEach(function(d,i){
+    var layer = map.layerManager.getLayer(category, d);
+    if (layer){ // or should this raise an error?
+      layer.unbindTooltip();
+      // the object subsetting to get the integer array and casting to string is what I added
+      layer.bindTooltip(label.label[i].toString());
+    }
+  });
+};
+
+window.LeafletWidget.methods.setPopup = function(category, layerId, popup){
+  var map = this;
+  if (!layerId){
+    return;
+  } else if (!(typeof(layerId) === "object" && layerId.length)){ // in case a single layerid is given
+    layerId = [layerId];
+  }
+
+  layerId.forEach(function(d,i){
+    var layer = map.layerManager.getLayer(category, d);
+    if (layer){ // or should this raise an error?
+      layer.unbindPopup();
+      // the object subsetting to get the integer array and casting to string is what I added
+      layer.bindPopup(popup.popup[i].toString());
     }
   });
 };

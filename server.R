@@ -38,8 +38,18 @@ server <- function(input, output) {
     leafletProxy("map") %>%
       setCircleMarkerStyle(layerId = ~objectid,
                            color = ~pal(AQ_index),
+                           data = air_data()
+      ) %>% 
+      setCircleMarkerPopup(layerId = ~objectid,
+                           popup = ~paste0("<strong>Estación:</strong> ", nombre, "<br>",
+                                   "Variable: ", AirPollutant, "<br>",
+                                   "Concentración: ", Concentration, " ", UnitOfMeasurement, "<br>",
+                                   "<strong>Calidad :</strong> ", AQ_index, "<br>",
+                                   "Tipo de zona: ", tipozona, "<br>",
+                                   "Tipo de emisión: ", tipoemision, "<br>"),
                            data = air_data())
   })
+  
   
   observeEvent(traffic_data(),{ 
     # adding day and night section --------------------------------------------
@@ -50,7 +60,8 @@ server <- function(input, output) {
         addTiles() %>%
         setShapeStyle(layerId = ~gid,
                       color = ~pal_trafico(estado),
-                      data = traffic_data())
+                      data = traffic_data()) %>% 
+        setShapeLabel(layerId = ~ gid, label = ~denominacion, data = traffic_data())
       
     } else {
       leafletProxy("map") %>%
