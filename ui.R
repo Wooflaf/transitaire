@@ -9,15 +9,21 @@ ui <- dashboardPage(
       column(width = 4,
              box(title = "Visualización temporal",
                  width = NULL, solidHeader = TRUE,
-                 uiOutput(outputId = "slider"),
-                 uiOutput("speed_value")
+                 sliderInput("time","Time",
+                             min = min(trafico$fecha_carga),
+                             max =  max(trafico$fecha_carga),
+                             value = min(trafico$fecha_carga), step = 3600,
+                             timezone = "+0000", animate = animationOptions(interval = 1500))
              ),
              box(title = "Variable a mostrar",
                  width = NULL, solidHeader = TRUE,
                  selectInput("var", NULL, 
-                             choices = c("AQ_index_all", "SO2", "PM10", "O3",
-                                         "NO2", "NOX as NO2", "CO", "C6H6",
-                                         "NO", "PM2.5")
+                             choices = c("Índice de Calidad del Aire" = "AQ_index_all",
+                                         "Partículas PM2.5" = "PM2.5",
+                                         "Partículas PM10" = "PM10", 
+                                         "NO2 (Dióxido de Nitrógeno)" = "NO2",
+                                         "O3 (Ozono)" = "O3",
+                                         "SO2 (Dióxido de Azufre)" = "SO2")
                  )
              ),
              conditionalPanel(condition = "input.map_marker_click != null",
