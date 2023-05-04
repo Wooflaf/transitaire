@@ -12,12 +12,22 @@ ui <- dashboardPage(
                  tags$style("#fecha {font-size:20px;
                               font-family:helvetica, sans-serif;}"),
                  textOutput("fecha"),
-                 sliderInput("time", NULL,
-                             min = min(trafico$fecha_carga),
-                             max =  max(trafico$fecha_carga),
-                             value = min(trafico$fecha_carga), step = 3600,
-                             timezone = "+0000", timeFormat = "%d/%m/%Y %H:%M",
-                             animate = animationOptions(interval = 1500))
+                 tags$style(
+                   HTML(".slider-container { 
+                        width: 85%; 
+                        margin: 0 auto;
+                        }")
+                 ),
+                 tags$br(),
+                 div(class = "slider-container",
+                     sliderInput("time", NULL,
+                                 min = min(trafico$fecha_carga),
+                                 max =  max(trafico$fecha_carga),
+                                 value = min(trafico$fecha_carga), step = 3600,
+                                 timezone = "+0000", timeFormat = "%d/%m/%Y %H:%M",
+                                 animate = animationOptions(interval = 1500), ticks = F)
+                 )
+                 
              ),
              box(title = "Variable a mostrar",
                  width = NULL, solidHeader = TRUE,
