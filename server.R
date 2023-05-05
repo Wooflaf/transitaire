@@ -84,17 +84,20 @@ server <- function(input, output) {
       layout(showlegend = FALSE) # Ocultar la leyenda de color en plotly
   })
   
-  #Funcion para crear el histograma con los parametros normalizados
-  output$histograma <- renderPlot({
+  #Funcion para crear el grafico de barras apiladas
+  colores <- c("Buena" = "#2E8B57", "Razonablemente  buena" = "darkgreen", "Regular" = "#FF8C00", "Desfavorable" = "#4169E1", "Muy Desfavorable" = "#A9A9A9", "Extremadamente Desfavorable" = "black")
+  
+  output$apilados <- renderPlot({
     shiny::validate(need(input$ID_Estacion2, "Elige una o varias estaciones"))
-    ggplot(datos_diarios_clean %>% group_by(Parametros) %>%
-             mutate(Valores_norm = (Valores - min(Valores)) / (max(Valores) - min(Valores))) %>%
-             filter(Fecha >= "2019-02-06" & Fecha <= "2019-02-09",
-                    Estacion %in% input$ID_Estacion2), aes(x = Parametros, y = Valores_norm)) +
-      labs(x = "Parametros", y = "Valores normalizados") + 
-      theme(legend.position = "none") + 
-      theme_minimal() 
+    ggplot(datos_diarios_clean %>% 
+             filter(Parametros == input$ID_Calidad2, Estacion %in% input$ID_Estacion2), 
+           aes(x = Estacion, y = Valores, fill = Clasificacion)) +
+      geom_bar(stat = "identity") +
+      labs(x = "Estaciones", y = "Valores", fill = "Clasificación") +
+      scale_fill_manual(values = colores) +
+      theme_minimal()
   })
+  
   
   
   # Funcion para crear el grafico de tarta para varias estaciones y todos los parametros
