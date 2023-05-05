@@ -24,10 +24,13 @@ server <- function(input, output) {
   output$map <- renderLeaflet({
     
     # Crear el mapa con Leaflet
-    map <- leaflet() %>%
+    map <- leaflet(options = leafletOptions(minZoom = 13, maxZoom = 16)) %>%
       addTiles() %>% 
       addPolylines(data = trafico, layerId = ~gid) %>% 
-      addCircleMarkers(data = est_contamin, layerId = ~objectid)
+      addCircleMarkers(data = est_contamin, layerId = ~objectid) %>% 
+      setView(lat = "39.469693930673834", lng = "-0.37759126257400377", zoom = 13) %>% 
+      setMaxBounds(lng1 = "-0.5017152868950778", lat1 = "39.55050724348406",
+                   lng2 = "-0.24762442378004983", lat2 = "39.389409229115124")
     
     # Retornar el mapa
     return(map)
