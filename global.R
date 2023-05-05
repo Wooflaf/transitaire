@@ -15,3 +15,10 @@ source("./functions/palettes.R", local = TRUE, encoding = "UTF-8")
 
 # Cargamos las funciones para poder aplicar estilos dinámicamente en leaflet
 source("./functions/leaflet_dynamic_style.R", local = TRUE, encoding = "UTF-8")
+
+####### PARTE SANDRA, WILSON, GEMA
+source("./data-downloader/datos_diarios2.R")
+
+##########
+
+shinyApp(ui, server)
