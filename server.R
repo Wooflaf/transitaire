@@ -27,7 +27,7 @@ server <- function(input, output) {
     map <- leaflet(options = leafletOptions(minZoom = 13, maxZoom = 16, zoomSnap = 0.1)) %>%
       addTiles() %>% 
       addPolylines(data = trafico, layerId = ~gid) %>% 
-      addCircleMarkers(data = est_contamin, layerId = ~objectid) %>% 
+      addAwesomeMarkers(data = est_contamin, layerId = ~objectid) %>% 
       setView(lng = "-0.37219126257400377", lat = "39.468993930673834",  zoom = 13.6) %>% 
       setMaxBounds(lng1 = "-0.5017152868950778", lat1 = "39.55050724348406",
                    lng2 = "-0.24762442378004983", lat2 = "39.389409229115124") %>% 
@@ -40,34 +40,32 @@ server <- function(input, output) {
   
   observeEvent(air_data(), {
     leafletProxy("map") %>%
-      setCircleMarkerStyle(layerId = ~objectid,
-                           color = ~pal(AQ_index),
-                           data = air_data()
-      ) %>% 
-      setCircleMarkerPopup(layerId = ~objectid,
-                           popup = ~ifelse(AirPollutant == "AQ_index_all",
-                                           ifelse(is.na(cause) | AQ_index == "Buena",
-                                                  paste0("<strong>Estación:</strong> ", nombre, "<br>",
-                                                         "<strong>Calidad:</strong> ", AQ_index, "<br>",
-                                                         "<strong>Tipo de zona:</strong> ", tipozona, "<br>",
-                                                         "<strong>Tipo de emisión:</strong> ", tipoemision, "<br>"),
-                                                  paste0("<strong>Estación:</strong> ", nombre, "<br>",
-                                                         "<strong>Calidad:</strong> ", AQ_index, " (debido a ", cause, ")<br>",
-                                                         "<strong>Tipo de zona:</strong> ", tipozona, "<br>",
-                                                         "<strong>Tipo de emisión:</strong> ", tipoemision, "<br>")),
-                                           ifelse(AQ_index == "Sin datos", 
-                                                  paste0("<strong>Estación:</strong> ", nombre, "<br>",
-                                                         "<strong>Calidad:</strong> ", AQ_index, "<br>",
-                                                         "<strong>Tipo de zona:</strong> ", tipozona, "<br>",
-                                                         "<strong>Tipo de emisión:</strong> ", tipoemision, "<br>"),
-                                                  paste0("<strong>Estación:</strong> ", nombre, "<br>",
-                                                         "<strong>Concentración ", AirPollutant,":</strong> ",
-                                                         Concentration, " ", UnitOfMeasurement, "<br>",
-                                                         "<strong>Calidad:</strong> ", AQ_index, "<br>",
-                                                         "<strong>Tipo de zona:</strong> ", tipozona, "<br>",
-                                                         "<strong>Tipo de emisión:</strong> ", tipoemision, "<br>"))
-                           ),
-                           data = air_data())
+      clearMarkers() %>% 
+      addAwesomeMarkers(data = air_data(), layerId = ~objectid,
+                        icon = ~icon_estaciones[AQ_index],
+                        popup = ~ifelse(AirPollutant == "AQ_index_all",
+                                        ifelse(is.na(cause) | AQ_index == "Buena",
+                                               paste0("<strong>Estación:</strong> ", nombre, "<br>",
+                                                      "<strong>Calidad:</strong> ", AQ_index, "<br>",
+                                                      "<strong>Tipo de zona:</strong> ", tipozona, "<br>",
+                                                      "<strong>Tipo de emisión:</strong> ", tipoemision, "<br>"),
+                                               paste0("<strong>Estación:</strong> ", nombre, "<br>",
+                                                      "<strong>Calidad:</strong> ", AQ_index, " (debido a ", cause, ")<br>",
+                                                      "<strong>Tipo de zona:</strong> ", tipozona, "<br>",
+                                                      "<strong>Tipo de emisión:</strong> ", tipoemision, "<br>")),
+                                        ifelse(AQ_index == "Sin datos",
+                                               paste0("<strong>Estación:</strong> ", nombre, "<br>",
+                                                      "<strong>Calidad:</strong> ", AQ_index, "<br>",
+                                                      "<strong>Tipo de zona:</strong> ", tipozona, "<br>",
+                                                      "<strong>Tipo de emisión:</strong> ", tipoemision, "<br>"),
+                                               paste0("<strong>Estación:</strong> ", nombre, "<br>",
+                                                      "<strong>Concentración ", AirPollutant,":</strong> ",
+                                                      Concentration, " ", UnitOfMeasurement, "<br>",
+                                                      "<strong>Calidad:</strong> ", AQ_index, "<br>",
+                                                      "<strong>Tipo de zona:</strong> ", tipozona, "<br>",
+                                                      "<strong>Tipo de emisión:</strong> ", tipoemision, "<br>"))
+                                        )
+                        )
   })
   
   
