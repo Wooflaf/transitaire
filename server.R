@@ -12,12 +12,12 @@ server <- function(input, output) {
   
   air_data <- reactive({
     air_data_var() %>%
-      filter(fecha_carga == input$time)
+      filter(DatetimeBegin == input$time)
   })
   
   traffic_data <- reactive({
     trafico %>% 
-      filter(fecha_carga == input$time)
+      filter(DatetimeBegin == input$time)
   })
   
   # Función para crear el mapa con Leaflet

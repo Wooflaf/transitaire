@@ -1,5 +1,3 @@
-library(tidyverse)
-
 load("./data/estaciones.RData")
 
 clean_date_time <- function(x){
@@ -13,7 +11,7 @@ AQ_index_lvls <- c("Sin Datos", "Buena", "Razonablemente Buena", "Regular",
 
 AQ_data <- read.csv("./data/AQ_EU_data.csv") %>% 
   mutate(
-    fecha_carga = clean_date_time(DatetimeBegin),
+    DatetimeBegin = clean_date_time(DatetimeBegin),
     DatetimeEnd = clean_date_time(DatetimeEnd),
     AirPollutant = factor(AirPollutant),
     objectid = case_when(AirQualityStationEoICode == "ES1239A" ~ 26,
@@ -32,6 +30,7 @@ AQ_data <- read.csv("./data/AQ_EU_data.csv") %>%
       AirPollutant == "SO2" ~ cut(Concentration, c(0, 100, 200, 350, 500, 750, 1250), labels = F),
       TRUE ~ 0)
     )
+  
 
 AQ_index_all_hourly <- AQ_data %>% 
   group_by(AirQualityStationEoICode, DatetimeBegin, DatetimeEnd, objectid, fecha_carga) %>% 
