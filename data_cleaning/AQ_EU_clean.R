@@ -33,7 +33,7 @@ AQ_data <- read.csv("./data/AQ_EU_data.csv") %>%
   
 
 AQ_index_all_hourly <- AQ_data %>% 
-  group_by(AirQualityStationEoICode, DatetimeBegin, DatetimeEnd, objectid, fecha_carga) %>% 
+  group_by(AirQualityStationEoICode, DatetimeBegin, DatetimeEnd, objectid) %>% 
   summarise(cause = paste(AirPollutant[which(AQ_index == max(AQ_index))], collapse = ", "),
             AQ_index = max(AQ_index),
             AirPollutant = "AQ_index_all"
