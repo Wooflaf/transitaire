@@ -28,7 +28,7 @@ server <- function(input, output) {
   # Función para filtrar los datos
   datos_filtrados <- reactive({
     datos_diarios %>%
-      filter(Fecha >= "2019-02-06" & Fecha <= "2019-02-09",
+      filter(Fecha >= input$ID_Fecha2[1] & Fecha <= input$ID_Fecha2[2],
              Estacion %in% input$ID_Estacion2)
   })
   
@@ -54,7 +54,7 @@ server <- function(input, output) {
   #Datos para varias estaciones y todos los parametros
   datos_filtrados1 <- reactive({
     datos_diarios_clean %>% 
-      filter(Fecha >= "2019-02-06" & Fecha <= "2019-02-09", #Fecha >= input$ID_Fecha2[1] & Fecha <= input$ID_Fecha2[2]
+      filter(Fecha >= input$ID_Fecha2[1] & Fecha <= input$ID_Fecha2[2], #Fecha >= "2019-02-06" & Fecha <= "2019-02-09"
              Estacion == input$ID_Estacion2)  
   })
   
@@ -72,7 +72,8 @@ server <- function(input, output) {
     #pie(x = datos_filtrados1()[[Valores]], labels = datos_filtrados1()[[Parametros]],  main = "Gráfico de tarta para todos los parametros")
     # Basic piechart
     ggplot(datos_diarios_clean %>%
-             filter(Estacion %in% input$ID_Estacion2) %>%
+             filter(Estacion %in% input$ID_Estacion2) %>% 
+             filter(Fecha >= input$ID_Fecha2[1] & Fecha <= input$ID_Fecha2[2]) %>%
              group_by(Clasificacion) %>% 
              summarise(con=n()) %>% 
              ungroup()
@@ -88,6 +89,7 @@ server <- function(input, output) {
     shiny::validate(need(input$ID_Estacion2, "Elige una o varias estaciones"))
     ggplot(datos_diarios_clean %>% 
              filter(Clasificacion == "Muy Desfavorable"|Clasificacion=="Extremadamente Desfavorable") %>% 
+             filter(Fecha >= input$ID_Fecha2[1] & Fecha <= input$ID_Fecha2[2]) %>%
              mutate(dia_sem = factor(dia_sem, levels = c("Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"))) %>% 
              group_by(dia_sem) %>% 
              summarise(con=n()) %>% 
@@ -107,6 +109,7 @@ server <- function(input, output) {
     shiny::validate(need(input$ID_Estacion2, "Elige una o varias estaciones"))
     ggplot(datos_diarios_clean %>% 
              filter(Clasificacion == "Muy Desfavorable"|Clasificacion=="Extremadamente Desfavorable") %>% 
+             filter(Fecha >= input$ID_Fecha2[1] & Fecha <= input$ID_Fecha2[2]) %>%
              mutate(dia_sem = factor(dia_sem, levels = c("Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"))) %>% 
              filter(Estacion %in% input$ID_Estacion2) %>%
              group_by(dia_sem) %>% 
