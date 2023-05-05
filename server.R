@@ -45,18 +45,34 @@ server <- function(input, output) {
                            data = air_data()
       ) %>% 
       setCircleMarkerPopup(layerId = ~objectid,
-                           popup = ~paste0("<strong>Estación:</strong> ", nombre, "<br>",
-                                   "Variable: ", AirPollutant, "<br>",
-                                   "Concentración: ", Concentration, " ", UnitOfMeasurement, "<br>",
-                                   "<strong>Calidad :</strong> ", AQ_index, "<br>",
-                                   "Tipo de zona: ", tipozona, "<br>",
-                                   "Tipo de emisión: ", tipoemision, "<br>"),
+                           popup = ~ifelse(AirPollutant == "AQ_index_all",
+                                           ifelse(is.na(cause) | AQ_index == "Buena",
+                                                  paste0("<strong>Estación:</strong> ", nombre, "<br>",
+                                                         "<strong>Calidad:</strong> ", AQ_index, "<br>",
+                                                         "<strong>Tipo de zona:</strong> ", tipozona, "<br>",
+                                                         "<strong>Tipo de emisión:</strong> ", tipoemision, "<br>"),
+                                                  paste0("<strong>Estación:</strong> ", nombre, "<br>",
+                                                         "<strong>Calidad:</strong> ", AQ_index, " (debido a ", cause, ")<br>",
+                                                         "<strong>Tipo de zona:</strong> ", tipozona, "<br>",
+                                                         "<strong>Tipo de emisión:</strong> ", tipoemision, "<br>")),
+                                           ifelse(AQ_index == "Sin datos", 
+                                                  paste0("<strong>Estación:</strong> ", nombre, "<br>",
+                                                         "<strong>Calidad:</strong> ", AQ_index, "<br>",
+                                                         "<strong>Tipo de zona:</strong> ", tipozona, "<br>",
+                                                         "<strong>Tipo de emisión:</strong> ", tipoemision, "<br>"),
+                                                  paste0("<strong>Estación:</strong> ", nombre, "<br>",
+                                                         "<strong>Concentración ", AirPollutant,":</strong> ",
+                                                         Concentration, " ", UnitOfMeasurement, "<br>",
+                                                         "<strong>Calidad:</strong> ", AQ_index, "<br>",
+                                                         "<strong>Tipo de zona:</strong> ", tipozona, "<br>",
+                                                         "<strong>Tipo de emisión:</strong> ", tipoemision, "<br>"))
+                           ),
                            data = air_data())
   })
   
   
   observeEvent(traffic_data(),{ 
-    # adding day and night section --------------------------------------------
+    # En función de la hora, cambio entre cartografía clara/oscura
     
     if (hour(input$time) >= 7 & hour(input$time) < 21) {
       
