@@ -1,10 +1,12 @@
 # Cargar las librerías necesarias
 library(shiny)
 library(leaflet)
+library(leaflet.extras)
 library(shinydashboard)
 library(tidyverse)
 library(lubridate)
 library(sf)
+
 
 # Cargamos los datos
 source("./data_cleaning/AQ_EU_clean.R", local = TRUE, encoding = "UTF-8")
