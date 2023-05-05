@@ -100,7 +100,9 @@ ui <- dashboardPage(
                              ),
                              mainPanel(
                                h4("Grafico boxplot"),
-                               plotOutput("boxplot"), 
+                               plotlyOutput("boxplot"), 
+                               h4("Grafico histograma"),
+                               plotOutput("histograma"),
                                h4("Graficos de tarta"),
                                plotOutput("tartageneral"),
                                plotOutput("tarta1parametro"), 
@@ -109,7 +111,7 @@ ui <- dashboardPage(
                                h4("Grafico semanal 2"), 
                                plotOutput("semanal2"),
                                h4("Grafico de lineas"), 
-                               plotOutput("grafico1")
+                               plotlyOutput("grafico1")
                              ))),
                   tabPanel("Tabla",  sidebarLayout(
                     sidebarPanel(
@@ -142,4 +144,3 @@ ui <- dashboardPage(
     )
   )
 )
-

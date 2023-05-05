@@ -33,13 +33,15 @@ server <- function(input, output) {
   })
   
   #Metemos la info de los plots
-  output$grafico1 <- renderPlot({
+  output$grafico1 <- renderPlotly({
     shiny::validate(
       need(input$ID_Estacion2, "Elige una o varias estaciones"),
       need(input$ID_Calidad2, "Elige una o varios parametros de calidad del aire")
     )
     gra <- ggplot(datos_filtrados(), aes(x = Fecha, colour = Estacion, group = Estacion)) +
-      ylim(0, 100)
+      ylim(0, 100) +
+      theme(legend.position = "none") + 
+      theme_minimal()
     for (calidad in input$ID_Calidad2) {
       gra <- gra + geom_line(aes_string(y = calidad))
     }
@@ -65,6 +67,35 @@ server <- function(input, output) {
     boxplot(Valores ~ Parametros, data = datos_filtrados1(), xlab = "Parametros", ylab = "Valores",  main = "Boxplot de cada parametro de las estaciones seleccionadas")
     
   })
+  
+  
+  #Funcion para crear el boxplot
+  output$boxplot <- renderPlotly({
+    shiny::validate(need(input$ID_Estacion2, "Elige una o varias estaciones"))
+    gra <- ggplot(datos_filtrados1(), aes(x = Parametros, y = Valores, fill = "blue")) + 
+      geom_boxplot(alpha = 0.5) + 
+      labs(x = "Parametros", y = "Valores") + 
+      theme(legend.position = "none") + 
+      theme_minimal() + 
+      scale_fill_manual(values = alpha("blue", 0.5))
+    
+    # Convertir ggplot en plotly
+    ggplotly(gra, tooltip = "text", dynamicTicks = TRUE) %>% 
+      layout(showlegend = FALSE) # Ocultar la leyenda de color en plotly
+  })
+  
+  #Funcion para crear el histograma con los parametros normalizados
+  output$histograma <- renderPlot({
+    shiny::validate(need(input$ID_Estacion2, "Elige una o varias estaciones"))
+    ggplot(datos_diarios_clean %>% group_by(Parametros) %>%
+             mutate(Valores_norm = (Valores - min(Valores)) / (max(Valores) - min(Valores))) %>%
+             filter(Fecha >= "2019-02-06" & Fecha <= "2019-02-09",
+                    Estacion %in% input$ID_Estacion2), aes(x = Parametros, y = Valores_norm)) +
+      labs(x = "Parametros", y = "Valores normalizados") + 
+      theme(legend.position = "none") + 
+      theme_minimal() 
+  })
+  
   
   # Funcion para crear el grafico de tarta para varias estaciones y todos los parametros
   output$tartageneral <- renderPlot({
