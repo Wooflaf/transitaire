@@ -29,7 +29,8 @@ AQ_data <- read.csv("./data/AQ_EU_data.csv") %>%
       AirPollutant == "O3" ~ cut(Concentration, c(0, 50, 100, 130, 240, 380, 800), labels = F),
       AirPollutant == "SO2" ~ cut(Concentration, c(0, 100, 200, 350, 500, 750, 1250), labels = F),
       TRUE ~ 0)
-    )
+    ) %>% 
+  select(-X)
   
 
 AQ_index_all_hourly <- AQ_data %>% 
@@ -40,7 +41,13 @@ AQ_index_all_hourly <- AQ_data %>%
             ) %>% 
   ungroup()
 
-AQ_data_clean <- bind_rows(AQ_data, AQ_index_all_hourly) %>% 
+AQ_data_clean <- bind_rows(AQ_data, AQ_index_all_hourly) %>%
+  group_by() %>%
+  complete(nesting(DatetimeBegin, DatetimeEnd),
+           nesting(AirQualityStationEoICode, objectid),
+           nesting(AirPollutant, UnitOfMeasurement),
+           fill = list(AQ_index = 0)) %>%
+  ungroup() %>% 
   mutate(AQ_index = factor(AQ_index, labels = AQ_index_lvls, levels = 0:6))
 
 est_contamin <- st_as_sf(left_join(AQ_data_clean, estaciones, by = "objectid") %>% mutate(objectid = as.character(objectid)))
