@@ -231,6 +231,21 @@ server <- function(input, output) {
   
   
   
+  # INFORMACION
+
+  # Carga el archivo CSV
+  # tabla <- read.csv("./data/clasificacion.csv")
+  # 
+  # # Crea la tabla HTML
+  # output$tablaclasificacion <- renderDataTable({
+  #   datatable(tabla, 
+  #             options = list(pageLength = 10, 
+  #                            searchHighlight = TRUE,
+  #                            lengthMenu = c(10, 25, 50)))
+  # })
+  # 
+  
+  
   ############### FIN PARTE GEMA, WILSON, SANDRA
   
   

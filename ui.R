@@ -170,7 +170,10 @@ ui <- dashboardPage(
                                      sanguíneo a través de los pulmones y reduce la cantidad de oxígeno."),
                                      p("•	Las Particulate matter (PM) son partículas que se encuentran en el aire, incluido el 
                                      polvo, la suciedad, el hollín, el humo y las gotitas de líquido. Y son altamente peligrosas 
-                                     debido a que pueden alojarse profundamente en los pulmones por su pequeño tamaño")
+                                     debido a que pueden alojarse profundamente en los pulmones por su pequeño tamaño"),
+                                     # h3("Niveles de clasificación"), 
+                                     # hr(), 
+                                     # DT::dataTableOutput("tablaclasificacion")
                                      
                                        
 
