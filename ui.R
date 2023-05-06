@@ -52,6 +52,7 @@ ui <- dashboardPage(
                        )
                 )
               ),
+    
       # Third tab content
       tabItem(tabName = "stats",
               h2("Distribución del NO2"),
@@ -117,7 +118,8 @@ ui <- dashboardPage(
                                h4("Grafico de lineas"), 
                                plotlyOutput("grafico1")
                              ))),
-                  tabPanel("Tabla",  sidebarLayout(
+                  tabPanel("Tabla",  
+                    sidebarLayout(
                     sidebarPanel(
                       h4("Elementos de entrada"), #header de tama?o 3 x eso es m?s grande
                       
@@ -142,12 +144,20 @@ ui <- dashboardPage(
                       DT::dataTableOutput("tabla"),
                       h3("Estadisticas para cada variable"), 
                       verbatimTextOutput("stats")
-                    ))) 
+                    )))))),
+                tabItem(tabName = "info", 
+                        h2("Más información"), 
+                        fluidPage(
+                          tabsetPanel(
+                            tabPanel("Informacion"),
+                            tabPanel("Salud"),
+                            tabPanel("Consejos"))
+                        )) 
                   
                   
-                )
-              )
-      )
+                
+              
+      
     )
   )
 )
