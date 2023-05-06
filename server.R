@@ -25,7 +25,7 @@ server <- function(input, output) {
     # Crear el mapa con Leaflet
     map <- leaflet(options = leafletOptions(minZoom = 13, maxZoom = 16, zoomSnap = 0.1)) %>%
       addProviderTiles(providers$CartoDB.Positron) %>% 
-      addPolylines(data = trafico, layerId = ~gid) %>% 
+      addPolylines(data = trafico, layerId = ~gid, label = ~denominacion) %>% 
       addAwesomeMarkers(data = est_contamin, layerId = ~objectid) %>% 
       setView(lng = "-0.36339126257400377", lat = "39.469993930673834",  zoom = 13.6) %>% 
       setMaxBounds(lng1 = "-0.5017152868950778", lat1 = "39.55050724348406",
@@ -96,9 +96,7 @@ server <- function(input, output) {
         setShapeStyle(layerId = ~gid,
                       color = ~pal_trafico(estado),
                       dashArray = ~ifelse(grepl("(?i)paso inferior", estado), "10,15", ""),
-                      data = traffic_data()) %>% 
-        setShapeLabel(layerId = ~ gid, label = ~denominacion, data = traffic_data())
-      
+                      data = traffic_data())
     } else {
       leafletProxy("map") %>%
         addProviderTiles(providers$CartoDB.DarkMatter) %>% 
