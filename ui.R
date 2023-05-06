@@ -149,15 +149,14 @@ ui <- dashboardPage(
                         h2("Más información"), 
                         fluidPage(
                           tabsetPanel(
-                            tabPanel("Informacion"),
+                            tabPanel("Informacion",
+                                     p("Este es un estudio que se lleva a cabo para documentar 
+                                       la calidad del aire de la ciudad de Valencia según los 
+                                       datos publicados por las estaciones de monitoreo en la ciudad.")
+                            ),
                             tabPanel("Salud"),
                             tabPanel("Consejos"))
                         )) 
-                  
-                  
-                
-              
-      
     )
   )
 )
