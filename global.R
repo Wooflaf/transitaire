@@ -6,6 +6,7 @@ library(shinydashboard)
 library(tidyverse)
 library(lubridate)
 library(sf)
+library(leaflegend)
 
 
 # Cargamos los datos

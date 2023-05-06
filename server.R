@@ -25,13 +25,23 @@ server <- function(input, output) {
     
     # Crear el mapa con Leaflet
     map <- leaflet(options = leafletOptions(minZoom = 13, maxZoom = 16, zoomSnap = 0.1)) %>%
-      addTiles() %>% 
+      addProviderTiles(providers$CartoDB.Positron) %>% 
       addPolylines(data = trafico, layerId = ~gid) %>% 
       addAwesomeMarkers(data = est_contamin, layerId = ~objectid) %>% 
       setView(lng = "-0.37219126257400377", lat = "39.468993930673834",  zoom = 13.6) %>% 
       setMaxBounds(lng1 = "-0.5017152868950778", lat1 = "39.55050724348406",
                    lng2 = "-0.24762442378004983", lat2 = "39.389409229115124") %>% 
-      addResetMapButton()
+      addResetMapButton() %>% 
+      addLegendAwesomeIcon(iconSet = icon_estaciones,
+                           orientation = 'vertical',
+                           position = 'topright',
+                           title = htmltools::tags$div(
+                             style = 'font-size: 14px;',
+                             'Estaciones de Contaminación'),
+                           labelStyle = 'font-size: 12px;') %>% 
+      addLegend(colors = c("#2CC121", "#2332BA", "#C91616", "#E2D43C", "#303131"),
+                labels = levels(trafico$estado)[1:5], opacity = 0.8,
+                title = 'Tráfico', position = 'bottomright', data = trafico)
     
     # Retornar el mapa
     return(map)
@@ -75,9 +85,10 @@ server <- function(input, output) {
     if (hour(input$time) >= 7 & hour(input$time) < 21) {
       
       leafletProxy("map") %>%
-        addTiles() %>%
+        addProviderTiles(providers$CartoDB.Positron) %>%
         setShapeStyle(layerId = ~gid,
                       color = ~pal_trafico(estado),
+                      dashArray = ~ifelse(grepl("(?i)paso inferior", estado), "10,15", ""),
                       data = traffic_data()) %>% 
         setShapeLabel(layerId = ~ gid, label = ~denominacion, data = traffic_data())
       
@@ -85,7 +96,8 @@ server <- function(input, output) {
       leafletProxy("map") %>%
         addProviderTiles(providers$CartoDB.DarkMatter) %>% 
         setShapeStyle(layerId = ~gid,
-                      color = ~pal_trafico(estado),
+                      color = ~pal_trafico_night(estado),
+                      dashArray = ~ifelse(grepl("(?i)paso inferior", estado), "10,15", ""),
                       data = traffic_data())
     }
     

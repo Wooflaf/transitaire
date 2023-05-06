@@ -1,5 +1,3 @@
-pal_estaciones <- colorFactor(c("black", "green", "blue", "orange", "red", "darkred", "purple"),
-                              levels = levels(est_contamin$AQ_index))
 pal_estaciones <- function(AQ_label){
   # Usar una declaración switch para asignar un color en función del nombre de la variable
   color <- switch(AQ_label,
@@ -15,7 +13,10 @@ pal_estaciones <- function(AQ_label){
   return(color)
   
 }
-pal_trafico <- colorFactor(c("green", "blue", "red", "yellow", "black", "green", "blue", "red", "yellow", "black"),
+pal_trafico <- colorFactor(c("#3BFF2D", "#2332BA", "red", "yellow", "#303131", "#3BFF2D", "#2332BA", "red", "yellow", "#303131"),
+                           levels = levels(trafico$estado))
+
+pal_trafico_night <- colorFactor(c("green", "blue", "red", "yellow", "white", "green", "blue", "red", "yellow", "white"),
                            levels = levels(trafico$estado))
 
 icon_estaciones <- awesomeIconList(
