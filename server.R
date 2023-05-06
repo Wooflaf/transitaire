@@ -89,4 +89,39 @@ server <- function(input, output) {
     
   })
   
+  output$est_plotly <- renderPlotly({
+    if (!is.null(input$map_marker_click$id)){
+      plot <- plot_ly(data = st_drop_geometry(air_data_var()) %>%
+                filter(objectid == input$map_marker_click$id) %>% 
+                group_by(nombre, AirPollutant) %>% 
+                count(AQ_index) %>% 
+                complete(AQ_index, fill = list(n = NA)) %>% 
+                ungroup() %>% 
+                arrange(factor(AQ_index, levels = c("Buena", "Razonablemente Buena",
+                                                    "Regular", "Desfavorable",
+                                                    "Muy Desfavorable",
+                                                    "Extremadamente Desfavorable",
+                                                    "Sin Datos")
+                               )
+                        ),
+              labels = ~AQ_index, values = ~n, type = 'pie',
+              marker = list(colors = c("Buena" = "#72ae27",
+                                       "Razonablemente Buena" = "#37a4d7",
+                                       "Regular" = "#f49631",
+                                       "Desfavorable" = "#d43f2b",
+                                       "Muy Desfavorable" = "#9c3035",
+                                       "Extremadamente Desfavorable" = "#d253b8",
+                                       "Sin Datos" = "#303131")),
+              sort = FALSE, direction = 'clockwise',
+              textinfo = 'percent', hoverinfo = 'text',
+              text = ~paste(n, "registros"),
+              hole = 0.3) %>% 
+        layout(title = ~ifelse(AirPollutant[1] == "AQ_index_all",
+                               paste0("Calidad del aire para la estación ", nombre[1]),
+                               paste0("Porc. registros de ", AirPollutant[1], " para la estación ", nombre[1])),
+               xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+               yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+    }
+  })
+  
 }

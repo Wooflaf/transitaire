@@ -7,6 +7,7 @@ library(tidyverse)
 library(lubridate)
 library(sf)
 library(leaflegend)
+library(plotly)
 
 
 # Cargamos los datos

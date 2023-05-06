@@ -44,8 +44,7 @@ ui <- dashboardPage(
                               box(
                                 title = "Estadísticas de la estación seleccionada",
                                 width = NULL, solidHeader = TRUE,
-                                uiOutput("estadisticas_ui"),
-                                plotOutput("grafico", height = 300)
+                                plotlyOutput("est_plotly", height = 300)
                               )
              )
       ),
