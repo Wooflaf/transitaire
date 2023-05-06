@@ -22,7 +22,6 @@ server <- function(input, output) {
   
   # Función para crear el mapa con Leaflet
   output$map <- renderLeaflet({
-    
     # Crear el mapa con Leaflet
     map <- leaflet(options = leafletOptions(minZoom = 13, maxZoom = 16, zoomSnap = 0.1)) %>%
       addProviderTiles(providers$CartoDB.Positron) %>% 
@@ -38,10 +37,18 @@ server <- function(input, output) {
                            title = htmltools::tags$div(
                              style = 'font-size: 14px;',
                              'Estaciones de Contaminación'),
-                           labelStyle = 'font-size: 12px;') %>% 
+                           labelStyle = 'font-size: 14px;') %>%
+      addLegendImage(images = list("./icons/line.png", "./icons/dash.png"),
+                     labels = c("Exterior", "Subterráneo"),
+                     labelStyle = "font-size: 12px; vertical-align: middle;",
+                     height = c(30, 30),
+                     width = c(30, 30),
+                     orientation = 'horizontal',
+                     title = 'Tipo de tramo',
+                     position = 'bottomright') %>%
       addLegend(colors = c("#2CC121", "#2332BA", "#C91616", "#E2D43C", "#303131"),
                 labels = levels(trafico$estado)[1:5], opacity = 0.8,
-                title = 'Tráfico', position = 'bottomright', data = trafico)
+                title = 'Tráfico', position = 'bottomright')
     
     # Retornar el mapa
     return(map)
