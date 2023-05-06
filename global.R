@@ -22,13 +22,19 @@ source("./functions/leaflet_dynamic_style.R", local = TRUE, encoding = "UTF-8")
 source("./data-downloader/datos_diarios2.R")
 
 ##########
+#Funcion para crear el grafico de barras apiladas
+colores <- c("Buena" = "#2E8B57", "Razonablemente Buena" = "darkgreen", 
+             "Regular" = "#FF8C00", "Desfavorable" = "#e66b6b", 
+             "Muy Desfavorable" = "#FF0000", 
+             "Extremadamente Desfavorable" = "#33105D",
+             "Sin datos" = "#FFFFFF")
 
 #Funcion que hace el mapa de calor
 date_heatmap <- function(df){
-  ggplot(df, aes(week, dia_sem, text = Clasificacion)) + 
-    geom_tile(aes(fill = Valores)) + 
+  ggplot(df, aes(week, dia_sem, fill = Clasificacion, text = Clasificacion)) + 
+    geom_tile() + 
     facet_grid(year(Fecha) ~ month) +
-    scale_fill_viridis_c(option = "plasma", na.value = "gray65") +
+    scale_fill_manual(values = colores) +
     scale_y_discrete(limits = rev) +
     labs(x="Semana del mes", y = "", subtitle = "")
 }
