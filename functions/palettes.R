@@ -21,43 +21,43 @@ pal_trafico_night <- colorFactor(c("green", "blue", "red", "yellow", "white", "g
 
 icon_estaciones <- awesomeIconList(
   "Sin Datos" = makeAwesomeIcon(
-    icon = "wind",
-    iconColor = "black",
+    icon = "cloud",
+    iconColor = "#FFFFFF",
     markerColor = pal_estaciones("Sin Datos"),
     library = "fa"
   ),
   "Buena" = makeAwesomeIcon(
-    icon = "wind",
+    icon = "cloud",
     iconColor = "black",
     markerColor = pal_estaciones("Buena"),
     library = "fa"
   ),
   "Razonablemente Buena" = makeAwesomeIcon(
-    icon = "wind",
+    icon = "cloud",
     iconColor = "black",
     markerColor = pal_estaciones("Razonablemente Buena"),
     library = "fa"
   ),
   "Regular" = makeAwesomeIcon(
-    icon = "wind",
+    icon = "cloud",
     iconColor = "black",
     markerColor = pal_estaciones("Regular"),
     library = "fa"
   ),
   "Desfavorable" = makeAwesomeIcon(
-    icon = "wind",
+    icon = "cloud",
     iconColor = "black",
     markerColor = pal_estaciones("Desfavorable"),
     library = "fa"
   ),
   "Muy Desfavorable" = makeAwesomeIcon(
-    icon = "wind",
-    iconColor = "black",
+    icon = "cloud",
+    iconColor = "#FFFFFF",
     markerColor = pal_estaciones("Muy Desfavorable"),
     library = "fa"
   ),
   "Extremadamente Desfavorable" = makeAwesomeIcon(
-    icon = "wind",
+    icon = "cloud",
     iconColor = "black",
     markerColor = pal_estaciones("Extremadamente Desfavorable"),
     library = "fa"
