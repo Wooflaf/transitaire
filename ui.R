@@ -5,7 +5,8 @@ ui <- dashboardPage(
     sidebarMenu(
     menuItem("Dashboard", tabName = "dashboard"),
     menuItem("Graficos", tabName = "graficos"),
-    menuItem("Stats", tabName = "stats")  
+    menuItem("Estadísticas", tabName = "stats"), 
+    menuItem("Información", tabName = "info")
     )
   ),
   
@@ -74,7 +75,7 @@ ui <- dashboardPage(
                                               language = "es", separator = "a"),
                                selectInput("ID_Calidad1",
                                            "Selecciona los parámetros",
-                                           names(datos_diarios[6:19]))
+                                           names(datos_diarios[c("PM2.5", "PM10","NO2", "O3", "SO2")]))
                              ),
                              mainPanel(
                                h3("Grafico de calor")
@@ -96,13 +97,11 @@ ui <- dashboardPage(
                                               language = "es", separator = "a"),
                                selectInput("ID_Calidad2",
                                            "Selecciona los parámetros",
-                                           names(datos_diarios[6:19]))
+                                           names(datos_diarios[c("PM2.5", "PM10","NO2", "O3", "SO2")]))
                              ),
                              mainPanel(
-                               h4("Grafico boxplot"),
-                               plotlyOutput("boxplot"), 
                                h4("Grafico de barras apiladas"),
-                               plotOutput("apilados"),
+                               plotlyOutput("apilados"),
                                h4("Graficos de tarta"),
                                plotOutput("tartageneral"),
                                plotOutput("tarta1parametro"), 
@@ -129,7 +128,7 @@ ui <- dashboardPage(
                                      language = "es", separator = "a"),
                       selectInput("ID_Calidad3",
                                   "Selecciona los parámetros",
-                                  names(datos_diarios[6:19]),multiple = TRUE)
+                                  names(datos_diarios[c("PM2.5", "PM10","NO2", "O3", "SO2")]),multiple = TRUE)
                     ),
                     mainPanel(
                       DT::dataTableOutput("tabla"),

@@ -61,33 +61,12 @@ server <- function(input, output) {
   })
   
   
-  #Funcion para crear el boxplot
-  output$boxplot <- renderPlot({
-    shiny::validate(need(input$ID_Estacion2, "Elige una o varias estaciones"))
-    boxplot(Valores ~ Parametros, data = datos_filtrados1(), xlab = "Parametros", ylab = "Valores",  main = "Boxplot de cada parametro de las estaciones seleccionadas")
-    
-  })
-  
-  
-  #Funcion para crear el boxplot
-  output$boxplot <- renderPlotly({
-    shiny::validate(need(input$ID_Estacion2, "Elige una o varias estaciones"))
-    gra <- ggplot(datos_filtrados1(), aes(x = Parametros, y = Valores, fill = "blue")) + 
-      geom_boxplot(alpha = 0.5) + 
-      labs(x = "Parametros", y = "Valores") + 
-      theme(legend.position = "none") + 
-      theme_minimal() + 
-      scale_fill_manual(values = alpha("blue", 0.5))
-    
-    # Convertir ggplot en plotly
-    ggplotly(gra, tooltip = "text", dynamicTicks = TRUE) %>% 
-      layout(showlegend = FALSE) # Ocultar la leyenda de color en plotly
-  })
-  
   #Funcion para crear el grafico de barras apiladas
-  colores <- c("Buena" = "#2E8B57", "Razonablemente  buena" = "darkgreen", "Regular" = "#FF8C00", "Desfavorable" = "#4169E1", "Muy Desfavorable" = "#A9A9A9", "Extremadamente Desfavorable" = "black")
+  colores <- c("Buena" = "#2E8B57", "Razonablemente  buena" = "darkgreen", 
+               "Regular" = "#FF8C00", "Desfavorable" = "#4169E1", 
+               "Muy Desfavorable" = "#A9A9A9", "Extremadamente Desfavorable" = "black")
   
-  output$apilados <- renderPlot({
+  output$apilados <- renderPlotly({
     shiny::validate(need(input$ID_Estacion2, "Elige una o varias estaciones"))
     ggplot(datos_diarios_clean %>% 
              filter(Parametros == input$ID_Calidad2, Estacion %in% input$ID_Estacion2), 
@@ -97,6 +76,7 @@ server <- function(input, output) {
       scale_fill_manual(values = colores) +
       theme_minimal()
   })
+
   
   
   
