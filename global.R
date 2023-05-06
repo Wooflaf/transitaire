@@ -23,4 +23,20 @@ source("./data-downloader/datos_diarios2.R")
 
 ##########
 
+#Funcion que hace el mapa de calor
+date_heatmap <- function(df){
+  ggplot(df, aes(week, dia_sem, text = Clasificacion)) + 
+    geom_tile(aes(fill = Valores)) + 
+    facet_grid(year(Fecha) ~ month) +
+    scale_fill_viridis_c(option = "plasma", na.value = "gray65") +
+    scale_y_discrete(limits = rev) +
+    labs(x="Semana del mes", y = "", subtitle = "")
+}
+
+#Hacerlo interactivo
+interactive_date_heatmap <- function(p){
+  ggplotly(p, tooltip = "text") %>% 
+    config(displayModeBar = FALSE)
+}
+
 shinyApp(ui, server)

@@ -24,6 +24,35 @@ server <- function(input, output) {
   
   ########### PARTE GEMA, WILSON, SANDRA
   # Creamos el grafico
+  #Añadimos el mapa de calor
+  
+  # Dataframe adaptado para la visualización del mapa de calor
+  df_date <- reactive({
+    datos_diarios_clean %>%
+      filter(Fecha >= input$ID_Fecha1[1] & Fecha <= input$ID_Fecha1[2])
+  })
+  
+  # Filtrado de medida seleccionada
+  df_medida <- reactive({
+    df_date() %>%
+      filter(Parametros == input$ID_Calidad1)
+  })
+  
+  # Generar dataframe para utilizar en el primer mapa de calor
+  df <- reactive({
+    df_medida() %>% 
+      filter(Estacion == input$ID_Estacion1)
+  })
+  
+  # Renderizar el mapa de calor
+  output$heatmap <- renderPlotly({
+    map <- df() %>% 
+      date_heatmap() 
+    #abs(title = paste("Mapa de calor para"),
+    #fill=paste(input$ID_Calidad2, "(u/mg)"))
+    
+    interactive_date_heatmap(map)
+  })
   
   # Función para filtrar los datos
   datos_filtrados <- reactive({
@@ -162,13 +191,35 @@ server <- function(input, output) {
   datos_filtrados3 <- reactive({
     datos_diarios_clean %>% 
       filter(Fecha >= "2019-02-06" & Fecha <= "2019-02-09", #Fecha >= input$ID_Fecha3[1] & Fecha <= input$ID_Fecha3[2]
-             Estacion == input$ID_Estacion3, Parametros == input$ID_Calidad3)  
+             Estacion %in% input$ID_Estacion3, Parametros %in% input$ID_Calidad3)  
   })
   
-  
-  #Muestro las 10 primeras variables en Table2
-  output$tabla <- renderDataTable(datos_diarios_clean[datos_diarios_clean$Estacion == estaciones(),])
-  
+  #Muestra la tabla interactiva
+  output$tabla <- DT::renderDataTable({
+    shiny::validate(need(input$ID_Estacion3, "Selecciona la estación que quieras ver"))
+    shiny::validate(need(input$ID_Calidad3, "Selecciona el parametro de calidad de aire"))
+    DT::datatable(
+      datos_filtrados3(), rownames = FALSE,
+      extensions = 'Buttons',
+      options = list(
+        dom = "Bfrtip",
+        buttons = c('copy', 'csv', 'excel', 'pdf'),
+        pageLength = 10,
+        lengthMenu = c(5, 10, 50, 100),
+        paging = FALSE,
+        searching = TRUE,
+        fixedColumns = FALSE,
+        autoWidth = TRUE,
+        ordering = TRUE,
+        initComplete = JS(
+          "function(settings, json) {",
+          "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});",
+          "}"
+        )
+      )
+    )
+  })
+
   #Mostrar las estadisticas para los datos seleccionados
   
   output$stats<- renderPrint({

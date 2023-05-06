@@ -67,18 +67,23 @@ ui <- dashboardPage(
                                
                                selectInput("ID_Estacion1",
                                            "Selecciona la estación",
-                                           unique(datos_diarios$Estacion)),
+                                           unique(datos_diarios$Estacion),
+                                           selected = "Viveros"),
                                dateRangeInput("ID_Fecha1",
                                               "Selecciona las fechas",
-                                              start = min(datos_diarios$Fecha), end = max(datos_diarios$Fecha), min = min(datos_diarios$Fecha),
+                                              start = "2018-06-27", 
+                                              end = "2020-07-09",
+                                              min = min(datos_diarios$Fecha),
                                               max = max(datos_diarios$Fecha), format = "yyyy-mm-dd", weekstart = 1,
                                               language = "es", separator = "a"),
                                selectInput("ID_Calidad1",
                                            "Selecciona los parámetros",
-                                           names(datos_diarios[c("PM2.5", "PM10","NO2", "O3", "SO2")]))
+                                           names(datos_diarios[c("PM2.5", "PM10","NO2", "O3", "SO2")]),
+                                           selected = "NO2")
                              ),
                              mainPanel(
-                               h3("Grafico de calor")
+                               h3("Grafico de calor"),
+                               plotlyOutput("heatmap")
                              ))),
                   tabPanel("Graficos varias estaciones", 
                            sidebarLayout(
@@ -131,6 +136,9 @@ ui <- dashboardPage(
                                   names(datos_diarios[c("PM2.5", "PM10","NO2", "O3", "SO2")]),multiple = TRUE)
                     ),
                     mainPanel(
+                      h3("Tabla Interactiva"), 
+                      hr(), 
+                      hr(),
                       DT::dataTableOutput("tabla"),
                       h3("Estadisticas para cada variable"), 
                       verbatimTextOutput("stats")

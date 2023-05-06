@@ -83,6 +83,35 @@ for (parametro in names(lista)) {
 # assigning the third column name to a new name
 colnames(datos_diarios_clean)[3] <- "dia_sem"
 
+#Definimos los niveles 
+
+month_levels <- c("Jan", "Feb", "Mar", "Apr",
+                  "May", "Jun", "Jul", "Aug",
+                  "Sep", "Oct", "Nov", "Dec")
+
+dias_levels <- c("Lunes", "Martes", "Miercoles", "Jueves",
+                 "Viernes", "Sabado", "Domingo")
+
+#Creamos nuevas columans con la semana, el año 
+
+#ANUAL
+datos_diarios_clean$year <- year(datos_diarios_clean$Fecha)
+
+#MENSUAL
+datos_diarios_clean$month <- as.numeric(format(datos_diarios_clean$Fecha, "%m"))
+datos_diarios_clean$month <- factor(datos_diarios_clean$month,
+                                    levels=c(1,2,3,4,5,6,7,8,9,10,11,12),
+                                    labels= month_levels)
+
+#SEMANAL
+datos_diarios_clean$week <- day(datos_diarios_clean$Fecha)
+datos_diarios_clean$week <- ceiling(datos_diarios_clean$week / 7)
+
+#DIARIO
+datos_diarios_clean$dia_sem <- factor(datos_diarios_clean$dia_sem,
+                                      levels= dias_levels,
+                                      labels= dias_levels)
+
 path <- "./data/datos_diarios_clean.RData"
 # Guardamos los datos 
 save(datos_diarios_clean, file = path)
