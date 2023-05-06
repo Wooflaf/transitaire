@@ -78,24 +78,42 @@ server <- function(input, output) {
   })
 
   
-  
-  
   # Funcion para crear el grafico de tarta para varias estaciones y todos los parametros
-  output$tartageneral <- renderPlot({
+  output$tartageneral <- renderPlotly({
     shiny::validate(need(input$ID_Estacion2, "Elige una o varias estaciones"))
     #pie(x = datos_filtrados1()[[Valores]], labels = datos_filtrados1()[[Parametros]],  main = "Gráfico de tarta para todos los parametros")
-    # Basic piechart
-    ggplot(datos_diarios_clean %>%
-             filter(Estacion %in% input$ID_Estacion2) %>% 
-             filter(Fecha >= input$ID_Fecha2[1] & Fecha <= input$ID_Fecha2[2]) %>%
-             group_by(Clasificacion) %>% 
-             summarise(con=n()) %>% 
-             ungroup()
-           , aes(x="", y=con, fill=Clasificacion)) +
-      geom_bar(stat="identity", width=1, color="white") +
-      coord_polar("y", start=0) +
-      
-      theme_void() # remove background, grid, numeric labels
+    data <- datos_diarios_clean %>%
+      filter(Estacion %in% input$ID_Estacion2) %>% 
+      filter(Fecha >= input$ID_Fecha2[1] & Fecha <= input$ID_Fecha2[2]) %>%
+      group_by(Clasificacion) %>% 
+      summarise(suma=n()) %>% 
+      ungroup()
+    
+    fig <- plot_ly(data, labels = ~Clasificacion, values = ~suma, type = 'pie')
+    fig %>% layout(title = 'Para varias estaciones y todos los parámetros',
+                          xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+                          yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+    
+
+  })
+  
+  #Funcion para crear el grafico de tarta para varias estaciones y 1 parametro
+  output$tarta1parametro <- renderPlotly({
+    shiny::validate(need(input$ID_Estacion2, "Elige una o varias estaciones"))
+    #pie(x = datos_filtrados1()[[Valores]], labels = datos_filtrados1()[[Parametros]],  main = "Gráfico de tarta para todos los parametros")
+    data <- datos_diarios_clean %>%
+      filter(Estacion %in% input$ID_Estacion2) %>% 
+      filter(Fecha >= input$ID_Fecha2[1] & Fecha <= input$ID_Fecha2[2]) %>%
+      filter(Parametros == input$ID_Calidad2) %>% 
+      group_by(Clasificacion) %>% 
+      summarise(suma=n()) %>% 
+      ungroup()
+    
+    fig <- plot_ly(data, labels = ~Clasificacion, values = ~suma, type = 'pie')
+    fig %>% layout(title = 'Para varias estaciones y el parámetro seleccionado',
+                   xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+                   yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+    
   })
   
   # Función para crear el gráfico semanal 
@@ -138,12 +156,6 @@ server <- function(input, output) {
             axis.ticks = element_blank())+
       labs(title="Valores desfavorables para cada estacion seleccionada", x="", y="")
   })
-  # #Funcion para crear el grafico de tarta para varias estaciones y 1 parametro
-  # output$tarta1parametro <- renderPlot({
-  # validate(need(input$ID_Estacion2, "Elige una o varias estaciones"))
-  #   datos <- datos_filtrados1() %>% filter(Parametros == input$ID_Calidad2)
-  #   pie(x =  datos[["Valores"]], labels = datos[["clasificacion"]], main = "Gráfico de tarta para el parametro seleccionado")
-  # })
   
   
   #Datos filtrados para la pestaña de tabla

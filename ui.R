@@ -103,8 +103,8 @@ ui <- dashboardPage(
                                h4("Grafico de barras apiladas"),
                                plotlyOutput("apilados"),
                                h4("Graficos de tarta"),
-                               plotOutput("tartageneral"),
-                               plotOutput("tarta1parametro"), 
+                               plotlyOutput("tartageneral"),
+                               plotlyOutput("tarta1parametro"), 
                                h4("Grafico semanal"), 
                                plotOutput("semanal"),
                                h4("Grafico semanal 2"), 
@@ -143,3 +143,4 @@ ui <- dashboardPage(
     )
   )
 )
+
