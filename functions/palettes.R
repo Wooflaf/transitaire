@@ -1,3 +1,4 @@
+### Palettes of colors
 pal_estaciones <- function(AQ_label){
   # Usar una declaración switch para asignar un color en función del nombre de la variable
   color <- switch(AQ_label,
@@ -19,6 +20,7 @@ pal_trafico <- colorFactor(c("#3BFF2D", "#2332BA", "red", "yellow", "#303131", "
 pal_trafico_night <- colorFactor(c("green", "blue", "red", "yellow", "white", "green", "blue", "red", "yellow", "white"),
                            levels = levels(trafico$estado))
 
+### Icons
 icon_estaciones <- awesomeIconList(
   "Sin Datos" = makeAwesomeIcon(
     icon = "cloud",
@@ -63,3 +65,28 @@ icon_estaciones <- awesomeIconList(
     library = "fa"
   )
 )
+
+### Popups
+est_popups <- function(AirPollutant, AQ_index, cause, Concentration, direccion, nombre, tipozona, tipoemision, UnitOfMeasurement){
+  inbetween <- ifelse(AirPollutant == "AQ_index_all",
+                      
+                      ifelse(is.na(cause) | AQ_index == "Buena",
+                             paste0("<strong>Calidad:</strong> ", AQ_index, "<br>"),
+                             paste0("<strong>Calidad:</strong> ", AQ_index, " (debido a ", cause, ")<br>")
+                      ),
+                      
+                      ifelse(is.na(Concentration) | AQ_index == "Sin datos",
+                             paste0("<strong>Calidad:</strong> ", AQ_index, "<br>"),
+                             paste0("<strong>Concentración ", AirPollutant,":</strong> ", 
+                                    Concentration, " ", UnitOfMeasurement, "<br>",
+                                    "<strong>Calidad:</strong> ", AQ_index, "<br>"
+                             )
+                      )
+  )
+  
+  paste0("<strong>Estación:</strong> ", nombre, "<br>",
+         inbetween,
+         "<strong>Tipo de zona:</strong> ", tipozona, "<br>",
+         "<strong>Tipo de emisión:</strong> ", tipoemision, "<br>",
+         "<strong>Dirección:</strong> ", direccion, "<br>")
+}

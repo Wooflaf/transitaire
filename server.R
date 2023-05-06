@@ -60,28 +60,9 @@ server <- function(input, output) {
       clearMarkers() %>% 
       addAwesomeMarkers(data = air_data(), layerId = ~objectid,
                         icon = ~icon_estaciones[AQ_index],
-                        popup = ~ifelse(AirPollutant == "AQ_index_all",
-                                        ifelse(is.na(cause) | AQ_index == "Buena",
-                                               paste0("<strong>Estación:</strong> ", nombre, "<br>",
-                                                      "<strong>Calidad:</strong> ", AQ_index, "<br>",
-                                                      "<strong>Tipo de zona:</strong> ", tipozona, "<br>",
-                                                      "<strong>Tipo de emisión:</strong> ", tipoemision, "<br>"),
-                                               paste0("<strong>Estación:</strong> ", nombre, "<br>",
-                                                      "<strong>Calidad:</strong> ", AQ_index, " (debido a ", cause, ")<br>",
-                                                      "<strong>Tipo de zona:</strong> ", tipozona, "<br>",
-                                                      "<strong>Tipo de emisión:</strong> ", tipoemision, "<br>")),
-                                        ifelse(AQ_index == "Sin datos",
-                                               paste0("<strong>Estación:</strong> ", nombre, "<br>",
-                                                      "<strong>Calidad:</strong> ", AQ_index, "<br>",
-                                                      "<strong>Tipo de zona:</strong> ", tipozona, "<br>",
-                                                      "<strong>Tipo de emisión:</strong> ", tipoemision, "<br>"),
-                                               paste0("<strong>Estación:</strong> ", nombre, "<br>",
-                                                      "<strong>Concentración ", AirPollutant,":</strong> ",
-                                                      Concentration, " ", UnitOfMeasurement, "<br>",
-                                                      "<strong>Calidad:</strong> ", AQ_index, "<br>",
-                                                      "<strong>Tipo de zona:</strong> ", tipozona, "<br>",
-                                                      "<strong>Tipo de emisión:</strong> ", tipoemision, "<br>"))
-                                        )
+                        popup = ~est_popups(AirPollutant, AQ_index, cause,
+                                            Concentration, direccion, nombre,
+                                            tipozona, tipoemision, UnitOfMeasurement)
                         )
   })
   
