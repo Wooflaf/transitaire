@@ -28,7 +28,7 @@ server <- function(input, output) {
       addProviderTiles(providers$CartoDB.Positron) %>% 
       addPolylines(data = trafico, layerId = ~gid) %>% 
       addAwesomeMarkers(data = est_contamin, layerId = ~objectid) %>% 
-      setView(lng = "-0.37219126257400377", lat = "39.468993930673834",  zoom = 13.6) %>% 
+      setView(lng = "-0.36339126257400377", lat = "39.469993930673834",  zoom = 13.6) %>% 
       setMaxBounds(lng1 = "-0.5017152868950778", lat1 = "39.55050724348406",
                    lng2 = "-0.24762442378004983", lat2 = "39.389409229115124") %>% 
       addResetMapButton() %>% 
