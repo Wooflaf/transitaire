@@ -152,7 +152,29 @@ ui <- dashboardPage(
                             tabPanel("Informacion",
                                      p("Este es un estudio que se lleva a cabo para documentar 
                                        la calidad del aire de la ciudad de Valencia según los 
-                                       datos publicados por las estaciones de monitoreo en la ciudad.")
+                                       datos publicados por las estaciones de monitoreo en la ciudad."),
+                                     p("Para ello, se han tenido en cuenta once estaciones distribuidas 
+                                       por la ciudad y de cinco de los más relevantes contaminantes 
+                                       del aire. Todo ha sido gracias a los datos recogidos en el portal 
+                                       dela pagina web de datos abiertos de Valencia desde el año 2004 hasta el año 2022.
+                                       Los parametros a evaluar son:"),
+                                     p("•	El dióxido de azufre, un gas reactivo incoloro, se produce cuando se 
+                                     queman combustibles que contienen azufre, como el carbón y el petróleo. Con 
+                                     una exposición muy breve de SO2 puede causar estrechamiento de las vías respiratori"),
+                                     
+                                      p("•	El dióxido de azufre, un gas reactivo incoloro, se produce cuando se queman 
+                                        combustibles que contienen azufre, como el carbón y el petróleo. La exposición 
+                                        al NOz provoca efectos respiratorios adversos."),
+                                     p("•	El monóxido de carbono es un gas inodoro e incoloro que se forma cuando el carbono 
+                                     de los combustibles no se quema por completo. El monóxido de carbono ingresa al torrente 
+                                     sanguíneo a través de los pulmones y reduce la cantidad de oxígeno."),
+                                     p("•	Las Particulate matter (PM) son partículas que se encuentran en el aire, incluido el 
+                                     polvo, la suciedad, el hollín, el humo y las gotitas de líquido. Y son altamente peligrosas 
+                                     debido a que pueden alojarse profundamente en los pulmones por su pequeño tamaño")
+                                     
+                                       
+
+                                     
                             ),
                             tabPanel("Salud"),
                             tabPanel("Consejos"))
