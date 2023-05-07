@@ -239,7 +239,14 @@ styles <- tags$head(
             margin-bottom: 20px;
             width: 100%;
             box-shadow: 0 1px 1px rgb(0 0 0 / 10%);
-      }"
+      }
+      .bttn-jelly.bttn-primary {
+            margin-left: 20px;
+            height: 10%;
+            width: 50%;
+            font-size: 16px;
+      }
+      "
     )
   )
 )
