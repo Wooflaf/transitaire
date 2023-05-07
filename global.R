@@ -1,5 +1,6 @@
 # Cargar las librerías necesarias
 library(shiny)
+library(shinyWidgets)
 library(leaflet)
 library(leaflet.extras)
 library(shinydashboard)
@@ -8,6 +9,8 @@ library(lubridate)
 library(sf)
 library(leaflegend)
 library(plotly)
+library(waiter)
+library(cicerone)
 
 
 # Cargamos los datos
