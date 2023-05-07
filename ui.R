@@ -171,6 +171,10 @@ ui <- dashboardPage(
                                      polvo, la suciedad, el hollín, el humo y las gotitas de líquido. Y son altamente peligrosas 
                                      debido a que pueden alojarse profundamente en los pulmones por su pequeño tamaño"),
                                      p("Todas estos parametros estan registrados bajo la misma unidad de medida, µm."),
+                                     p("Para más información sobre los tipos de contaminantes y sus efectos en la salud, visita la página de la", 
+                                       a("Organización Mundial de la Salud (OMS)", 
+                                         href = "https://www.who.int/teams/environment-climate-change-and-health/air-quality-and-health/health-impacts/types-of-pollutants", target="_blank"),
+                                       "."),
                                      hr(),
                                      h3("Clasificación:"), 
                                      h4("Extremadamente desfavorable"),
@@ -190,12 +194,14 @@ ui <- dashboardPage(
                                      h4("Buena"),
                                      p("La calidad del aire es satisfactoria y presenta poco o ningún riesgo para la salud.")
                                      
-                                     
-                                       
-
-                                     
                             ),
-                            tabPanel("Salud"),
+                            tabPanel("Salud",
+                                     
+                                     
+                                     
+                                     
+                                     
+                                     ),
                             tabPanel("Consejos"))
                         )) 
     )
