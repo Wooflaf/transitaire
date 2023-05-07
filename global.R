@@ -22,3 +22,6 @@ source("./functions/styling.R", local = TRUE, encoding = "UTF-8")
 
 # Cargamos las funciones para poder aplicar estilos dinámicamente en leaflet
 source("./functions/leaflet_dynamic_style.R", local = TRUE, encoding = "UTF-8")
+
+# Cargamos las tabs
+source("./tabs/AQ_traffic_tab.R", local = TRUE, encoding = "UTF-8")

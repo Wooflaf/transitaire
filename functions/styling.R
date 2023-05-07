@@ -139,16 +139,17 @@ guide <- Cicerone$
     title = "Estadísticas de la estación",
     description = "Vaya. Aquí no hay... ¿Nada? En este recuadro se mostrará un gráfico con información relevante para una estación.
     No obstante, antes deberás hacer click en alguna de las que aparece en el mapa."
-  )#$
-  # step(
-  #   el = "sidebarCollapsed",
-  #   title = "Barra lateral",
-  #   description = "Pero no solo acaba ahí. A través de la barra lateral, puedes cambiar de sección. Podrás visualizar 
-  #                         los datos de las estaciones, compararlas entre ellas, así como acceder a una visualización en tiempo
-  #                         real de la ciudad de Valencia, y obtener información sobre cómo hemos obtenido los datos y por qué
-  #                         es tan importante mantener una ciudad libre de contaminación ambiental.",
-  #   position = "right-center"
-  # )
+  )$
+  step(
+    el = "[class = 'sidebar-toggle']",
+    title = "Barra lateral",
+    description = "Si haces click aquí podrás cambiar de sección.Podrás visualizar 
+    los datos de las estaciones, compararlas entre ellas, así como acceder a una 
+    visualización en tiempo real de Valencia. También podrás obtener información
+    sobre cómo hemos obtenido los datos y por qué es tan importante mantener una
+    ciudad con una buena calidad del aire",
+    is_id = FALSE
+  )
 
 ### Custom styles for classes
 
