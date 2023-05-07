@@ -117,11 +117,29 @@ guide <- Cicerone$
     el = "map",
     title = "Dora, ¡es el mapa!",
     description = HTML("En este mapa podrás ver la calidad del aire y el estado del 
-    tráfico en una hora y día determinado.<br><br>En la parte superior izquierda, tienes tres botones.
-    Los dos primeros controlan el zoom del mapa y el tercero te permite volver a la vista inicial.
-    <br><br>Además, en el lateral derecho, se encuentran las leyendas que te ayudarán 
-    a identificar qué representa cada elemento."),
+    tráfico en una hora y día determinado.<br><br>Los datos que vas a visualizar
+    comienzan el 2 de mayo de 2023 y acaban el 9 de mayo de 2023."),
     position = "left-center"
+  )$
+  step(
+    el = "[class = 'leaflet-top leaflet-left']",
+    title = "Zoom y reset",
+    description = "Con los dos primeros botones puedes controlar el zoom 
+    (también lo puedes hacer con la rueda del ratón).<br>
+    Con el último puedes volver a la vista inicial.",
+    is_id = FALSE
+  )$
+  step(
+    el = "[class = 'info legend leaflet-control']",
+    title = "Leyenda para las estaciones",
+    position = "left-center",
+    is_id = FALSE
+  )$
+  step(
+    el = "[class = 'leaflet-bottom leaflet-right']",
+    title = "Leyenda para el tráfico",
+    position = "left-center",
+    is_id = FALSE
   )$
   step(
     el = "box-time",
@@ -138,17 +156,48 @@ guide <- Cicerone$
     el = "box-stats",
     title = "Estadísticas de la estación",
     description = "Vaya. Aquí no hay... ¿Nada? En este recuadro se mostrará un gráfico con información relevante para una estación.
-    No obstante, antes deberás hacer click en alguna de las que aparece en el mapa."
+    No obstante, antes deberás hacer click en alguna de las que aparece en el mapa.",
+    on_next = "function(){
+    var body = document.body
+    body.classList.remove('sidebar-collapse')
+    }",
+    next_btn_text = "Abrir barra lateral"
   )$
   step(
-    el = "[class = 'sidebar-toggle']",
+    el = "sidebarCollapsed",
     title = "Barra lateral",
-    description = "Si haces click aquí podrás cambiar de sección.Podrás visualizar 
-    los datos de las estaciones, compararlas entre ellas, así como acceder a una 
-    visualización en tiempo real de Valencia. También podrás obtener información
-    sobre cómo hemos obtenido los datos y por qué es tan importante mantener una
-    ciudad con una buena calidad del aire",
-    is_id = FALSE
+    description = "Si mueves el ratón hacia el lateral izquierdo, o haces click en las tres líneas horizontales,
+    se abre esta barra lateral.<br>Aquí podrás cambiar de sección.",
+    position = "right-center",
+    next_btn_text = "Ver secciones"
+  )$
+  step(
+    el = "[data-value = 'graficos']",
+    title = "Gráficos sobre las estaciones",
+    description = "Podrás visualizar los datos de las estaciones, así como
+    compararlas entre ellas.",
+    is_id = FALSE,
+    position = "right-center"
+  )$
+  step(
+    el = "[data-value = 'live']",
+    title = "Visualización en tiempo real",
+    description = "En esta sección habrá una visualización geográfica en tiempo real
+    de los datos de las estaciones y de otras entidades",
+    is_id = FALSE,
+    position = "right-center"
+  )$
+  step(
+    el = "[data-value = 'info']",
+    title = "Información",
+    description = "Información sobre cómo hemos obtenido los datos
+    y por qué es tan importante mantener una ciudad con una buena calidad del aire",
+    is_id = FALSE,
+    on_next = "function(){
+    var body = document.body
+    body.classList.add('sidebar-collapse')
+    }",
+    position = "right-center"
   )
 
 ### Custom styles for classes
@@ -181,6 +230,15 @@ styles <- tags$head(
             font-size: 22px;
             margin: 0;
             line-height: 1;
+      }
+      .box {
+            position: relative;
+            border-radius: 3px;
+            background: #fff;
+            border-top: 3px solid #3c8cbd;
+            margin-bottom: 20px;
+            width: 100%;
+            box-shadow: 0 1px 1px rgb(0 0 0 / 10%);
       }"
     )
   )

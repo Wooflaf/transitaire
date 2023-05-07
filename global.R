@@ -4,6 +4,7 @@ library(shinyWidgets)
 library(leaflet)
 library(leaflet.extras)
 library(shinydashboard)
+library(shinydashboardPlus)
 library(tidyverse)
 library(lubridate)
 library(sf)
@@ -11,6 +12,7 @@ library(leaflegend)
 library(plotly)
 library(waiter)
 library(cicerone)
+library(shinyjs)
 
 
 # Cargamos los datos

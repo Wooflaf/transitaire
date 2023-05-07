@@ -64,8 +64,7 @@ server <- function(input, output) {
                      width = c(30, 30),
                      orientation = 'horizontal',
                      title = 'Tipo de tramo',
-                     position = 'bottomright',
-                     layerId = 'hola') %>%
+                     position = 'bottomright') %>%
       addLegend(colors = c("#2CC121", "#2332BA", "#C91616", "#E2D43C", "#303131"),
                 labels = levels(trafico$estado)[1:5], opacity = 0.8,
                 title = 'Tráfico', position = 'bottomright')
