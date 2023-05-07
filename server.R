@@ -61,21 +61,6 @@ server <- function(input, output) {
              Estacion %in% input$ID_Estacion2)
   })
   
-  #Metemos la info de los plots
-  output$grafico1 <- renderPlotly({
-    shiny::validate(
-      need(input$ID_Estacion2, "Elige una o varias estaciones"),
-      need(input$ID_Calidad2, "Elige una o varios parametros de calidad del aire")
-    )
-    gra <- ggplot(datos_filtrados(), aes(x = Fecha, colour = Estacion, group = Estacion)) +
-      ylim(0, 100) +
-      theme(legend.position = "none") + 
-      theme_minimal()
-    for (calidad in input$ID_Calidad2) {
-      gra <- gra + geom_line(aes_string(y = calidad))
-    }
-    gra
-  })
   
   #AÑADIMOS LA TABLA
   estaciones <- reactive({
@@ -220,31 +205,8 @@ server <- function(input, output) {
     )
   })
 
-  #Mostrar las estadisticas para los datos seleccionados
   
-  output$stats<- renderPrint({
-    shiny::validate(need(input$ID_Estacion3, "Elige una o varias estaciones"))
-    shiny::validate(need(input$ID_Calidad3, "Elige uno o varios parametros"))
-    shiny::validate(need(input$ID_Fecha3, "Elige una o varias estaciones"))
-    summary(datos_filtrados3())
-  })
-  
-  
-  
-  # INFORMACION
 
-  # Carga el archivo CSV
-  # tabla <- read.csv("./data/clasificacion.csv")
-  # 
-  # # Crea la tabla HTML
-  # output$tablaclasificacion <- renderDataTable({
-  #   datatable(tabla, 
-  #             options = list(pageLength = 10, 
-  #                            searchHighlight = TRUE,
-  #                            lengthMenu = c(10, 25, 50)))
-  # })
-  # 
-  
   
   ############### FIN PARTE GEMA, WILSON, SANDRA
   

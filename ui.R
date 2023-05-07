@@ -42,7 +42,7 @@ ui <- dashboardPage(
                 )),
       # Second tab content
       tabItem(tabName = "graficos",
-              h2("Distribución del NO2"),
+              h2("Distribución de los contaminantes en Valencia"),
               fluidRow(
                 column(width = 4,
                        box(title = "Visualización temporal",
@@ -55,7 +55,7 @@ ui <- dashboardPage(
     
       # Third tab content
       tabItem(tabName = "stats",
-              h2("Distribución del NO2"),
+              h2("Distribución de los contaminantes en valencia"),
               fluidPage(
                 # Show a plot of the generated distribution
                 tabsetPanel(
@@ -114,9 +114,7 @@ ui <- dashboardPage(
                                h4("Grafico semanal"), 
                                plotOutput("semanal"),
                                h4("Grafico semanal 2"), 
-                               plotOutput("semanal2"),
-                               h4("Grafico de lineas"), 
-                               plotlyOutput("grafico1")
+                               plotOutput("semanal2")
                              ))),
                   tabPanel("Tabla",  
                     sidebarLayout(
@@ -141,9 +139,7 @@ ui <- dashboardPage(
                       h3("Tabla Interactiva"), 
                       hr(), 
                       hr(),
-                      DT::dataTableOutput("tabla"),
-                      h3("Estadisticas para cada variable"), 
-                      verbatimTextOutput("stats")
+                      DT::dataTableOutput("tabla")
                     )))))),
                 tabItem(tabName = "info", 
                         h2("Más información"), 
@@ -176,7 +172,7 @@ ui <- dashboardPage(
                                          href = "https://www.who.int/teams/environment-climate-change-and-health/air-quality-and-health/health-impacts/types-of-pollutants", target="_blank"),
                                        "."),
                                      hr(),
-                                     h3("Clasificación:"), 
+                                     h3(strong("Clasificación:")), 
                                      h4("Extremadamente desfavorable"),
                                      p("Activar advertencias sanitarias de condiciones de emergencia. Es aún más probable que toda 
                                      la población se vea afectada por efectos graves para la salud."), 
