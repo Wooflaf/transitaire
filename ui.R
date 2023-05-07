@@ -169,7 +169,26 @@ ui <- dashboardPage(
                                      sanguíneo a través de los pulmones y reduce la cantidad de oxígeno en sangre."),
                                      p("    •	Las Particulate matter (PM) son partículas que se encuentran en el aire, incluido el 
                                      polvo, la suciedad, el hollín, el humo y las gotitas de líquido. Y son altamente peligrosas 
-                                     debido a que pueden alojarse profundamente en los pulmones por su pequeño tamaño")
+                                     debido a que pueden alojarse profundamente en los pulmones por su pequeño tamaño"),
+                                     p("Todas estos parametros estan registrados bajo la misma unidad de medida, µm."),
+                                     hr(),
+                                     h3("Clasificación:"), 
+                                     h4("Extremadamente desfavorable"),
+                                     p("Activar advertencias sanitarias de condiciones de emergencia. Es aún más probable que toda 
+                                     la población se vea afectada por efectos graves para la salud."), 
+                                     h4("Muy desfavorable "),
+                                     p("Activar una alerta de salud, lo que significa que todos pueden experimentar efectos de salud más graves."),
+                                     h4("Desfavorable "),
+                                     p("Todo el mundo puede comenzar a experimentar efectos en la salud. Los grupos sensibles pueden experimentar 
+                                       efectos de salud más graves. Insalubre para un grupo sensible."),
+                                     h4("Regular"),
+                                     p("Los grupos sensibles pueden experimentar efectos en la salud, pero es 
+                                       poco probable que el público en general se vea afectado."),
+                                     h4("Razonablemente buena "),
+                                     p("La calidad del aire es aceptable; sin embargo, la contaminación en este rango puede representar 
+                                       un problema de salud moderado para un número muy pequeño de personas."),
+                                     h4("Buena"),
+                                     p("La calidad del aire es satisfactoria y presenta poco o ningún riesgo para la salud.")
                                      
                                      
                                        
