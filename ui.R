@@ -158,22 +158,19 @@ ui <- dashboardPage(
                                        del aire. Todo ha sido gracias a los datos recogidos en el portal 
                                        dela pagina web de datos abiertos de Valencia desde el año 2004 hasta el año 2022.
                                        Los parametros a evaluar son:"),
-                                     p("•	El dióxido de azufre, un gas reactivo incoloro, se produce cuando se 
+                                     p("    •	El dióxido de azufre (SO2), es un gas reactivo incoloro, se produce cuando se 
                                      queman combustibles que contienen azufre, como el carbón y el petróleo. Con 
-                                     una exposición muy breve de SO2 puede causar estrechamiento de las vías respiratori"),
-                                     
-                                      p("•	El dióxido de azufre, un gas reactivo incoloro, se produce cuando se queman 
-                                        combustibles que contienen azufre, como el carbón y el petróleo. La exposición 
-                                        al NOz provoca efectos respiratorios adversos."),
-                                     p("•	El monóxido de carbono es un gas inodoro e incoloro que se forma cuando el carbono 
+                                     una exposición muy breve de SO2 puede causar estrechamiento de las vías respiratorias."),
+                                      p("    •	El dióxido de nitrogeno (NO2), es un gas que se forma como subproducto en los procesos 
+                                      de combustión a altas temperaturas, como en los vehículos motorizados y las plantas eléctricas. La exposición 
+                                        al NO2 provoca efectos respiratorios adversos."),
+                                     p("    •	El monóxido de carbono (CO) es un gas inodoro e incoloro que se forma cuando el carbono 
                                      de los combustibles no se quema por completo. El monóxido de carbono ingresa al torrente 
-                                     sanguíneo a través de los pulmones y reduce la cantidad de oxígeno."),
-                                     p("•	Las Particulate matter (PM) son partículas que se encuentran en el aire, incluido el 
+                                     sanguíneo a través de los pulmones y reduce la cantidad de oxígeno en sangre."),
+                                     p("    •	Las Particulate matter (PM) son partículas que se encuentran en el aire, incluido el 
                                      polvo, la suciedad, el hollín, el humo y las gotitas de líquido. Y son altamente peligrosas 
-                                     debido a que pueden alojarse profundamente en los pulmones por su pequeño tamaño"),
-                                     # h3("Niveles de clasificación"), 
-                                     # hr(), 
-                                     # DT::dataTableOutput("tablaclasificacion")
+                                     debido a que pueden alojarse profundamente en los pulmones por su pequeño tamaño")
+                                     
                                      
                                        
 
