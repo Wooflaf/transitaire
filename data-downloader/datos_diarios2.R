@@ -112,6 +112,14 @@ datos_diarios_clean$dia_sem <- factor(datos_diarios_clean$dia_sem,
                                       levels= dias_levels,
                                       labels= dias_levels)
 
+#Añadimos la información que visualizaremos
+datos_diarios_clean$text <- paste0("Fecha: ", day(datos_diarios_clean$Fecha), " de ",
+                                   month(datos_diarios_clean$Fecha, label = TRUE, abbr = FALSE), "\n",
+                                   "Valor: ", datos_diarios_clean$Valores, "\n",
+                                   "Dia: ", datos_diarios_clean$dia_sem)
+
+
+
 path <- "./data/datos_diarios_clean.RData"
 # Guardamos los datos 
 save(datos_diarios_clean, file = path)
