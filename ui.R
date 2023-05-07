@@ -202,7 +202,44 @@ ui <- dashboardPage(
                                      
                                      
                                      ),
-                            tabPanel("Consejos"))
+                            tabPanel("Consejos",
+                                     h2("Politicas para reducir la contaminación en el aire."),
+                                     p("Tomar medidas contra la contaminación del aire, que es el segundo factor de riesgo para las 
+                                       enfermedades no transmisibles, es crucial para proteger la salud pública."),
+                                     p("La mayoría de las fuentes de contaminación del aire exterior están más allá del control de las personas, 
+                                       lo que requiere la adopción de medidas concertadas por parte de las instancias normativas locales, nacionales 
+                                       y regionales que trabajan en sectores tales como el de la energía, el transporte, la gestión de desechos, 
+                                       la planificación urbana y la agricultura."),
+                                     p("Estos son algunos ejemplos de medidas posibles para mejorar:"),
+                                     p("Existen numerosos ejemplos de políticas que han obtenido buenos resultados en la reducción de la contaminación del aire:"),
+
+                                      p(" •	En la",strong("industria"), ": utilización de tecnologías limpias que reducen las emisiones de las chimeneas industriales; gestión 
+                                        mejorada de desechos urbanos y agrícolas, incluida la recuperación del gas metano de los vertederos como una alternativa 
+                                        a la incineración (para utilizarlo como biogás"),
+                                      p(" •	En el ",strong("sector de la energía"),": garantizar el acceso a soluciones asequibles de energía doméstica no contaminante para cocinar, 
+                                        generar calor y alumbrar."),
+                                      p(" •	En el ",strong("transporte"),": adopción de métodos limpios de generación de electricidad; priorización del transporte urbano rápido, 
+                                        las sendas peatonales y los carriles para bicicletas en las ciudades, así como el transporte interurbano de cargas y 
+                                        pasajeros por ferrocarril; utilización de vehículos pesados de motor diésel más limpios y vehículos y combustibles 
+                                        de bajas emisiones, especialmente combustibles con bajo contenido de azufre"),
+                                      p(" •	En la ",strong("planificación urbana"),": mejoramiento de la eficiencia energética de los edificios y promoción de ciudades más 
+                                      compactas y con más zonas verdes para lograr una mayor eficiencia"),
+                                      p(" •	En la ",strong("generación de electricidad"),": aumento del uso de combustibles de bajas emisiones y fuentes de energía renovable 
+                                        sin combustión (solar, eólica o hidroeléctrica); generación conjunta de calor y electricidad; y generación distribuida 
+                                        de energía (por ejemplo, generación de electricidad mediante redes pequeñas y paneles solares"),
+                                      p(" •	En la ",strong("gestión de desechos municipales y agrícolas"),": estrategias de reducción, separación, reciclado y reutilización o 
+                                        reelaboración de desechos, así como métodos mejorados de gestión biológica de desechos tales como la digestión anaeróbica 
+                                        para producir biogás, que constituyen alternativas viables y de bajo costo a la incineración de desechos sólidos; cuando 
+                                        no se pueda evitar la incineración, será crucial la utilización de tecnologías de combustión con rigurosos controles de emisión"),
+                                      p(" •	En las ",strong("actividades de atención de la salud"),": situar los servicios de salud en la vía del desarrollo con bajas emisiones de 
+                                        carbono puede contribuir a una prestación de servicios más resiliente y costoeficaz, además de reducir los riesgos medioambientales
+                                        para la salud de los pacientes, los trabajadores de la salud y la comunidad. Al apoyar políticas inocuas para el clima, el sector 
+                                        de la salud puede hacer gala de liderazgo público y a la vez mejorar la prestación de los servicios de salud."),
+                                     p("Para más información, visita la página de la", 
+                                       a("Organización Mundial de la Salud (OMS)", 
+                                         href = "https://www.who.int/es/news-room/fact-sheets/detail/ambient-(outdoor)-air-quality-and-health", target="_blank"),
+                                       "."),
+                                                                           ))
                         )) 
     )
   )
