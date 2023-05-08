@@ -16,7 +16,6 @@ ui <- dashboardPage(
     waiter_show_on_load(html = waiting_screen, color = "#edf1f5"),
     use_cicerone(),
     styles,
-    useShinyjs(),
     tabItems(
       tabItem(tabName = "AQ_traffic", AQ_traffic_tab),
       tabItem(tabName = "graficos"),

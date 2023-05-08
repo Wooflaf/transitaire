@@ -66,7 +66,7 @@ AQ_traffic_tab <- fluidRow(
                            value = first_datetime, step = 3600,
                            timeFormat = "%d/%m/%Y %H:%M",
                            ticks = F, timezone = "+0000",
-                           animate = animationOptions(interval = 1500, loop = F,
+                           animate = animationOptions(interval = 850, loop = F,
                                                       playButton = actionButton(
                                                         "play",
                                                         "",
@@ -83,20 +83,7 @@ AQ_traffic_tab <- fluidRow(
                                                       )
                            )
                )
-             ),
-             div(
-               style = "width: 40%;",
-               class = "slider-container",
-               sliderInput("speed", NULL,
-                           min = 1, max =  4, 
-                           value = 1, step = 1,
-                           ticks = FALSE),
-               actionBttn("speed_button",
-                          label = "Cambiar velocidad",
-                          style = "jelly",
-                          color = "primary")
-             ),
-             
+             )
            )
          )
   )

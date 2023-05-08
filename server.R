@@ -3,13 +3,6 @@ server <- function(input, output, session) {
   observeEvent(input$waiter_hidden, {guide$init()$start()})
   observeEvent(input$guide, {guide$start()})
   
-  observeEvent(input$speed_button, {
-    runjs("
-    document.getElementById('play').click();
-    document.getElementsByClassName('slider-animate-button')[0].dataset.interval = 1500/document.getElementsByClassName('irs-single')[1].innerHTML;
-    ")
-  })
-  
   output$fecha <- renderUI({
     fecha <- str_to_sentence(format(input$time, format = "%A, %e de %B de %Y %H:%M"))
     if (hour(input$time) >= 7 & hour(input$time) < 21) {
