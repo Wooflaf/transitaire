@@ -193,10 +193,39 @@ ui <- dashboardPage(
                                      
                             ),
                             tabPanel("Salud",
-                                     
-                                     
-                                     
-                                     
+                                     p("La contaminación del aire representa uno de los mayores peligros para el medio ambiente y la salud humana. 
+                                       Si los países logran reducir los niveles de contaminación atmosférica, podrían disminuir significativamente 
+                                       la incidencia de enfermedades como accidentes cerebrovasculares, enfermedades cardíacas, cánceres de pulmón y 
+                                       neumopatías crónicas y agudas, incluyendo el asma.Se trata de un efecto equivalente al de fumar tabaco."),
+                                     p("Cerca de 374.831 personas cuentan con diagnóstico activo de asma en la Comunitat Valenciana. 
+                                       Por provincias: 40.829 personas en Castellón, 199.633 en Valencia y 134.369 en Alicante. 
+                                       El ozono (O3) es uno de los principales factores que causan asma (o la empeora), y el dióxido de nitrógeno (NO2) y el dióxido 
+                                       de azufre (SO2) también pueden causar asma, síntomas bronquiales, inflamación pulmonar e insuficiencia pulmonar. Estos son 
+                                       algunos de los contaminantes estudiados."),
+                                     p("Los efectos combinados de la contaminación del aire ambiente y la del aire doméstico se asocian a 6,7 millones de 
+                                     muertes prematuras cada año. Se estima que en 2019 la contaminación del aire ambiente (exterior) provocó en todo el 
+                                       mundo 4,2 millones de muertes prematuras."),
+                                     p("Es esencial implementar acciones para combatir la contaminación del aire, ya que ésta constituye el segundo factor 
+                                       de riesgo más importante para las enfermedades no transmisibles, es crucial para proteger la salud pública."),
+                                     p("Las Directrices Mundiales de la Organización Mundial de la Salud (OMS) sobre la Calidad del Aire son un conjunto de 
+                                       recomendaciones a nivel global que establecen umbrales y límites para los principales contaminantes atmosféricos que 
+                                       pueden afectar la salud. Estas directrices se desarrollan mediante un proceso transparente y basado en evidencia, lo 
+                                       que garantiza su alta calidad metodológica. Además de definir valores para los contaminantes, las Directrices Mundiales 
+                                       de la OMS también establecen metas intermedias para fomentar una disminución gradual de las concentraciones de 
+                                       contaminantes, pasando de niveles elevados a niveles más bajos."),
+                                 
+                                     p("Para más información sobre los tipos de contaminantes y sus efectos en la salud, visita la página de la", 
+                                       a("Organización Mundial de la Salud (OMS)", 
+                                         href = "https://www.who.int/es/news-room/fact-sheets/detail/ambient-(outdoor)-air-quality-and-health", target="_blank"),
+                                       "."),
+                                     p("Referencias", 
+                                       a("Generalitat Valenciana", 
+                                         href = "https://comunica.gva.es/va/detalle?id=371592919&site=174859789", target="_blank"),
+                                       "."),
+                                     p("Referencias", 
+                                       a("Cómo la contaminación del aire está destruyendo nuestra salud (OMS)", 
+                                         href = "https://www.who.int/es/news-room/spotlight/how-air-pollution-is-destroying-our-health", target="_blank"),
+                                       "."),
                                      
                                      ),
                             tabPanel("Consejos",
