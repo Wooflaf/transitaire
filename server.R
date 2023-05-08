@@ -204,11 +204,17 @@ server <- function(input, output) {
       )
     )
   })
-
   
+  output$Imagen <- renderImage({
+    
+    list(src = "www/Clasificacion.jpeg",
+         width = "100%",
+         height = 330)
+    
+  }, deleteFile = F)
 
-  
   ############### FIN PARTE GEMA, WILSON, SANDRA
+  
   
   
   

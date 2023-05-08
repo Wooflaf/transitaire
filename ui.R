@@ -188,7 +188,8 @@ ui <- dashboardPage(
                                      p("La calidad del aire es aceptable; sin embargo, la contaminación en este rango puede representar 
                                        un problema de salud moderado para un número muy pequeño de personas."),
                                      h4("Buena"),
-                                     p("La calidad del aire es satisfactoria y presenta poco o ningún riesgo para la salud.")
+                                     p("La calidad del aire es satisfactoria y presenta poco o ningún riesgo para la salud."),
+                                     imageOutput("Imagen")
                                      
                             ),
                             tabPanel("Salud",

@@ -31,7 +31,7 @@ colores <- c("Buena" = "#2E8B57", "Razonablemente Buena" = "darkgreen",
 
 #Funcion que hace el mapa de calor
 date_heatmap <- function(df){
-  ggplot(df, aes(week, dia_sem, fill = Clasificacion, text = Clasificacion)) + 
+  ggplot(df, aes(week, dia_sem, fill = Clasificacion, text = text)) + 
     geom_tile() + 
     facet_grid(year(Fecha) ~ month) +
     scale_fill_manual(values = colores) +
@@ -44,5 +44,6 @@ interactive_date_heatmap <- function(p){
   ggplotly(p, tooltip = "text") %>% 
     config(displayModeBar = FALSE)
 }
+
 
 shinyApp(ui, server)
