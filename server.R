@@ -52,7 +52,7 @@ server <- function(input, output, session) {
     map <- leaflet(options = leafletOptions(minZoom = 13, maxZoom = 16, zoomSnap = 0.1)) %>%
       addProviderTiles(providers$CartoDB.Positron) %>% 
       addPolylines(data = tramos_trafico, layerId = ~as.character(gid), label = ~denominacion) %>% 
-      addAwesomeMarkers(data = est_contamin, layerId = ~objectid) %>% 
+      addAwesomeMarkers(data = estaciones, layerId = ~as.character(objectid)) %>% 
       setView(lng = "-0.36139126257400377", lat = "39.469993930673834",  zoom = 13.6) %>% 
       setMaxBounds(lng1 = "-0.5017152868950778", lat1 = "39.55050724348406",
                    lng2 = "-0.24762442378004983", lat2 = "39.389409229115124") %>% 
