@@ -93,29 +93,32 @@ server <- function(input, output, session) {
   })
   
   # En función de la hora, cambio entre cartografía clara/oscura
-  timeList <- reactiveValues(tile_historic = "tile_night")
+  timeList <- reactiveValues(tile_historic = "tile_night1", inc = 1)
   
   observeEvent(input$time,{
+    timeList$inc <- timeList$inc+1 
     if (is_daylight(input$time)) {
-      timeList$tile_historic <- c(timeList$tile_historic, "tile_daylight") 
+      timeList$tile_historic <- c(timeList$tile_historic, paste0("tile_daylight", timeList$inc)) 
     } else{
-      timeList$tile_historic <- c(timeList$tile_historic, "tile_night") 
+      timeList$tile_historic <- c(timeList$tile_historic, paste0("tile_night", timeList$inc)) 
     }
   })
   
   
   observe({
     last_selected_tile <- tail(timeList$tile_historic, 1)
+    last_selected_tile_class <- gsub("[0-9]", "", last_selected_tile)
     second_to_last_selected_tile <- tail(timeList$tile_historic, 2)[1]
-    
-    if(last_selected_tile != second_to_last_selected_tile){
-      
-      if (last_selected_tile == "tile_daylight"){
-        prov <- providers$CartoDB.Positron
+    second_to_last_selected_tile_class <- gsub("[0-9]", "", second_to_last_selected_tile)
+
+    if( last_selected_tile_class != second_to_last_selected_tile_class){
+
+      if (last_selected_tile_class == "tile_daylight"){
+          prov <- providers$CartoDB.Positron
       } else{
         prov <- providers$CartoDB.DarkMatter
       }
-      
+
       leafletProxy("map") %>%
         removeTiles(layerId = second_to_last_selected_tile) %>%
         addProviderTiles(
