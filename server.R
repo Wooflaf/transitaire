@@ -45,12 +45,12 @@ server <- function(input, output, session) {
     trafico %>% 
       filter(fecha_carga == input$time)
   })
-  
+
   # Función para crear el mapa con Leaflet
   output$map <- renderLeaflet({
     # Crear el mapa con Leaflet
     map <- leaflet(options = leafletOptions(minZoom = 13, maxZoom = 16, zoomSnap = 0.1)) %>%
-      addProviderTiles(providers$CartoDB.Positron) %>% 
+      addProviderTiles(providers$CartoDB.DarkMatter, layerId = "tile_night", group = "day_night_tiles") %>%
       addPolylines(data = tramos_trafico, layerId = ~as.character(gid), label = ~denominacion) %>% 
       addAwesomeMarkers(data = estaciones, layerId = ~as.character(objectid)) %>% 
       setView(lng = "-0.36139126257400377", lat = "39.469993930673834",  zoom = 13.6) %>% 
@@ -92,26 +92,46 @@ server <- function(input, output, session) {
       )
   })
   
+  # En función de la hora, cambio entre cartografía clara/oscura
+  timeList <- reactiveValues(tile_historic = "tile_night")
   
-  observeEvent(traffic_data(),{ 
-    # En función de la hora, cambio entre cartografía clara/oscura
+  observeEvent(input$time,{
+    if (is_daylight(input$time)) {
+      timeList$tile_historic <- c(timeList$tile_historic, "tile_daylight") 
+    } else{
+      timeList$tile_historic <- c(timeList$tile_historic, "tile_night") 
+    }
+  })
+  
+  
+  observe({
+    last_selected_tile <- tail(timeList$tile_historic, 1)
+    second_to_last_selected_tile <- tail(timeList$tile_historic, 2)[1]
     
-    if (hour(input$time) >= 7 & hour(input$time) < 21) {
+    if(last_selected_tile != second_to_last_selected_tile){
+      
+      if (last_selected_tile == "tile_daylight"){
+        prov <- providers$CartoDB.Positron
+      } else{
+        prov <- providers$CartoDB.DarkMatter
+      }
       
       leafletProxy("map") %>%
-        addProviderTiles(providers$CartoDB.Positron) %>%
-        setShapeStyle(layerId = ~gid,
-                      color = ~pal_trafico(estado),
-                      dashArray = ~ifelse(grepl("(?i)paso inferior", estado), "10,15", ""),
-                      data = traffic_data())
-    } else {
-      leafletProxy("map") %>%
-        addProviderTiles(providers$CartoDB.DarkMatter) %>% 
-        setShapeStyle(layerId = ~gid,
-                      color = ~pal_trafico_night(estado),
-                      dashArray = ~ifelse(grepl("(?i)paso inferior", estado), "10,15", ""),
-                      data = traffic_data())
+        removeTiles(layerId = second_to_last_selected_tile) %>%
+        addProviderTiles(
+          prov,
+          layerId = last_selected_tile,
+          group = "day_night_tiles")
     }
+  })
+  
+  observeEvent(traffic_data(),{ 
+    leafletProxy("map") %>%
+      setShapeStyle(layerId = ~gid,
+                    color = ~pal_trafico(estado),
+                    dashArray = ~ifelse(grepl("(?i)paso inferior", estado), "10,15", ""),
+                    data = traffic_data())
+
     waiter_hide()
   })
   

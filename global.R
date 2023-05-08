@@ -1,18 +1,18 @@
 # Cargar las librerías necesarias
-library(shiny)
-library(shinyWidgets)
-library(leaflet)
-library(leaflet.extras)
-library(shinydashboard)
-library(shinydashboardPlus)
-library(tidyverse)
-library(lubridate)
-library(sf)
-library(leaflegend)
-library(plotly)
-library(waiter)
-library(cicerone)
-library(shinyjs)
+library(shiny) # Version 1.7.4
+library(shinyWidgets) # Version 0.7.6 
+library(leaflet) # Version 2.1.2
+library(leaflet.extras) # Version 1.0.0
+library(shinydashboard) # Version 0.7.2
+library(shinydashboardPlus) # Version 2.0.3
+library(tidyverse) # Version 1.3.2
+library(lubridate) # Version 1.9.2
+library(sf) # Version 1.0-12
+library(leaflegend) # Version 1.10
+library(plotly) # Version 4.10.1
+library(waiter) # Version 0.2.5
+library(cicerone) # Version 1.0.4
+library(shinyjs) # Version 2.1.0
 
 
 # Cargamos los datos
@@ -27,3 +27,12 @@ source("./functions/leaflet_dynamic_style.R", local = TRUE, encoding = "UTF-8")
 
 # Cargamos las tabs
 source("./tabs/AQ_traffic_tab.R", local = TRUE, encoding = "UTF-8")
+
+is_daylight <- function(date){
+  if(hour(date) >= 7 & hour(date) < 21){
+    return(TRUE)
+  }
+  else{
+    return(FALSE)
+  }
+}
