@@ -10,9 +10,6 @@ clean_date_time <- function(x){
   return(with_tz(dt, tzone = "Europe/Madrid"))
 }
 
-first_datetime <- min(accum_trafico_rodado$fecha_carga)
-last_datetime <- max(accum_trafico_rodado$fecha_carga)
-
 labels_estado <- c("Fluido", "Denso", "Congestionado", "Cortado", "Sin datos",
                    str_c("Paso inferior ", c("fluido", "denso", "congestionado", "cortado")),
                    "Sin datos (paso inferior)")
@@ -22,6 +19,9 @@ accum_trafico_rodado <- read_csv("./data/accum_trafico.csv") %>%
     gid = as.integer(gid),
     estado = factor(estado, levels = 0:9, labels = labels_estado),
     fecha_carga = clean_date_time(fecha_carga))
+
+first_datetime <- min(accum_trafico_rodado$fecha_carga)
+last_datetime <- max(accum_trafico_rodado$fecha_carga)
 
 trafico <- st_as_sf(left_join(accum_trafico_rodado, tramos_trafico, by = "gid") %>%
                       mutate(gid = as.character(gid)) %>% 
