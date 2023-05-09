@@ -1,12 +1,18 @@
 # Crear el servidor
 server <- function(input, output, session) {
+  
+  # Iniciar guía cuando se acabe animación de carga inicial
   observeEvent(input$waiter_hidden, {guide$init()$start()})
+  
+  # Iniciar guía al presionar botón guide en UI
   observeEvent(input$guide, {guide$start()})
   
+  # Valor reactivo para obtener la fecha y hora en zona horaria correspondiente
   datetime <- reactive({
     return(with_tz(as.POSIXct(input$time, tz = "UTC"), tzone = "Europe/Madrid"))
   })
   
+  # Renderizar fecha y hora en mapa cambiando el color acorde a la hora
   output$fecha <- renderUI({
     fecha <- str_to_sentence(format(datetime(), format = "%A, %e de %B de %Y %H:%M"))
     if (is_daylight(datetime())) {
@@ -18,6 +24,7 @@ server <- function(input, output, session) {
     return(HTML(as.character(fecha_color)))
   })
   
+  # Cambiar color acorde a la hora de los labels mínimos y máximos del slider
   output$color <- renderUI({
     if (is_daylight(datetime())) {
       color <- paste0(".irs-min, .irs-max {color: #000000;}")
@@ -28,16 +35,19 @@ server <- function(input, output, session) {
     return(tags$head(tags$style(HTML(as.character(color)))))
   })
   
+  # Dataframe de estaciones filtrado por la variable seleccionada
   air_data_var <- reactive({
     est_contamin %>%
       filter(AirPollutant == input$var) 
   })
   
+  # Dataframe de estaciones filtrado por la variable y hora seleccionada
   air_data <- reactive({
     air_data_var() %>%
       filter(DatetimeBegin == datetime())
   })
   
+  # Dataframe de tráfico filtrado por la hora seleccionada
   traffic_data <- reactive({
     trafico %>% 
       filter(fecha_carga == datetime())
@@ -46,7 +56,7 @@ server <- function(input, output, session) {
   # Función para crear el mapa con Leaflet
   output$map <- renderLeaflet({
     # Crear el mapa con Leaflet
-    map <- leaflet(options = leafletOptions(minZoom = 13, maxZoom = 16, zoomSnap = 0.1)) %>%
+    leaflet(options = leafletOptions(minZoom = 13, maxZoom = 16, zoomSnap = 0.1)) %>%
       addProviderTiles(providers$CartoDB.DarkMatter, layerId = "tile_night", group = "day_night_tiles") %>%
       addPolylines(data = tramos_trafico, layerId = ~as.character(gid), label = ~denominacion) %>% 
       addAwesomeMarkers(data = estaciones, layerId = ~as.character(objectid)) %>% 
@@ -58,12 +68,12 @@ server <- function(input, output, session) {
                            orientation = 'vertical',
                            position = 'topright',
                            title = htmltools::tags$div(
-                             style = 'font-size: 14px;',
+                             style = 'font-size: 16px; font-weight: bold',
                              'Estaciones de Contaminación'),
                            labelStyle = 'font-size: 14px;') %>%
       addLegendImage(images = list("./icons/line.png", "./icons/dash.png"),
                      labels = c("Exterior", "Subterráneo"),
-                     labelStyle = "font-size: 12px; vertical-align: middle;",
+                     labelStyle = "font-size: 14px; vertical-align: middle;",
                      height = c(30, 30),
                      width = c(30, 30),
                      orientation = 'horizontal',
@@ -72,12 +82,9 @@ server <- function(input, output, session) {
       addLegend(colors = c("#2CC121", "#2332BA", "#C91616", "#E2D43C", "#303131"),
                 labels = levels(trafico$estado)[1:5], opacity = 0.8,
                 title = 'Tráfico', position = 'bottomright')
-    
-    # Retornar el mapa
-    return(map)
-    
   })
   
+  # Cuando cambien los datos de estaciones, eliminar los marcadores antiguos y cargar los actualizados
   observeEvent(air_data(), {
     leafletProxy("map") %>%
       clearMarkers() %>% 
@@ -92,6 +99,9 @@ server <- function(input, output, session) {
   # En función de la hora, cambio entre cartografía clara/oscura
   timeList <- reactiveValues(tile_historic = "tile_night1", inc = 1)
   
+  # Cuando cambia la fecha y hora, guardo un histórico de las tiles que debería cargarse en base a su hora
+  # Si es diurno, indico "tile_daylight" y si es nocturno, indico "tile_night"
+  # Esto permite saber si hay que cambiar de tiles o no
   observeEvent(datetime(),{
     timeList$inc <- timeList$inc+1 
     if (is_daylight(datetime())) {
@@ -101,7 +111,17 @@ server <- function(input, output, session) {
     }
   })
   
+  # Si las tiles que debería cargar son del mismo tipo que las anteriores (por ejemplo, ambas diurnas)
+  # no cambio de tiles. No obstante, si la actual es de un tipo y las anteriores de otro
+  # (por ejemplo, nocturnas y antes diurnas) cambio de tiles.
   
+  # También mantengo una especie de identificador (es la variable "inc") para que se 
+  # carguen de nuevo las tiles, en vez de ir cambiando entre las que están cargadas.
+  
+  # Esto puede no tener sentido desde un punto de vista computacional.
+  # Pero es porque de esta manera, al cargarse se produce una animación "suave".
+  # Si las tiles ya están cargadas, el cambio es muy brusco y molesto para el usuario,
+  # sobre todo si es del color negro al blanco
   observe({
     last_selected_tile <- tail(timeList$tile_historic, 1)
     last_selected_tile_class <- gsub("[0-9]", "", last_selected_tile)
@@ -125,6 +145,10 @@ server <- function(input, output, session) {
     }
   })
   
+  # Cuando cambien los datos de tráfico, actualizamos las layers con las características que queramos
+  # Método más óptimo que borrar las polylines y volver a cargarlas.
+  # Además, evitamos el efecto de flash al eliminar y cargar las capas.
+  # La función setShapeStyle no está implementada en leaflet, ver script leaflet_dynamic_style.R.
   observeEvent(traffic_data(),{ 
     leafletProxy("map") %>%
       setShapeStyle(layerId = ~gid,
@@ -132,9 +156,11 @@ server <- function(input, output, session) {
                     dashArray = ~ifelse(grepl("(?i)paso inferior", estado), "10,15", ""),
                     data = traffic_data())
     
+    # Cuando se carguen inicialmente en el leaflet, ocultamos la pantalla de carga
     waiter_hide()
   })
   
+  # Renderizar plotly del % de registros para una estación y variable determinada, coloreando por la calidad
   output$est_plotly <- renderPlotly({
     validate(
       need(input$map_marker_click$id, 'Selecciona una estación de contaminación atmosférica.')
@@ -171,7 +197,8 @@ server <- function(input, output, session) {
              yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
   })
   
-  output$station_stats <- renderUI({
+  # Renderizar desde server el título de estadísticas de la estación para cambiar según estación seleccionada
+  output$station_stats <- renderText({
     if(is.null(input$map_marker_click$id)){
       box_title <- "Estadísticas de la estación"
     } else {
@@ -187,16 +214,6 @@ server <- function(input, output, session) {
       
       box_title <- str_c("Estadísticas de la estación ", estacion)
     }
-    
-    return(
-      div(
-        id = "box-stats",
-        box(
-          title = box_title,
-          width = NULL, solidHeader = F,
-          plotlyOutput("est_plotly", height = 300)
-        )
-      )
-    )
+    return(box_title)
   })
 }

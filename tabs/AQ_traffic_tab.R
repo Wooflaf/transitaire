@@ -28,7 +28,14 @@ AQ_traffic_tab <- fluidRow(
                )
            )
          ),
-         uiOutput("station_stats"),
+         div(
+           id = "box-stats",
+           box(
+             title = textOutput("station_stats"),
+             width = NULL, solidHeader = F,
+             plotlyOutput("est_plotly", height = 300)
+           )
+         ),
          div(style="display:inline-block",
              actionBttn('guide', 'Ver tutorial de nuevo',
                         style = "fill", color = "primary"
