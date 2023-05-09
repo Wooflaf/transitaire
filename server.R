@@ -213,6 +213,13 @@ server <- function(input, output) {
     
   }, deleteFile = F)
 
+  
+  # tabla 2 parte información
+  output$tabla2 <- renderText({
+    tabla  %>% kable(caption = "(Si queremos poner titulo a la tabla)") %>% kable_styling() %>%
+      row_spec(1, background = "lightblue") #%>%
+      #scroll_box(width = "700px", height = "400px")
+  })
   ############### FIN PARTE GEMA, WILSON, SANDRA
   
   
@@ -259,3 +266,4 @@ server <- function(input, output) {
   })
   
 }
+

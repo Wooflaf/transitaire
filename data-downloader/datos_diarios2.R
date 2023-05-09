@@ -3,6 +3,8 @@ library(lubridate)
 library(jsonlite)
 library(tidyverse)
 library(readr)
+library(dplyr)
+library(tidyr)
 
 
 # Descargar los datos y convertirlos en una cadena de texto
@@ -17,7 +19,7 @@ path <- "./data/datos_diarios.RData"
 # Guardamos los datos 
 save(datos_diarios, file = path)
 
-datos_diarios_clean <- datos_diarios%>% select(-c("Fecha baja", "NH3","Ruido", "Humidad relativa", "Radiacion solar", 
+datos_diarios_clean <- datos_diarios%>% dplyr::select(-c("Fecha baja", "NH3","Ruido", "Humidad relativa", "Radiacion solar", 
                                                    "Direccion del viento", "Velocidad del viento", "Velocidad maxima del viento",
                                                    "Precipitacion", "Temperatura"))
 
@@ -30,7 +32,7 @@ for (i in columnas){
 }
 
 # Seleccionamos las columnas que son numericas
-parametros_numericos <- names(datos_diarios_clean %>% select(-c("Id", "Fecha", "Dia de la semana", "Estacion", "Fecha creacion")))
+parametros_numericos <- names(datos_diarios_clean %>% dplyr::select(-c("Id", "Fecha", "Dia de la semana", "Estacion", "Fecha creacion")))
 
 #Las convertimos todas a numericas
 for (i in parametros_numericos) {
@@ -39,7 +41,7 @@ for (i in parametros_numericos) {
 
 
 #Selccionamos las variables que nos interesan 
-datos_diarios_interesantes <- datos_diarios_clean %>% select(c(PM2.5, PM10,NO2, O3, SO2, Id, Fecha, "Dia de la semana", Estacion))
+datos_diarios_interesantes <- datos_diarios_clean %>% dplyr::select(c(PM2.5, PM10,NO2, O3, SO2, Id, Fecha, "Dia de la semana", Estacion))
 
 
 #Ahora queremos los datos de una manera sencilla para representarlo en los graficos
@@ -123,3 +125,5 @@ datos_diarios_clean$text <- paste0("Fecha: ", day(datos_diarios_clean$Fecha), " 
 path <- "./data/datos_diarios_clean.RData"
 # Guardamos los datos 
 save(datos_diarios_clean, file = path)
+
+tabla <- read_delim("data/tabla.csv", delim = ";")

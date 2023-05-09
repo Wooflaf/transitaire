@@ -169,7 +169,7 @@ ui <- dashboardPage(
                                      p("Todas estos parametros estan registrados bajo la misma unidad de medida, µm."),
                                      p("Para más información sobre los tipos de contaminantes y sus efectos en la salud, visita la página de la", 
                                        a("Organización Mundial de la Salud (OMS)", 
-                                         href = "https://www.who.int/teams/environment-climate-change-and-health/air-quality-and-health/health-impacts/types-of-pollutants", target="_blank"),
+                                         href = "https://www.who.int/teams/environment-climate-change-and-health/air-quality-and-health/health-impacts/types-of-pollutants"),
                                        "."),
                                      hr(),
                                      h3(strong("Clasificación:")), 
@@ -189,7 +189,11 @@ ui <- dashboardPage(
                                        un problema de salud moderado para un número muy pequeño de personas."),
                                      h4("Buena"),
                                      p("La calidad del aire es satisfactoria y presenta poco o ningún riesgo para la salud."),
-                                     imageOutput("Imagen")
+                                     imageOutput("Imagen"),
+                                     # como la tabla la hacemos con kable nos devuelve la tabla en lenguaje html
+                                     # y por eso en lugar de tableOutput tenemos que usar htmlOutput()
+                                     # en el server en lugar de renderTable utilizamos renderText
+                                     htmlOutput("tabla2")
                                      
                             ),
                             tabPanel("Salud",
@@ -216,16 +220,17 @@ ui <- dashboardPage(
                                  
                                      p("Para más información sobre los tipos de contaminantes y sus efectos en la salud, visita la página de la", 
                                        a("Organización Mundial de la Salud (OMS)", 
-                                         href = "https://www.who.int/es/news-room/fact-sheets/detail/ambient-(outdoor)-air-quality-and-health", target="_blank"),
+                                         href = "https://www.who.int/es/news-room/fact-sheets/detail/ambient-(outdoor)-air-quality-and-health"),
                                        "."),
                                      p("Referencias", 
                                        a("Generalitat Valenciana", 
-                                         href = "https://comunica.gva.es/va/detalle?id=371592919&site=174859789", target="_blank"),
+                                         href = "https://comunica.gva.es/va/detalle?id=371592919&site=174859789"),
                                        "."),
                                      p("Referencias", 
                                        a("Cómo la contaminación del aire está destruyendo nuestra salud (OMS)", 
-                                         href = "https://www.who.int/es/news-room/spotlight/how-air-pollution-is-destroying-our-health", target="_blank"),
+                                         href = "https://www.who.int/es/news-room/spotlight/how-air-pollution-is-destroying-our-health"),
                                        "."),
+                                     p()
                                      
                                      ),
                             tabPanel("Consejos",
@@ -263,7 +268,7 @@ ui <- dashboardPage(
                                         de la salud puede hacer gala de liderazgo público y a la vez mejorar la prestación de los servicios de salud."),
                                      p("Para más información, visita la página de la", 
                                        a("Organización Mundial de la Salud (OMS)", 
-                                         href = "https://www.who.int/es/news-room/fact-sheets/detail/ambient-(outdoor)-air-quality-and-health", target="_blank"),
+                                         href = "https://www.who.int/es/news-room/fact-sheets/detail/ambient-(outdoor)-air-quality-and-health"),
                                        "."),
                                                                            ))
                         )) 

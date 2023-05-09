@@ -7,6 +7,7 @@ library(lubridate)
 library(sf)
 library(DT)
 library(plotly)
+library(kableExtra)
 
 # Cargamos los datos
 source("./data_cleaning/AQ_EU_clean.R", local = TRUE, encoding = "UTF-8")
