@@ -115,7 +115,7 @@ guide <- Cicerone$
   )$
   step(
     el = "map",
-    title = "Dora, ¡es el mapa!",
+    title = "Visualización geográfica",
     description = HTML("En este mapa podrás ver la calidad del aire y el estado del 
     tráfico en una hora y día determinado.<br><br>Los datos que vas a visualizar
     comienzan el 2 de mayo de 2023 y acaban el 9 de mayo de 2023."),
@@ -182,8 +182,8 @@ guide <- Cicerone$
   step(
     el = "[data-value = 'live']",
     title = "Visualización en tiempo real",
-    description = "En esta sección habrá una visualización geográfica en tiempo real
-    de los datos de las estaciones y de otras entidades",
+    description = "Visualización geográfica en tiempo real de los datos de
+    las estaciones y de otras entidades",
     is_id = FALSE,
     position = "right-center"
   )$
