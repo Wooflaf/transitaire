@@ -215,7 +215,12 @@ server <- function(input, output) {
   # tabla 2 parte información
   output$tabla2 <- renderText({
     tabla  %>% kable(caption = "(Si queremos poner titulo a la tabla)") %>% kable_styling() %>%
-      row_spec(1, background = "lightblue") #%>%
+      column_spec(2, color = "white", background = "#72ae27") %>%
+      column_spec(3, color = "white", background = "#37a4d7") %>%
+      column_spec(4, color = "white", background = "#f49631") %>%
+      column_spec(5, color = "white", background = "#d43f2b") %>%
+      column_spec(6, color = "white", background = "#9c3035") %>%
+      column_spec(7, color = "white", background = "#d253b8") #%>%
       #scroll_box(width = "700px", height = "400px")
   })
   ############### FIN PARTE GEMA, WILSON, SANDRA
