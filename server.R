@@ -76,9 +76,7 @@ server <- function(input, output) {
   
   
   #Funcion para crear el grafico de barras apiladas
-  colores <- c("Buena" = "#2E8B57", "Razonablemente  buena" = "darkgreen", 
-               "Regular" = "#FF8C00", "Desfavorable" = "#4169E1", 
-               "Muy Desfavorable" = "#A9A9A9", "Extremadamente Desfavorable" = "black")
+
   
   output$apilados <- renderPlotly({
     shiny::validate(need(input$ID_Estacion2, "Elige una o varias estaciones"))
