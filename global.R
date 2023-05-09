@@ -24,11 +24,13 @@ source("./data-downloader/datos_diarios2.R")
 
 ##########
 #Funcion para crear el grafico de barras apiladas
-colores <- c("Buena" = "#2E8B57", "Razonablemente Buena" = "darkgreen", 
-             "Regular" = "#FF8C00", "Desfavorable" = "#e66b6b", 
-             "Muy Desfavorable" = "#FF0000", 
-             "Extremadamente Desfavorable" = "#33105D",
-             "Sin datos" = "#FFFFFF")
+colores <- c("Buena" = "#72ae27",
+                         "Razonablemente Buena" = "#37a4d7",
+                         "Regular" = "#f49631",
+                         "Desfavorable" = "#d43f2b",
+                         "Muy Desfavorable" = "#9c3035",
+                         "Extremadamente Desfavorable" = "#d253b8",
+                         "Sin Datos" = "#303131")
 
 #Funcion que hace el mapa de calor
 date_heatmap <- function(df){
