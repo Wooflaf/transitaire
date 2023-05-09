@@ -13,6 +13,7 @@ library(plotly) # Version 4.10.1
 library(waiter) # Version 0.2.5
 library(cicerone) # Version 1.0.4
 library(shinyjs) # Version 2.1.0
+library(hover) # Version 0.1.1
 
 
 # Cargamos los datos

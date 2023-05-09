@@ -19,7 +19,7 @@ ui <- dashboardPage(
     tabItems(
       tabItem(tabName = "AQ_traffic", AQ_traffic_tab),
       tabItem(tabName = "graficos"),
-      tabItem(tabName = "live"), 
+      tabItem(tabName = "live", live), 
       tabItem(tabName = "info")
     )
   )

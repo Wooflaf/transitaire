@@ -225,4 +225,46 @@ server <- function(input, output) {
              xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
              yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
   })
+  
+  ##### Elementos para sección live
+  ### Mapa con Leaflet en vivo
+  output$map_live <- renderLeaflet({
+    leaflet(options = leafletOptions(minZoom = 13, maxZoom = 16, zoomSnap = 0.1)) %>%
+      addProviderTiles(providers$CartoDB.DarkMatter, layerId = "tile_night", group = "day_night_tiles") %>%
+      addPolylines(data = tramos_trafico, layerId = ~as.character(gid), label = ~denominacion) %>% 
+      addAwesomeMarkers(data = estaciones, layerId = ~as.character(objectid)) %>% 
+      setView(lng = "-0.36139126257400377", lat = "39.469993930673834",  zoom = 13.6) %>% 
+      setMaxBounds(lng1 = "-0.5017152868950778", lat1 = "39.55050724348406",
+                   lng2 = "-0.24762442378004983", lat2 = "39.389409229115124") %>% 
+      addResetMapButton() %>% 
+      addLegendAwesomeIcon(iconSet = icon_estaciones,
+                           orientation = 'vertical',
+                           position = 'topright',
+                           title = htmltools::tags$div(
+                             style = 'font-size: 16px; font-weight: bold',
+                             'Estaciones de Contaminación'),
+                           labelStyle = 'font-size: 14px;') %>%
+      addLegendImage(images = list("./icons/line.png", "./icons/dash.png"),
+                     labels = c("Exterior", "Subterráneo"),
+                     labelStyle = "font-size: 14px; vertical-align: middle;",
+                     height = c(30, 30),
+                     width = c(30, 30),
+                     orientation = 'horizontal',
+                     title = 'Tipo de tramo',
+                     position = 'bottomright') %>%
+      addLegend(colors = c("#2CC121", "#2332BA", "#C91616", "#E2D43C", "#303131"),
+                labels = levels(trafico$estado)[1:5], opacity = 0.8,
+                title = 'Tráfico', position = 'bottomright')
+  })
+  
+  output$fecha_live <- renderUI({
+    fecha <- str_to_sentence(format(Sys.time(), format = "%A, %e de %B de %Y %H:%M"))
+    if (is_daylight(Sys.time())) {
+      fecha_color <- p(fecha, style = "color: #000000")
+    }
+    else{
+      fecha_color <- p(fecha, style = "color: #FFFFFF")
+    }
+    return(HTML(as.character(fecha_color)))
+  })
 }
