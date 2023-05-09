@@ -28,14 +28,7 @@ AQ_traffic_tab <- fluidRow(
                )
            )
          ),
-         div(
-           id = "box-stats",
-           box(
-             title = "Estadísticas de la estación",
-             width = NULL, solidHeader = F,
-             plotlyOutput("est_plotly", height = 300)
-           )
-         ),
+         uiOutput("station_stats"),
          div(style="display:inline-block",
              actionBttn('guide', 'Ver tutorial de nuevo',
                         style = "fill", color = "primary"
@@ -65,7 +58,7 @@ AQ_traffic_tab <- fluidRow(
                            max =  last_datetime,
                            value = first_datetime, step = 3600,
                            timeFormat = "%d/%m/%Y %H:%M",
-                           ticks = F, timezone = "+0000",
+                           ticks = F,
                            animate = animationOptions(interval = 850, loop = F,
                                                       playButton = actionButton(
                                                         "play",

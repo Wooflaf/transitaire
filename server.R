@@ -3,9 +3,13 @@ server <- function(input, output, session) {
   observeEvent(input$waiter_hidden, {guide$init()$start()})
   observeEvent(input$guide, {guide$start()})
   
+  datetime <- reactive({
+    return(with_tz(as.POSIXct(input$time, tz = "UTC"), tzone = "Europe/Madrid"))
+  })
+  
   output$fecha <- renderUI({
-    fecha <- str_to_sentence(format(input$time, format = "%A, %e de %B de %Y %H:%M"))
-    if (hour(input$time) >= 7 & hour(input$time) < 21) {
+    fecha <- str_to_sentence(format(datetime(), format = "%A, %e de %B de %Y %H:%M"))
+    if (is_daylight(datetime())) {
       fecha_color <- p(fecha, style = "color: #000000")
     }
     else{
@@ -15,7 +19,7 @@ server <- function(input, output, session) {
   })
   
   output$color <- renderUI({
-    if (hour(input$time) >= 7 & hour(input$time) < 21) {
+    if (is_daylight(datetime())) {
       color <- paste0(".irs-min, .irs-max {color: #000000;}")
     }
     else{
@@ -31,14 +35,14 @@ server <- function(input, output, session) {
   
   air_data <- reactive({
     air_data_var() %>%
-      filter(DatetimeBegin == input$time)
+      filter(DatetimeBegin == datetime())
   })
   
   traffic_data <- reactive({
     trafico %>% 
-      filter(fecha_carga == input$time)
+      filter(fecha_carga == datetime())
   })
-
+  
   # Función para crear el mapa con Leaflet
   output$map <- renderLeaflet({
     # Crear el mapa con Leaflet
@@ -88,9 +92,9 @@ server <- function(input, output, session) {
   # En función de la hora, cambio entre cartografía clara/oscura
   timeList <- reactiveValues(tile_historic = "tile_night1", inc = 1)
   
-  observeEvent(input$time,{
+  observeEvent(datetime(),{
     timeList$inc <- timeList$inc+1 
-    if (is_daylight(input$time)) {
+    if (is_daylight(datetime())) {
       timeList$tile_historic <- c(timeList$tile_historic, paste0("tile_daylight", timeList$inc)) 
     } else{
       timeList$tile_historic <- c(timeList$tile_historic, paste0("tile_night", timeList$inc)) 
@@ -103,15 +107,15 @@ server <- function(input, output, session) {
     last_selected_tile_class <- gsub("[0-9]", "", last_selected_tile)
     second_to_last_selected_tile <- tail(timeList$tile_historic, 2)[1]
     second_to_last_selected_tile_class <- gsub("[0-9]", "", second_to_last_selected_tile)
-
+    
     if( last_selected_tile_class != second_to_last_selected_tile_class){
-
+      
       if (last_selected_tile_class == "tile_daylight"){
-          prov <- providers$CartoDB.Positron
+        prov <- providers$CartoDB.Positron
       } else{
         prov <- providers$CartoDB.DarkMatter
       }
-
+      
       leafletProxy("map") %>%
         removeTiles(layerId = second_to_last_selected_tile) %>%
         addProviderTiles(
@@ -127,7 +131,7 @@ server <- function(input, output, session) {
                     color = ~pal_trafico(estado),
                     dashArray = ~ifelse(grepl("(?i)paso inferior", estado), "10,15", ""),
                     data = traffic_data())
-
+    
     waiter_hide()
   })
   
@@ -137,7 +141,7 @@ server <- function(input, output, session) {
     )
     plot <- plot_ly(data = st_drop_geometry(air_data_var()) %>%
                       filter(objectid == input$map_marker_click$id) %>% 
-                      group_by(nombre, AirPollutant) %>% 
+                      group_by(AirPollutant) %>% 
                       count(AQ_index) %>% 
                       complete(AQ_index, fill = list(n = NA)) %>% 
                       ungroup() %>% 
@@ -158,12 +162,41 @@ server <- function(input, output, session) {
                                              "Sin Datos" = "#303131")),
                     sort = FALSE, direction = 'clockwise',
                     textinfo = 'percent', hoverinfo = 'text',
-                    text = ~paste(n, "registros"),
+                    text = ~paste(n, "registros con calidad", AQ_index),
                     hole = 0.3) %>% 
       layout(title = ~ifelse(AirPollutant[1] == "AQ_index_all",
-                             paste0("Calidad del aire para la estación ", nombre[1]),
-                             paste0("Porc. registros de ", AirPollutant[1], " para la estación ", nombre[1])),
+                             paste0("Calidad del aire"),
+                             paste0("Porcentaje de registros de ", AirPollutant[1])),
              xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
              yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+  })
+  
+  output$station_stats <- renderUI({
+    if(is.null(input$map_marker_click$id)){
+      box_title <- "Estadísticas de la estación"
+    } else {
+      estacion <- switch(input$map_marker_click$id,
+                       "22" = "Centro",
+                       "23" = "Francia",
+                       "24" = "Boulevar Sur",
+                       "25" = "Molí del Sol",
+                       "26" = "Pista de silla",
+                       "27" = "Univ. Politéc.",
+                       "28" = "Viveros",
+                       "431" = "Olivereta")
+      
+      box_title <- str_c("Estadísticas de la estación ", estacion)
+    }
+    
+    return(
+      div(
+        id = "box-stats",
+        box(
+          title = box_title,
+          width = NULL, solidHeader = F,
+          plotlyOutput("est_plotly", height = 300)
+        )
+      )
+    )
   })
 }
