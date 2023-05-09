@@ -9,7 +9,11 @@ AQ_index_lvls <- c("Sin Datos", "Buena", "Razonablemente Buena", "Regular",
                    "Desfavorable", "Muy Desfavorable",
                    "Extremadamente Desfavorable")
 
-AQ_data <- read.csv("./data/AQ_EU_data.csv") %>% 
+AQ_EU_data_path <- max(list.files(path = "./data/",
+                                  pattern = "^AQ_EU_data_\\d{4}-\\d{2}-\\d{2}\\.csv$",
+                                  full.names = T))
+
+AQ_data <- read.csv(AQ_EU_data_path) %>% 
   mutate(
     DatetimeBegin = clean_date_time(DatetimeBegin),
     DatetimeEnd = clean_date_time(DatetimeEnd),
