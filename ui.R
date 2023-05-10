@@ -1,35 +1,27 @@
 ui <- dashboardPage(
+  options = list(sidebarExpandOnHover = TRUE),
   dashboardHeader(title = "Valencia AQ"),
   
-  dashboardSidebar(),
+  dashboardSidebar(
+    collapsed = TRUE,
+    sidebarMenu(
+      id = "tabs",
+      menuItem("Tráfico y calidad del aire", tabName = "AQ_traffic", icon = icon("car-side", class = "fa-lg")),
+      menuItem("Gráficos", tabName = "graficos", icon = icon("chart-column", class = "fa-lg")),
+      menuItem("Live", tabName = "live", icon = icon("refresh", class = "fa-duotone fa-compass fa-spin fa-lg")), 
+      menuItem("Información", tabName = "info", icon = icon("circle-info", class = "fa-lg"))
+    )),
   
   dashboardBody(
-    fluidRow(
-      leafletjs,
-      column(width = 4,
-             box(title = "Visualización temporal",
-                 width = NULL, solidHeader = TRUE,
-                 uiOutput(outputId = "slider"),
-                 uiOutput("speed_value")
-             ),
-             box(title = "Variable a mostrar",
-                 width = NULL, solidHeader = TRUE,
-                 selectInput("var", NULL, 
-                             choices = c("AQ_index_all", "SO2", "PM10", "O3",
-                                         "NO2", "NOX as NO2", "CO", "C6H6",
-                                         "NO", "PM2.5")
-                 )
-             ),
-             conditionalPanel(condition = "input.map_marker_click != null",
-                              box(
-                                title = "Estadísticas de la estación seleccionada",
-                                width = NULL, solidHeader = TRUE,
-                                uiOutput("estadisticas_ui"),
-                                plotOutput("grafico", height = 300)
-                              )
-             )
-      ),
-      column(width = 8, leafletOutput("map", height = 900))
+    useWaiter(),
+    waiter_show_on_load(html = waiting_screen, color = "#edf1f5"),
+    use_cicerone(),
+    styles,
+    tabItems(
+      tabItem(tabName = "AQ_traffic", AQ_traffic_tab),
+      tabItem(tabName = "graficos"),
+      tabItem(tabName = "live", live), 
+      tabItem(tabName = "info")
     )
   )
 )
