@@ -32,7 +32,9 @@ source("./functions/others.R", local = TRUE, encoding = "UTF-8")
 
 # Cargamos las tabs
 source("./tabs/AQ_traffic_tab.R", local = TRUE, encoding = "UTF-8")
+source("./tabs/graficos_tab.R", local = TRUE, encoding = "UTF-8")
 source("./tabs/live.R", local = TRUE, encoding = "UTF-8")
+source("./tabs/info_tabs.R", local = TRUE, encoding = "UTF-8")
 
 ####### PARTE SANDRA, WILSON, GEMA
 source("./data-downloader/datos_diarios2.R")

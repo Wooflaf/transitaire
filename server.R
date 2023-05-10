@@ -407,8 +407,6 @@ server <- function(input, output, session) {
           group = "day_night_tiles")
     }
   })
-}
-
 
   ########### PARTE GEMA, WILSON, SANDRA
   # Creamos el grafico
@@ -597,7 +595,4 @@ server <- function(input, output, session) {
   })
   
   ############### FIN PARTE GEMA, WILSON, SANDRA
-
-
-
 }
