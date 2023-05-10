@@ -1,5 +1,4 @@
 live <- fluidRow(
-  use_hover(),
   leafletjs,
   column(width = 3,
          div(
@@ -12,22 +11,14 @@ live <- fluidRow(
                  esta también permite ver la calidad del aire en Valencia y su relación
                  con el estado del tráfico, no podemos avanzar en el tiempo. Porque estamos
                  viendo los datos <i>en tiempo real</i>.<br><br>Los datos se 
-                 recargan automáticamente cada 3 minutos. Puedes dar al botón inferior
-                 para hacerlo manualmente.
+                 recargan automáticamente cada 3 minutos.*
                         ")
                )
            )
          ),
-         hover_action_button(
-           inputId = "refresh",
-           label = "Recargar",
-           icon = icon("refresh"),
-           icon_animation = "spin",
-           style = 'width: 40%; font-size: 125%; background: #1d89ff;
-           color: #fff; border-radius: 6px;',
+         div(
+           textOutput("last_update")
          )
-         
-         
   ),
   column(width = 9,
          leafletOutput("map_live", height = 900),

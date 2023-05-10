@@ -7,3 +7,10 @@ is_daylight <- function(date){
     return(FALSE)
   }
 }
+
+calidad_aire <- c("Buena", "Razonablemente Buena", "Regular",
+                  "Desfavorable", "Muy Desfavorable",
+                  "Extremadamente Desfavorable", "Sin datos")
+
+est_url <- "https://valencia.opendatasoft.com/api/explore/v2.1/catalog/datasets/estacions-contaminacio-atmosferiques-estaciones-contaminacion-atmosfericas/exports/csv?lang=es"
+trafico_url <- "https://valencia.opendatasoft.com/api/explore/v2.1/catalog/datasets/estat-transit-temps-real-estado-trafico-tiempo-real/exports/csv?lang=es"

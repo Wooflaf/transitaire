@@ -1,5 +1,5 @@
 # Crear el servidor
-server <- function(input, output) {
+server <- function(input, output, session) {
   
   # Iniciar guía cuando se acabe animación de carga inicial
   observeEvent(input$waiter_hidden, {guide$init()$start()})
@@ -106,12 +106,23 @@ server <- function(input, output) {
   # Método más óptimo que borrar las polylines y volver a cargarlas.
   # Además, evitamos el efecto de flash al eliminar y cargar las capas.
   # La función setShapeStyle no está implementada en leaflet, ver script leaflet_dynamic_style.R.
-  observeEvent(traffic_data(),{ 
-    leafletProxy("map") %>%
-      setShapeStyle(layerId = ~gid,
-                    color = ~pal_trafico(estado),
-                    dashArray = ~ifelse(grepl("(?i)paso inferior", estado), "10,15", ""),
-                    data = traffic_data())
+  observeEvent(traffic_data(),{
+    last_selected_tile <- tail(timeList$tile_historic, 1)
+    last_selected_tile_class <- gsub("[0-9]", "", last_selected_tile)
+    
+    if (last_selected_tile_class == "tile_daylight"){
+      leafletProxy("map") %>%
+        setShapeStyle(layerId = ~gid,
+                      color = ~pal_trafico(estado),
+                      dashArray = ~ifelse(grepl("(?i)paso inferior", estado), "10,15", ""),
+                      data = traffic_data())
+    } else{
+      leafletProxy("map") %>%
+        setShapeStyle(layerId = ~gid,
+                      color = ~pal_trafico_night(estado),
+                      dashArray = ~ifelse(grepl("(?i)paso inferior", estado), "10,15", ""),
+                      data = traffic_data())
+    }
     
     # Cuando se carguen inicialmente en el leaflet, ocultamos la pantalla de carga
     waiter_hide()
@@ -227,16 +238,43 @@ server <- function(input, output) {
   })
   
   ##### Elementos para sección live
+  # Fecha actual que cambia de color en base a la hora
+  
+  now <- reactive({
+    invalidateLater(millis = 1000*1, session) # Refresh cada minuto
+    return(Sys.time()) 
+  })
+  
+  reload <- reactive({
+    invalidateLater(millis = 1000*60*3, session) # 3 minutos de timeout
+    return(Sys.time())
+  })
+  
+  output$fecha_live <- renderUI({
+    
+    fecha <- str_to_sentence(format(now(), format = "%A, %e de %B de %Y %H:%M:%S"))
+    if (is_daylight(now())) {
+      fecha_color <- p(fecha, style = "color: #000000")
+    }
+    else{
+      fecha_color <- p(fecha, style = "color: #FFFFFF")
+    }
+    return(HTML(as.character(fecha_color)))
+  })
+  
+  output$last_update <- renderText({
+    fecha_reload <- str_to_sentence(format(reload(), format = "%A, %e de %B de %Y %H:%M"))
+    return(str_c("*Última actualización: ", fecha_reload))
+  })
+  
   ### Mapa con Leaflet en vivo
   output$map_live <- renderLeaflet({
     leaflet(options = leafletOptions(minZoom = 13, maxZoom = 16, zoomSnap = 0.1)) %>%
-      addProviderTiles(providers$CartoDB.DarkMatter, layerId = "tile_night", group = "day_night_tiles") %>%
       addPolylines(data = tramos_trafico, layerId = ~as.character(gid), label = ~denominacion) %>% 
       addAwesomeMarkers(data = estaciones, layerId = ~as.character(objectid)) %>% 
-      setView(lng = "-0.36139126257400377", lat = "39.469993930673834",  zoom = 13.6) %>% 
+      setView(lng = "-0.36139126257400377", lat = "39.469993930673834",  zoom = 13.6) %>%
       setMaxBounds(lng1 = "-0.5017152868950778", lat1 = "39.55050724348406",
-                   lng2 = "-0.24762442378004983", lat2 = "39.389409229115124") %>% 
-      addResetMapButton() %>% 
+                   lng2 = "-0.24762442378004983", lat2 = "39.389409229115124") %>%
       addLegendAwesomeIcon(iconSet = icon_estaciones,
                            orientation = 'vertical',
                            position = 'topright',
@@ -257,14 +295,96 @@ server <- function(input, output) {
                 title = 'Tráfico', position = 'bottomright')
   })
   
-  output$fecha_live <- renderUI({
-    fecha <- str_to_sentence(format(Sys.time(), format = "%A, %e de %B de %Y %H:%M"))
-    if (is_daylight(Sys.time())) {
-      fecha_color <- p(fecha, style = "color: #000000")
+  # Cargar mapa de leaflet aunque esté en una pestaña diferente a la seleccionada
+  # Es para que funcione leafletProxy, que necesita que el mapa esté cargado para funcionar
+  outputOptions(output, "map_live", suspendWhenHidden = FALSE) 
+  
+  air_data_live <- reactive({
+    reload()
+    
+    est_live <- read.csv2(est_url) %>% 
+      select(-globalid:-geo_point_2d) %>%
+      mutate(tipozona = factor(tipozona),
+             tipoemision = factor(tipoemision),
+             fecha_carga = with_tz(trunc(ymd_hms(fecha_carga), units = "mins"), tzone = "Europe/Madrid"),
+             calidad_ambiental = factor(calidad_ambiental, levels = calidad_aire)) %>% 
+      mutate(across(.cols = so2:pm25, .fns = parse_number)) %>% 
+      select(-nombre:-mediciones)
+    
+    est_contamin_live <- st_as_sf(left_join(est_live, estaciones, by = "objectid") %>% 
+                                    mutate(objectid = as.character(objectid)))
+  })
+  
+  traffic_data_live <- reactive({
+    reload()
+    
+    trafico_live <- read.csv2(trafico_url) %>% 
+      select(-idtramo:-geo_point_2d) %>% 
+      mutate(estado = factor(estado, levels = 0:9, labels = labels_estado))
+    
+    trafico_live <- st_as_sf(left_join(trafico_live, tramos_trafico, by = "gid") %>% 
+                               mutate(gid = as.character(gid)))
+  })
+  
+  observe({
+    # Eliminar marcadores antiguos de estaciones y cargar los actualizados
+    leafletProxy("map_live") %>%
+      clearMarkers() %>% 
+      addAwesomeMarkers(data = air_data_live(), layerId = ~objectid,
+                        icon = ~icon_estaciones[calidad_ambiental],
+                        popup = ~est_popups_live(nombre, direccion, tipozona,
+                                                  tipoemision, calidad_ambiental,
+                                                  pm25, pm10, no2, o3,
+                                                  so2, co, fecha_carga)
+      )
+    
+    # Actualizar layers con las características que queramos
+    leafletProxy("map_live") %>%
+      setShapeStyle(layerId = ~gid,
+                    color = ~pal_trafico(estado),
+                    dashArray = ~ifelse(grepl("(?i)paso inferior", estado), "10,15", ""),
+                    data = traffic_data_live())
+  })
+  ### Cambio de cartogrfía clara/oscura en función de la hora
+  
+  timeList_live <- reactiveValues(tile_historic_live = "tile_night1", inc_live = 1)
+  
+  # Cuando cambia la fecha y hora, guardo un histórico de las tiles que debería cargarse en base a su hora
+  observeEvent(now(),{
+    timeList_live$inc_live <- timeList_live$inc_live+1 
+    if (is_daylight(now())) {
+      timeList_live$tile_historic_live <- c(timeList_live$tile_historic_live, paste0("tile_daylight", timeList_live$inc_live)) 
+    } else{
+      timeList_live$tile_historic_live <- c(timeList_live$tile_historic_live, paste0("tile_night", timeList_live$inc_live)) 
     }
-    else{
-      fecha_color <- p(fecha, style = "color: #FFFFFF")
+  })
+  
+  # Cambio de tiles ciclo día/noche
+  observe({
+    last_selected_tile <- tail(timeList_live$tile_historic_live, 1)
+    last_selected_tile_class <- gsub("[0-9]", "", last_selected_tile)
+    second_to_last_selected_tile <- tail(timeList_live$tile_historic_live, 2)[1]
+    second_to_last_selected_tile_class <- gsub("[0-9]", "", second_to_last_selected_tile)
+    
+    if (last_selected_tile_class == "tile_daylight"){
+      prov <- providers$CartoDB.Positron
+    } else{
+      prov <- providers$CartoDB.DarkMatter
     }
-    return(HTML(as.character(fecha_color)))
+    
+    if( last_selected_tile_class != second_to_last_selected_tile_class){
+      leafletProxy("map_live") %>%
+        removeTiles(layerId = second_to_last_selected_tile) %>%
+        addProviderTiles(
+          prov,
+          layerId = last_selected_tile,
+          group = "day_night_tiles")
+    } else if (length(timeList_live$tile_historic_live) == 1){
+      leafletProxy("map_live") %>%
+        addProviderTiles(
+          prov,
+          layerId = last_selected_tile,
+          group = "day_night_tiles")
+    }
   })
 }

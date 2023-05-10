@@ -91,6 +91,32 @@ est_popups <- function(AirPollutant, AQ_index, cause, Concentration, direccion, 
          "<strong>Dirección:</strong> ", direccion, "<br>")
 }
 
+est_popups_live <- function(nombre, direccion, tipozona, tipoemision,
+                            calidad_ambiental, pm25, pm10, no2, o3, so2, co, fecha_carga){
+  units <- "µg/m3"
+  pm2.5_label <- ifelse(is.na(pm25), "Sin datos", paste(pm25, units))
+  pm10_label <- ifelse(is.na(pm10), "Sin datos", paste(pm10, units))
+  no2_label <- ifelse(is.na(no2), "Sin datos", paste(no2, units))
+  o3_label <- ifelse(is.na(o3), "Sin datos", paste(o3, units))
+  so2_label <- ifelse(is.na(so2), "Sin datos", paste(so2, units))
+  co_label <- ifelse(is.na(co), "Sin datos", paste(co, units))
+  
+  inbetween <- paste0("<strong>Calidad:</strong> ", calidad_ambiental, "<br>",
+                      "<strong>Concentración PM2.5:</strong> ", pm2.5_label, " <br>",
+                      "<strong>Concentración PM10:</strong> ", pm10_label, " <br>",
+                      "<strong>Concentración NO2:</strong> ", no2_label, " <br>",
+                      "<strong>Concentración O3:</strong> ", o3_label, " <br>",
+                      "<strong>Concentración SO2:</strong> ", so2_label, " <br>",
+                      "<strong>Concentración CO:</strong> ", no2_label, " <br>"
+                      )
+  paste0("<strong>Estación:</strong> ", nombre, "<br>",
+         inbetween,
+         "<strong>Fecha de carga:</strong> ", fecha_carga, "<br>",
+         "<strong>Tipo de zona:</strong> ", tipozona, "<br>",
+         "<strong>Tipo de emisión:</strong> ", tipoemision, "<br>",
+         "<strong>Dirección:</strong> ", direccion, "<br>")
+}
+
 ### Waiting screen
 waiting_screen <- div(
   style = "color: #3d8cbc; width: 100%; height: 100%;",
