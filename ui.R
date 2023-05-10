@@ -109,12 +109,9 @@ ui <- dashboardPage(
                                h4("Grafico de barras apiladas"),
                                plotlyOutput("apilados"),
                                h4("Graficos de tarta"),
-                               plotlyOutput("tartageneral"),
-                               plotlyOutput("tarta1parametro"), 
+                               plotlyOutput("tarta2"),
                                h4("Grafico semanal"), 
-                               plotOutput("semanal"),
-                               h4("Grafico semanal 2"), 
-                               plotOutput("semanal2")
+                               plotOutput("semanal")
                              ))),
                   tabPanel("Tabla",  
                     sidebarLayout(
@@ -189,7 +186,6 @@ ui <- dashboardPage(
                                        un problema de salud moderado para un número muy pequeño de personas."),
                                      h4("Buena"),
                                      p("La calidad del aire es satisfactoria y presenta poco o ningún riesgo para la salud."),
-                                     imageOutput("Imagen"),
                                      # como la tabla la hacemos con kable nos devuelve la tabla en lenguaje html
                                      # y por eso en lugar de tableOutput tenemos que usar htmlOutput()
                                      # en el server en lugar de renderTable utilizamos renderText

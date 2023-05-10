@@ -54,26 +54,6 @@ server <- function(input, output) {
     interactive_date_heatmap(map)
   })
   
-  # Función para filtrar los datos
-  datos_filtrados <- reactive({
-    datos_diarios %>%
-      filter(Fecha >= input$ID_Fecha2[1] & Fecha <= input$ID_Fecha2[2],
-             Estacion %in% input$ID_Estacion2)
-  })
-  
-  
-  #AÑADIMOS LA TABLA
-  estaciones <- reactive({
-    input$ID_Estacion3 
-  })
-  
-  #Datos para varias estaciones y todos los parametros
-  datos_filtrados1 <- reactive({
-    datos_diarios_clean %>% 
-      filter(Fecha >= input$ID_Fecha2[1] & Fecha <= input$ID_Fecha2[2], #Fecha >= "2019-02-06" & Fecha <= "2019-02-09"
-             Estacion == input$ID_Estacion2)  
-  })
-  
   
   #Funcion para crear el grafico de barras apiladas
 
@@ -91,54 +71,57 @@ server <- function(input, output) {
 
   
   # Funcion para crear el grafico de tarta para varias estaciones y todos los parametros
-  output$tartageneral <- renderPlotly({
-    shiny::validate(need(input$ID_Estacion2, "Elige una o varias estaciones"))
-    #pie(x = datos_filtrados1()[[Valores]], labels = datos_filtrados1()[[Parametros]],  main = "Gráfico de tarta para todos los parametros")
-    data <- datos_diarios_clean %>%
+  datos_filtrados_todos <- reactive({
+    datos_diarios_clean %>%
       filter(Estacion %in% input$ID_Estacion2) %>% 
       filter(Fecha >= input$ID_Fecha2[1] & Fecha <= input$ID_Fecha2[2]) %>%
       group_by(Clasificacion) %>% 
-      summarise(suma=n()) %>% 
+      summarise(suma=n()) %>%
       ungroup()
-    
-    fig <- plot_ly(data, labels = ~Clasificacion, values = ~suma, type = 'pie')
-    fig %>% layout(title = 'Para varias estaciones y todos los parámetros',
-                          xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-                          yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
-    
-
   })
-  
   #Funcion para crear el grafico de tarta para varias estaciones y 1 parametro
-  output$tarta1parametro <- renderPlotly({
-    shiny::validate(need(input$ID_Estacion2, "Elige una o varias estaciones"))
-    #pie(x = datos_filtrados1()[[Valores]], labels = datos_filtrados1()[[Parametros]],  main = "Gráfico de tarta para todos los parametros")
-    data <- datos_diarios_clean %>%
+  datos_filtrados1 <- reactive({
+    datos_diarios_clean %>%
       filter(Estacion %in% input$ID_Estacion2) %>% 
       filter(Fecha >= input$ID_Fecha2[1] & Fecha <= input$ID_Fecha2[2]) %>%
       filter(Parametros == input$ID_Calidad2) %>% 
       group_by(Clasificacion) %>% 
-      summarise(suma=n()) %>% 
-      ungroup()
+      summarise(suma=n()) 
+  })
+  
+  #Funcion para crear los 2 graficos de tarta 
+  output$tarta2 <- renderPlotly({
+    shiny::validate(need(input$ID_Estacion2, "Elige una o varias estaciones"))
+    plot_ly(labels = ~Clasificacion, values = ~suma, legendgroup = ~Clasificacion) %>%
+      add_pie(data = datos_filtrados1(), name = "parámetro seleccionado", domain = list(row = 0, column = 0))%>%
+      add_pie(data = datos_filtrados_todos(), name = "todos los parámetros", domain = list(row = 0, column = 1))%>%
+      layout(title = "Pie Charts in Grid", showlegend = T,
+             grid=list(rows=1, columns=2),
+             xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+             yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE)) %>% 
+      add_annotations(x=c(0.05,0.55),
+                      y=0.9,
+                      text = c("Parámetro seleccionado", "General, todos los parámetros"),
+                      xref = "paper",
+                      yref = "paper",
+                      xanchor = "left",
+                      showarrow = FALSE)
     
-    fig <- plot_ly(data, labels = ~Clasificacion, values = ~suma, type = 'pie')
-    fig %>% layout(title = 'Para varias estaciones y el parámetro seleccionado',
-                   xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-                   yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+    
     
   })
   
-  # Función para crear el gráfico semanal 
   output$semanal <- renderPlot({
     shiny::validate(need(input$ID_Estacion2, "Elige una o varias estaciones"))
-    ggplot(datos_diarios_clean %>% 
-             filter(Clasificacion == "Muy Desfavorable"|Clasificacion=="Extremadamente Desfavorable") %>% 
-             filter(Fecha >= input$ID_Fecha2[1] & Fecha <= input$ID_Fecha2[2]) %>%
-             mutate(dia_sem = factor(dia_sem, levels = c("Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"))) %>% 
-             group_by(dia_sem) %>% 
-             summarise(con=n()) %>% 
-             ungroup(),
-           aes(dia_sem, con, fill=dia_sem))+
+    
+    semana1 <- ggplot(datos_diarios_clean %>% 
+                        filter(Clasificacion == "Muy Desfavorable"|Clasificacion=="Extremadamente Desfavorable") %>% 
+                        filter(Fecha >= input$ID_Fecha2[1] & Fecha <= input$ID_Fecha2[2]) %>%
+                        mutate(dia_sem = factor(dia_sem, levels = c("Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"))) %>% 
+                        group_by(dia_sem) %>% 
+                        summarise(con=n()) %>% 
+                        ungroup(),
+                      aes(dia_sem, con, fill=dia_sem))+
       geom_col()+
       coord_polar()+
       theme(legend.position = "none",
@@ -146,20 +129,17 @@ server <- function(input, output) {
             axis.text.x = element_text(size=6),
             axis.ticks = element_blank())+
       labs(title="Valores desfavorables para todas las estaciones", x="", y="")
-  })
-  
-  # Función para crear el gráfico semanal 2 para cada estacion seleccionada
-  output$semanal2 <- renderPlot({
-    shiny::validate(need(input$ID_Estacion2, "Elige una o varias estaciones"))
-    ggplot(datos_diarios_clean %>% 
-             filter(Clasificacion == "Muy Desfavorable"|Clasificacion=="Extremadamente Desfavorable") %>% 
-             filter(Fecha >= input$ID_Fecha2[1] & Fecha <= input$ID_Fecha2[2]) %>%
-             mutate(dia_sem = factor(dia_sem, levels = c("Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"))) %>% 
-             filter(Estacion %in% input$ID_Estacion2) %>%
-             group_by(dia_sem) %>% 
-             summarise(con=n()) %>% 
-             ungroup(),
-           aes(dia_sem, con, fill=dia_sem))+
+    
+    
+    semana2 <-  ggplot(datos_diarios_clean %>% 
+                         filter(Clasificacion == "Muy Desfavorable"|Clasificacion=="Extremadamente Desfavorable") %>% 
+                         filter(Fecha >= input$ID_Fecha2[1] & Fecha <= input$ID_Fecha2[2]) %>%
+                         mutate(dia_sem = factor(dia_sem, levels = c("Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"))) %>% 
+                         filter(Estacion %in% input$ID_Estacion2) %>%
+                         group_by(dia_sem) %>% 
+                         summarise(con=n()) %>% 
+                         ungroup(),
+                       aes(dia_sem, con, fill=dia_sem))+
       geom_col()+
       coord_polar()+
       theme(legend.position = "none",
@@ -167,8 +147,14 @@ server <- function(input, output) {
             axis.text.x = element_text(size=6),
             axis.ticks = element_blank())+
       labs(title="Valores desfavorables para cada estacion seleccionada", x="", y="")
+    
+    
+    # Envolver los gráficos con patchwork
+    pw <- wrap_plots(semana1, semana2, ncol = 2)
+    
+    pw
+    
   })
-  
   
   #Datos filtrados para la pestaña de tabla
   datos_filtrados3 <- reactive({
@@ -203,14 +189,6 @@ server <- function(input, output) {
     )
   })
   
-  output$Imagen <- renderImage({
-    
-    list(src = "www/Clasificacion.jpeg",
-         width = "100%",
-         height = 330)
-    
-  }, deleteFile = F)
-
   
   # tabla 2 parte información
   output$tabla2 <- renderText({
