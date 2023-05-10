@@ -92,9 +92,9 @@ server <- function(input, output) {
   #Funcion para crear los 2 graficos de tarta 
   output$tarta2 <- renderPlotly({
     shiny::validate(need(input$ID_Estacion2, "Elige una o varias estaciones"))
-    plot_ly(labels = ~Clasificacion, values = ~suma, legendgroup = ~Clasificacion) %>%
-      add_pie(data = datos_filtrados1(), name = "parámetro seleccionado", domain = list(row = 0, column = 0))%>%
-      add_pie(data = datos_filtrados_todos(), name = "todos los parámetros", domain = list(row = 0, column = 1))%>%
+    plot_ly(labels = ~Clasificacion, values = ~suma, legendgroup = ~Clasificacion, marker = list(color = colores)) %>%
+      add_pie(data = datos_filtrados1(), name = paste0("Parámetro: \n", input$ID_Calidad2), domain = list(row = 0, column = 0))%>%
+      add_pie(data = datos_filtrados_todos(), name = "General", domain = list(row = 0, column = 1))%>%
       layout(title = "Pie Charts in Grid", showlegend = T,
              grid=list(rows=1, columns=2),
              xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
@@ -201,6 +201,13 @@ server <- function(input, output) {
       column_spec(7, color = "white", background = "#d253b8") #%>%
       #scroll_box(width = "700px", height = "400px")
   })
+  
+  observeEvent(input$sidebarItemExpanded, {
+    if (input$sidebarItemExpanded == "MenuItem2") {
+      print("updating tab items")
+    }
+  })
+  
   ############### FIN PARTE GEMA, WILSON, SANDRA
   
   

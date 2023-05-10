@@ -3,10 +3,14 @@ ui <- dashboardPage(
   
   dashboardSidebar(
     sidebarMenu(
+    id = "mytabitems",
     menuItem("Dashboard", tabName = "dashboard"),
     menuItem("Graficos", tabName = "graficos"),
     menuItem("Estadísticas", tabName = "stats"), 
-    menuItem("Información", tabName = "info")
+    menuItem("Información", tabName = "informacion",
+      menuSubItem("Mas Información", tabName = "info"),
+      menuSubItem("Salud", tabName = "salud"),
+      menuSubItem("Consejos", tabName = "consejos"))
     )
   ),
   
@@ -141,7 +145,6 @@ ui <- dashboardPage(
                 tabItem(tabName = "info", 
                         h2("Más información"), 
                         fluidPage(
-                          tabsetPanel(
                             tabPanel("Informacion",
                                      p("Este es un estudio que se lleva a cabo para documentar 
                                        la calidad del aire de la ciudad de Valencia según los 
@@ -191,7 +194,10 @@ ui <- dashboardPage(
                                      # en el server en lugar de renderTable utilizamos renderText
                                      htmlOutput("tabla2")
                                      
-                            ),
+                            ))),
+                    tabItem(tabName = "salud", 
+                              h2("SALUD"), 
+                                fluidPage(
                             tabPanel("Salud",
                                      p("La contaminación del aire representa uno de los mayores peligros para el medio ambiente y la salud humana. 
                                        Si los países logran reducir los niveles de contaminación atmosférica, podrían disminuir significativamente 
@@ -228,8 +234,12 @@ ui <- dashboardPage(
                                        "."),
                                      p()
                                      
-                                     ),
-                            tabPanel("Consejos",
+                                     ))),
+                            
+                      tabItem(tabName = "consejos", 
+                                h2("CONSEJOS"), 
+                                    fluidPage(
+                            tabPanel("CONSEJOS",
                                      h2("Politicas para reducir la contaminación en el aire."),
                                      p("Tomar medidas contra la contaminación del aire, que es el segundo factor de riesgo para las 
                                        enfermedades no transmisibles, es crucial para proteger la salud pública."),
@@ -270,5 +280,4 @@ ui <- dashboardPage(
                         )) 
     )
   )
-)
 
