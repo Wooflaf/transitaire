@@ -203,7 +203,7 @@ server <- function(input, output, session) {
   
   # Renderizar plotly del % de registros para una estación y variable determinada, coloreando por la calidad
   output$est_plotly <- renderPlotly({
-    validate(
+    shiny::validate(
       need(input$map_marker_click$id, 'Selecciona una estación de contaminación atmosférica.')
     )
     plot <- plot_ly(data = st_drop_geometry(air_data_var()) %>%

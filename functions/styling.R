@@ -209,15 +209,15 @@ guide <- Cicerone$
     el = "[data-value = 'live']",
     title = "Visualización en tiempo real",
     description = "Visualización geográfica en tiempo real de los datos de
-    las estaciones y de otras entidades",
+    las estaciones y del tráfico",
     is_id = FALSE,
     position = "right-center"
   )$
   step(
-    el = "[data-value = 'info']",
+    el = "#sidebarItemExpanded > ul > li.treeview > a",
     title = "Información",
-    description = "Información sobre cómo hemos obtenido los datos
-    y por qué es tan importante mantener una ciudad con una buena calidad del aire",
+    description = "Información sobre los diferentes contaminantes, el riesgo que conllevan
+    para la salud, así como unos consejos finales para reducir este tipo de contaminación.",
     is_id = FALSE,
     on_next = "function(){
     var body = document.body
