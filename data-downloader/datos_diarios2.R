@@ -87,12 +87,12 @@ colnames(datos_diarios_clean)[3] <- "dia_sem"
 
 #Definimos los niveles 
 
-month_levels <- c("Jan", "Feb", "Mar", "Apr",
-                  "May", "Jun", "Jul", "Aug",
-                  "Sep", "Oct", "Nov", "Dec")
+month_levels <- c("Ene", "Feb", "Mar", "Abr",
+                  "May", "Jun", "Jul", "Ago",
+                  "Sep", "Oct", "Nov", "Dic")
 
-dias_levels <- c("Lunes", "Martes", "Miercoles", "Jueves",
-                 "Viernes", "Sabado", "Domingo")
+dias_levels <- c("Lunes", "Martes", "Miércoles", "Jueves",
+                 "Viernes", "Sábado", "Domingo")
 
 #Creamos nuevas columans con la semana, el año 
 
@@ -118,7 +118,7 @@ datos_diarios_clean$dia_sem <- factor(datos_diarios_clean$dia_sem,
 datos_diarios_clean$text <- paste0("Fecha: ", day(datos_diarios_clean$Fecha), " de ",
                                    month(datos_diarios_clean$Fecha, label = TRUE, abbr = FALSE), "\n",
                                    "Valor: ", datos_diarios_clean$Valores, "\n",
-                                   "Dia: ", datos_diarios_clean$dia_sem)
+                                   "Día: ", datos_diarios_clean$dia_sem)
 
 
 

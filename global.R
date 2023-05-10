@@ -13,9 +13,9 @@ library(plotly) # Version 4.10.1
 library(waiter) # Version 0.2.5
 library(cicerone) # Version 1.0.4
 library(shinyjs) # Version 2.1.0
-library(DT)
-library(kableExtra)
-library(patchwork)
+library(DT) # Version 0.27
+library(kableExtra) # Version 1.3.4
+library(patchwork) # Version 1.1.2
 
 # Cargamos los datos
 source("./data_cleaning/AQ_EU_clean.R", local = TRUE, encoding = "UTF-8")
@@ -37,17 +37,19 @@ source("./tabs/live.R", local = TRUE, encoding = "UTF-8")
 source("./tabs/info_tabs.R", local = TRUE, encoding = "UTF-8")
 
 ####### PARTE SANDRA, WILSON, GEMA
-source("./data-downloader/datos_diarios2.R")
+load("./data/datos_diarios.RData")
+load("./data/datos_diarios_clean.RData")
+tabla <- read_delim("data/tabla.csv", delim = ";")
 
 ##########
 #Funcion para crear el grafico de barras apiladas
 colores <- c("Buena" = "#72ae27",
-                         "Razonablemente Buena" = "#37a4d7",
-                         "Regular" = "#f49631",
-                         "Desfavorable" = "#d43f2b",
-                         "Muy Desfavorable" = "#9c3035",
-                         "Extremadamente Desfavorable" = "#d253b8",
-                         "Sin Datos" = "#303131")
+             "Razonablemente Buena" = "#37a4d7",
+             "Regular" = "#f49631",
+             "Desfavorable" = "#d43f2b",
+             "Muy Desfavorable" = "#9c3035",
+             "Extremadamente Desfavorable" = "#d253b8",
+             "Sin Datos" = "#303131")
 
 #Funcion que hace el mapa de calor
 date_heatmap <- function(df){
