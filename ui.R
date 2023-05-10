@@ -5,6 +5,7 @@ ui <- dashboardPage(
   dashboardSidebar(
     collapsed = TRUE,
     sidebarMenu(
+      id = "tabs",
       menuItem("Tráfico y calidad del aire", tabName = "AQ_traffic", icon = icon("car-side", class = "fa-lg")),
       menuItem("Gráficos", tabName = "graficos", icon = icon("chart-column", class = "fa-lg")),
       menuItem("Live", tabName = "live", icon = icon("refresh", class = "fa-duotone fa-compass fa-spin fa-lg")), 

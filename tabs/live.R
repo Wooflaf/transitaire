@@ -11,7 +11,7 @@ live <- fluidRow(
                  esta también permite ver la calidad del aire en Valencia y su relación
                  con el estado del tráfico, no podemos avanzar en el tiempo. Porque estamos
                  viendo los datos <i>en tiempo real</i>.<br><br>Los datos se 
-                 recargan automáticamente cada 3 minutos.*
+                 actualizan automáticamente cada 3 minutos.*
                         ")
                )
            )

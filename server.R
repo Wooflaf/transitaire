@@ -238,18 +238,32 @@ server <- function(input, output, session) {
   })
   
   ##### Elementos para sección live
-  # Fecha actual que cambia de color en base a la hora
+  # Objetos reactivos para recargar hora actual y mapa
   
   now <- reactive({
-    invalidateLater(millis = 1000*1, session) # Refresh cada minuto
+    invalidateLater(millis = 1000*1, session) # Refresh cada segundo de la hora
     return(Sys.time()) 
   })
   
-  reload <- reactive({
-    invalidateLater(millis = 1000*60*3, session) # 3 minutos de timeout
+  # Variable reactiva que sirve para notificar de si hay que actualizar los datos
+  reload <- reactiveVal(0)
+  
+  # Se actualizará si estamos en la pestaña correspondiente, así ahorramos cargas de más
+  observe({
+    if(!is.null(input$tabs)){
+      if(input$tabs == "live"){
+        invalidateLater(millis = 1000*60*3, session) # 3 minutos de timeout
+        reload(isolate(reload())+1)
+      }
+    }
+  })
+  # Variable reactiva para tener el valor de la hora en que se ha actualizado
+  reload_time <- reactive({
+    reload()
     return(Sys.time())
   })
   
+  # Fecha actual que cambia de color en base a la hora
   output$fecha_live <- renderUI({
     
     fecha <- str_to_sentence(format(now(), format = "%A, %e de %B de %Y %H:%M:%S"))
@@ -262,8 +276,9 @@ server <- function(input, output, session) {
     return(HTML(as.character(fecha_color)))
   })
   
+  # Fecha de la última actualización de los datos
   output$last_update <- renderText({
-    fecha_reload <- str_to_sentence(format(reload(), format = "%A, %e de %B de %Y %H:%M"))
+    fecha_reload <- str_to_sentence(format(reload_time(), format = "%A, %e de %B de %Y %H:%M"))
     return(str_c("*Última actualización: ", fecha_reload))
   })
   
@@ -299,33 +314,36 @@ server <- function(input, output, session) {
   # Es para que funcione leafletProxy, que necesita que el mapa esté cargado para funcionar
   outputOptions(output, "map_live", suspendWhenHidden = FALSE) 
   
+  # Datos de las estaciones de contaminación, se actualizan automáticamente
   air_data_live <- reactive({
     reload()
-    
-    est_live <- read.csv2(est_url) %>% 
+
+    est_live <- read.csv2(est_url) %>%
       select(-globalid:-geo_point_2d) %>%
       mutate(tipozona = factor(tipozona),
              tipoemision = factor(tipoemision),
              fecha_carga = with_tz(trunc(ymd_hms(fecha_carga), units = "mins"), tzone = "Europe/Madrid"),
-             calidad_ambiental = factor(calidad_ambiental, levels = calidad_aire)) %>% 
-      mutate(across(.cols = so2:pm25, .fns = parse_number)) %>% 
+             calidad_ambiental = factor(calidad_ambiental, levels = calidad_aire)) %>%
+      mutate(across(.cols = so2:pm25, .fns = parse_number)) %>%
       select(-nombre:-mediciones)
-    
-    est_contamin_live <- st_as_sf(left_join(est_live, estaciones, by = "objectid") %>% 
+
+    est_contamin_live <- st_as_sf(left_join(est_live, estaciones, by = "objectid") %>%
                                     mutate(objectid = as.character(objectid)))
   })
   
+  # Datos del tráfico, se actualizan automáticamente
   traffic_data_live <- reactive({
     reload()
     
-    trafico_live <- read.csv2(trafico_url) %>% 
-      select(-idtramo:-geo_point_2d) %>% 
+    trafico_live <- read.csv2(trafico_url) %>%
+      select(-idtramo:-geo_point_2d) %>%
       mutate(estado = factor(estado, levels = 0:9, labels = labels_estado))
-    
-    trafico_live <- st_as_sf(left_join(trafico_live, tramos_trafico, by = "gid") %>% 
+
+    trafico_live <- st_as_sf(left_join(trafico_live, tramos_trafico, by = "gid") %>%
                                mutate(gid = as.character(gid)))
   })
   
+  # Cuando actualizamos los datos, también modificamos las correspondientes capas en leaflet
   observe({
     # Eliminar marcadores antiguos de estaciones y cargar los actualizados
     leafletProxy("map_live") %>%
@@ -345,14 +363,15 @@ server <- function(input, output, session) {
                     dashArray = ~ifelse(grepl("(?i)paso inferior", estado), "10,15", ""),
                     data = traffic_data_live())
   })
-  ### Cambio de cartogrfía clara/oscura en función de la hora
   
-  timeList_live <- reactiveValues(tile_historic_live = "tile_night1", inc_live = 1)
+  ### Cambio de cartografía clara/oscura en función de la hora
+  
+  timeList_live <- reactiveValues(tile_historic_live = "", inc_live = 1)
   
   # Cuando cambia la fecha y hora, guardo un histórico de las tiles que debería cargarse en base a su hora
-  observeEvent(now(),{
+  observeEvent(reload_time(),{
     timeList_live$inc_live <- timeList_live$inc_live+1 
-    if (is_daylight(now())) {
+    if (is_daylight(reload_time())) {
       timeList_live$tile_historic_live <- c(timeList_live$tile_historic_live, paste0("tile_daylight", timeList_live$inc_live)) 
     } else{
       timeList_live$tile_historic_live <- c(timeList_live$tile_historic_live, paste0("tile_night", timeList_live$inc_live)) 
