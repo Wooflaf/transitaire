@@ -321,13 +321,14 @@ server <- function(input, output, session) {
   air_data_live <- reactive({
     reload()
 
-    est_live <- read.csv2(url(est_url, encoding = "UTF-8")) %>%
+    est_live <- read_delim(est_url, delim = ";",
+                           col_types = cols(objectid = col_integer(), 
+                                            fecha_carga = col_character())) %>%
       select(-globalid:-geo_point_2d) %>%
       mutate(tipozona = factor(tipozona),
              tipoemision = factor(tipoemision),
              fecha_carga = with_tz(trunc(ymd_hms(fecha_carga), units = "mins"), tzone = "Europe/Madrid"),
              calidad_ambiental = factor(calidad_ambiental, levels = calidad_aire)) %>%
-      mutate(across(.cols = so2:pm25, .fns = parse_number)) %>%
       select(-nombre:-mediciones)
 
     est_contamin_live <- st_as_sf(left_join(est_live, estaciones, by = "objectid") %>%
@@ -338,7 +339,10 @@ server <- function(input, output, session) {
   traffic_data_live <- reactive({
     reload()
     
-    trafico_live <- read.csv2(url(trafico_url, encoding = "UTF-8")) %>%
+    trafico_live <- read_delim(trafico_url, delim = ";", 
+                               col_types = cols(gid = col_integer(), 
+                                                estado = col_integer(),
+                                                idtramo = col_integer())) %>%
       select(-idtramo:-geo_point_2d) %>%
       mutate(estado = factor(estado, levels = 0:9, labels = labels_estado))
 
