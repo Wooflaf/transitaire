@@ -476,37 +476,6 @@ server <- function(input, output, session) {
              yaxis = list(title = "Porcentaje registros sobre el total (%)")) %>% 
       config(displayModeBar = FALSE)
   })
-  output$apilados2 <- renderPlotly({
-    shiny::validate(need(input$ID_Estacion2, "Selecciona las estaciones que quieras ver"))
-    data <- datos_diarios_clean %>% 
-      filter(Parametros == input$ID_Calidad2, Estacion %in% input$ID_Estacion2) %>%
-      group_by(Estacion) %>% 
-      count(Clasificacion) %>% 
-      mutate(prctg = n/sum(n)*100) %>% 
-      complete(Clasificacion, fill = list(prctg = 0)) %>%
-      ungroup() %>% 
-      arrange(factor(Clasificacion, levels = c("Buena", "Razonablemente Buena",
-                                               "Regular", "Desfavorable",
-                                               "Muy Desfavorable",
-                                               "Extremadamente Desfavorable",
-                                               "Sin Datos"))) %>%
-      mutate(color = case_when(Clasificacion == "Buena" ~ "#72ae27",
-                               Clasificacion == "Razonablemente Buena" ~ "#37a4d7",
-                               Clasificacion == "Regular" ~ "#f49631",
-                               Clasificacion == "Desfavorable" ~ "#d43f2b",
-                               Clasificacion == "Muy Desfavorable" ~ "#9c3035",
-                               Clasificacion == "Extremadamente Desfavorable" ~ "#d253b8",
-                               Clasificacion == "Sin Datos" ~ "#303131"))
-    data %>% 
-      plot_ly(x = ~Estacion, y = ~prctg, type = 'bar',
-              marker = list(color = ~color), hoverinfo = 'text',
-              hovertext = ~paste0(round(prctg, 1), "%<br>",
-                                  n, " registros (", Clasificacion,")")) %>% 
-      layout(barmode = "stack",
-             xaxis = list(title = "Estaciones"),
-             yaxis = list(title = "Porcentaje registros sobre el total (%)")) %>% 
-      config(displayModeBar = FALSE)
-  })
   
   #Datos filtrados para la pestaña de tabla
   datos_filtrados3 <- reactive({
