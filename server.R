@@ -321,7 +321,7 @@ server <- function(input, output, session) {
   air_data_live <- reactive({
     reload()
 
-    est_live <- read.csv2(est_url) %>%
+    est_live <- read.csv2(url(est_url, encoding = "UTF-8")) %>%
       select(-globalid:-geo_point_2d) %>%
       mutate(tipozona = factor(tipozona),
              tipoemision = factor(tipoemision),
@@ -338,7 +338,7 @@ server <- function(input, output, session) {
   traffic_data_live <- reactive({
     reload()
     
-    trafico_live <- read.csv2(trafico_url) %>%
+    trafico_live <- read.csv2(url(trafico_url, encoding = "UTF-8")) %>%
       select(-idtramo:-geo_point_2d) %>%
       mutate(estado = factor(estado, levels = 0:9, labels = labels_estado))
 
