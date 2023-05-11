@@ -56,7 +56,7 @@ date_heatmap <- function(df){
     facet_grid(year(Fecha) ~ month) +
     scale_fill_manual(values = colores) +
     scale_y_discrete(limits = rev) +
-    labs(x="Semana del mes", y = "", subtitle = "")
+    labs(x="Semana del mes", y = "", subtitle = "" , fill = "Clasificación")
 }
 
 #Hacerlo interactivo

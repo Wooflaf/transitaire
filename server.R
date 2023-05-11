@@ -477,7 +477,8 @@ server <- function(input, output, session) {
                                   n, " registros (", Clasificacion,")")) %>% 
       layout(barmode = "stack",
              xaxis = list(title = "Estaciones"),
-             yaxis = list(title = "Porcentaje registros sobre el total (%)"))
+             yaxis = list(title = "Porcentaje registros sobre el total (%)")) %>% 
+      config(displayModeBar = FALSE)
   })
   
   #Datos filtrados para la pestaña de tabla

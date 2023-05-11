@@ -14,7 +14,7 @@ labels_estado <- c("Fluido", "Denso", "Congestionado", "Cortado", "Sin datos",
                    str_c("Paso inferior ", c("fluido", "denso", "congestionado", "cortado")),
                    "Sin datos (paso inferior)")
 
-accum_trafico_rodado <- read_csv("./data/accum_trafico_2_to_9_may.csv") %>% 
+accum_trafico_rodado <- read_csv("./data/accum_trafico_2_to_10_may.csv") %>% 
   mutate(
     gid = as.integer(gid),
     estado = factor(estado, levels = 0:9, labels = labels_estado),

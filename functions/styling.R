@@ -144,7 +144,7 @@ guide <- Cicerone$
     title = "Visualización geográfica",
     description = HTML("En este mapa podrás ver la calidad del aire y el estado del 
     tráfico en una hora y día determinado.<br><br>Los datos que vas a visualizar
-    comienzan el 2 de mayo de 2023 y acaban el 9 de mayo de 2023."),
+    comienzan el 2 de mayo de 2023 y acaban el 10 de mayo de 2023."),
     position = "left-center"
   )$
   step(

@@ -28,4 +28,4 @@ for(url in urls){
     data <- rbind(data, station)
   }
 }
-write.csv(data, file = str_c("./data/AQ_EU_data_", max(as.Date(AQ_data$DatetimeEnd)), ".csv"))
+write.csv(data, file = str_c("./data/AQ_EU_data_", max(as.Date(data$DatetimeEnd)), ".csv"))
