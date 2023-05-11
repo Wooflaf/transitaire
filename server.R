@@ -456,6 +456,33 @@ server <- function(input, output, session) {
       group_by(Estacion) %>% 
       count(Clasificacion) %>% 
       mutate(prctg = n/sum(n)*100) %>% 
+      complete(Clasificacion = c("Buena", "Razonablemente Buena", "Regular", "Desfavorable", 
+                                 "Muy Desfavorable", "Extremadamente Desfavorable", "Sin Datos"), 
+               fill = list(prctg = 0)) %>%
+      ungroup() %>% 
+      arrange(factor(Clasificacion, levels = c("Buena", "Razonablemente Buena",
+                                               "Regular", "Desfavorable",
+                                               "Muy Desfavorable",
+                                               "Extremadamente Desfavorable",
+                                               "Sin Datos")))
+    data %>% 
+      plot_ly(x = ~Estacion, y = ~prctg, type = 'bar',color = ~ factor(Clasificacion),
+              colors = colores, 
+              hoverinfo = 'text',
+              hovertext = ~paste0(round(prctg, 1), "%<br>",
+                                  n, " registros (", Clasificacion,")")) %>% 
+      layout(barmode = "stack",
+             xaxis = list(title = "Estaciones"),
+             yaxis = list(title = "Porcentaje registros sobre el total (%)")) %>% 
+      config(displayModeBar = FALSE)
+  })
+  output$apilados2 <- renderPlotly({
+    shiny::validate(need(input$ID_Estacion2, "Selecciona las estaciones que quieras ver"))
+    data <- datos_diarios_clean %>% 
+      filter(Parametros == input$ID_Calidad2, Estacion %in% input$ID_Estacion2) %>%
+      group_by(Estacion) %>% 
+      count(Clasificacion) %>% 
+      mutate(prctg = n/sum(n)*100) %>% 
       complete(Clasificacion, fill = list(prctg = 0)) %>%
       ungroup() %>% 
       arrange(factor(Clasificacion, levels = c("Buena", "Razonablemente Buena",

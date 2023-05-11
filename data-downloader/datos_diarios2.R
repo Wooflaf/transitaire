@@ -79,7 +79,7 @@ for (parametro in names(lista)) {
     mutate(Clasificacion = ifelse(Parametros == parametro & (Valores > valor[4] & Valores <= valor[5]), vector2[4], Clasificacion)) %>%
     mutate(Clasificacion = ifelse(Parametros == parametro & (Valores > valor[5] & Valores <= valor[6]), vector2[5], Clasificacion)) %>%
     mutate(Clasificacion = ifelse(Parametros == parametro & (Valores > valor[6] & Valores <= valor[7]), vector2[6], Clasificacion)) %>%
-    mutate(Clasificacion = ifelse(Parametros == parametro & is.na(Valores), "Sin datos", Clasificacion))
+    mutate(Clasificacion = ifelse(Parametros == parametro & is.na(Valores), "Sin Datos", Clasificacion))
   
 }
 # assigning the third column name to a new name
@@ -91,7 +91,9 @@ month_levels <- c("Ene", "Feb", "Mar", "Abr",
                   "May", "Jun", "Jul", "Ago",
                   "Sep", "Oct", "Nov", "Dic")
 
-dias_levels <- c("Lunes", "Martes", "Miércoles", "Jueves",
+dias_levels <- c("Lunes", "Martes", "Miercoles", "Jueves",
+                 "Viernes", "Sabado", "Domingo")
+dias_labels <- c("Lunes", "Martes", "Miércoles", "Jueves",
                  "Viernes", "Sábado", "Domingo")
 
 #Creamos nuevas columans con la semana, el año 
@@ -112,7 +114,7 @@ datos_diarios_clean$week <- ceiling(datos_diarios_clean$week / 7)
 #DIARIO
 datos_diarios_clean$dia_sem <- factor(datos_diarios_clean$dia_sem,
                                       levels= dias_levels,
-                                      labels= dias_levels)
+                                      labels= dias_labels)
 
 #Añadimos la información que visualizaremos
 datos_diarios_clean$text <- paste0("Fecha: ", day(datos_diarios_clean$Fecha), " de ",
