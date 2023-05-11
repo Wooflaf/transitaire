@@ -17,13 +17,14 @@ ui <- dashboardPage(
   
   dashboardBody(
     useWaiter(),
+    autoWaiter(id = c("heatmap", "apilados", "tabla"), html = spin_6()),
     waiter_show_on_load(html = waiting_screen, color = "#edf1f5"),
     use_cicerone(),
     styles,
     tabItems(
       tabItem(tabName = "AQ_traffic", AQ_traffic_tab),
       tabItem(tabName = "graficos",
-              h2("Distribución de los contaminantes en valencia"),
+              h2("Visualización de los contaminantes en Valencia"),
               graficos_tab),
       tabItem(tabName = "live", live), 
       tabItem(tabName = "info", h2("Más información"), info_tab),

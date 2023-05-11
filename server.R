@@ -433,113 +433,42 @@ server <- function(input, output, session) {
   # Renderizar el mapa de calor
   output$heatmap <- renderPlotly({
     map <- df() %>% 
-      date_heatmap() 
-    #abs(title = paste("Mapa de calor para"),
-    #fill=paste(input$ID_Calidad2, "(u/mg)"))
+      date_heatmap()
     
     interactive_date_heatmap(map)
   })
   
-  
   #Funcion para crear el grafico de barras apiladas
-
   
   output$apilados <- renderPlotly({
-    shiny::validate(need(input$ID_Estacion2, "Elige una o varias estaciones"))
-    ggplot(datos_diarios_clean %>% 
-             filter(Parametros == input$ID_Calidad2, Estacion %in% input$ID_Estacion2), 
-           aes(x = Estacion, y = Valores, fill = Clasificacion)) +
-      geom_bar(stat = "identity") +
-      labs(x = "Estaciones", y = "Valores", fill = "Clasificación") +
-      scale_fill_manual(values = colores) +
-      theme_minimal()
-  })
-
-  
-  # Funcion para crear el grafico de tarta para varias estaciones y todos los parametros
-  datos_filtrados_todos <- reactive({
-    datos_diarios_clean %>%
-      filter(Estacion %in% input$ID_Estacion2) %>% 
-      filter(Fecha >= input$ID_Fecha2[1] & Fecha <= input$ID_Fecha2[2]) %>%
-      group_by(Clasificacion) %>% 
-      summarise(suma=n()) %>%
-      ungroup()
-  })
-  #Funcion para crear el grafico de tarta para varias estaciones y 1 parametro
-  datos_filtrados1 <- reactive({
-    datos_diarios_clean %>%
-      filter(Estacion %in% input$ID_Estacion2) %>% 
-      filter(Fecha >= input$ID_Fecha2[1] & Fecha <= input$ID_Fecha2[2]) %>%
-      filter(Parametros == input$ID_Calidad2) %>% 
-      group_by(Clasificacion) %>% 
-      summarise(suma=n()) 
-  })
-  
-  #Funcion para crear los 2 graficos de tarta 
-  output$tarta2 <- renderPlotly({
-    shiny::validate(need(input$ID_Estacion2, "Elige una o varias estaciones"))
-    plot_ly(labels = ~Clasificacion, values = ~suma, legendgroup = ~Clasificacion, marker = list(color = colores)) %>%
-      add_pie(data = datos_filtrados1(), name = paste0("Parámetro: \n", input$ID_Calidad2), domain = list(row = 0, column = 0))%>%
-      add_pie(data = datos_filtrados_todos(), name = "General", domain = list(row = 0, column = 1))%>%
-      layout(title = "Pie Charts in Grid", showlegend = T,
-             grid=list(rows=1, columns=2),
-             xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-             yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE)) %>% 
-      add_annotations(x=c(0.05,0.55),
-                      y=0.9,
-                      text = c("Parámetro seleccionado", "General, todos los parámetros"),
-                      xref = "paper",
-                      yref = "paper",
-                      xanchor = "left",
-                      showarrow = FALSE)
-    
-    
-    
-  })
-  
-  output$semanal <- renderPlot({
-    shiny::validate(need(input$ID_Estacion2, "Elige una o varias estaciones"))
-    
-    semana1 <- ggplot(datos_diarios_clean %>% 
-                        filter(Clasificacion == "Muy Desfavorable"|Clasificacion=="Extremadamente Desfavorable") %>% 
-                        filter(Fecha >= input$ID_Fecha2[1] & Fecha <= input$ID_Fecha2[2]) %>%
-                        mutate(dia_sem = factor(dia_sem, levels = c("Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"))) %>% 
-                        group_by(dia_sem) %>% 
-                        summarise(con=n()) %>% 
-                        ungroup(),
-                      aes(dia_sem, con, fill=dia_sem))+
-      geom_col()+
-      coord_polar()+
-      theme(legend.position = "none",
-            axis.text.y = element_blank(),
-            axis.text.x = element_text(size=6),
-            axis.ticks = element_blank())+
-      labs(title="Valores desfavorables para todas las estaciones", x="", y="")
-    
-    
-    semana2 <-  ggplot(datos_diarios_clean %>% 
-                         filter(Clasificacion == "Muy Desfavorable"|Clasificacion=="Extremadamente Desfavorable") %>% 
-                         filter(Fecha >= input$ID_Fecha2[1] & Fecha <= input$ID_Fecha2[2]) %>%
-                         mutate(dia_sem = factor(dia_sem, levels = c("Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"))) %>% 
-                         filter(Estacion %in% input$ID_Estacion2) %>%
-                         group_by(dia_sem) %>% 
-                         summarise(con=n()) %>% 
-                         ungroup(),
-                       aes(dia_sem, con, fill=dia_sem))+
-      geom_col()+
-      coord_polar()+
-      theme(legend.position = "none",
-            axis.text.y = element_blank(),
-            axis.text.x = element_text(size=6),
-            axis.ticks = element_blank())+
-      labs(title="Valores desfavorables para cada estacion seleccionada", x="", y="")
-    
-    
-    # Envolver los gráficos con patchwork
-    pw <- wrap_plots(semana1, semana2, ncol = 2)
-    
-    pw
-    
+    shiny::validate(need(input$ID_Estacion2, "Selecciona las estaciones que quieras ver"))
+    data <- datos_diarios_clean %>% 
+      filter(Parametros == input$ID_Calidad2, Estacion %in% input$ID_Estacion2) %>%
+      group_by(Estacion) %>% 
+      count(Clasificacion) %>% 
+      mutate(prctg = n/sum(n)*100) %>% 
+      complete(Clasificacion, fill = list(prctg = 0)) %>%
+      ungroup() %>% 
+      arrange(factor(Clasificacion, levels = c("Buena", "Razonablemente Buena",
+                                               "Regular", "Desfavorable",
+                                               "Muy Desfavorable",
+                                               "Extremadamente Desfavorable",
+                                               "Sin Datos"))) %>%
+      mutate(color = case_when(Clasificacion == "Buena" ~ "#72ae27",
+                               Clasificacion == "Razonablemente Buena" ~ "#37a4d7",
+                               Clasificacion == "Regular" ~ "#f49631",
+                               Clasificacion == "Desfavorable" ~ "#d43f2b",
+                               Clasificacion == "Muy Desfavorable" ~ "#9c3035",
+                               Clasificacion == "Extremadamente Desfavorable" ~ "#d253b8",
+                               Clasificacion == "Sin Datos" ~ "#303131"))
+    data %>% 
+      plot_ly(x = ~Estacion, y = ~prctg, type = 'bar',
+              marker = list(color = ~color), hoverinfo = 'text',
+              hovertext = ~paste0(round(prctg, 1), "%<br>",
+                                  n, " registros (", Clasificacion,")")) %>% 
+      layout(barmode = "stack",
+             xaxis = list(title = "Estaciones"),
+             yaxis = list(title = "Porcentaje registros sobre el total (%)"))
   })
   
   #Datos filtrados para la pestaña de tabla
@@ -578,7 +507,7 @@ server <- function(input, output, session) {
   
   # tabla 2 parte información
   output$tabla2 <- renderText({
-    tabla  %>% kable(caption = "(Si queremos poner titulo a la tabla)") %>% kable_styling() %>%
+    tabla  %>% kable(caption = "Tabla de clasificación") %>% kable_styling() %>%
       column_spec(2, color = "white", background = "#72ae27") %>%
       column_spec(3, color = "white", background = "#37a4d7") %>%
       column_spec(4, color = "white", background = "#f49631") %>%

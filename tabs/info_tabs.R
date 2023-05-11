@@ -7,7 +7,7 @@ info_tab <- fluidPage(
             por la ciudad y de cinco de los más relevantes contaminantes 
             del aire. Todo ha sido gracias a los datos recogidos en el portal 
             dela pagina web de datos abiertos de Valencia desde el año 2004 hasta el año 2022.
-            Los parametros a evaluar son:"),
+            Los parámetros a evaluar son:"),
            p("    •	El dióxido de azufre (SO2), es un gas reactivo incoloro, se produce cuando se 
             queman combustibles que contienen azufre, como el carbón y el petróleo. Con 
             una exposición muy breve de SO2 puede causar estrechamiento de las vías respiratorias."),
@@ -87,7 +87,7 @@ salud_tab <- fluidPage(
 
 consejos_tab <- fluidPage(
   tabPanel("CONSEJOS",
-           h2("Politicas para reducir la contaminación en el aire."),
+           h2("Políticas para reducir la contaminación en el aire."),
            p("Tomar medidas contra la contaminación del aire, que es el segundo factor de riesgo para las 
                      enfermedades no transmisibles, es crucial para proteger la salud pública."),
            p("La mayoría de las fuentes de contaminación del aire exterior están más allá del control de las personas, 
