@@ -20,6 +20,9 @@ library(patchwork) # Version 1.1.2
 # Cargamos los datos
 source("./data_cleaning/AQ_EU_clean.R", local = TRUE, encoding = "UTF-8")
 source("./data_cleaning/trafico_clean.R", local = TRUE, encoding = "UTF-8")
+load("./data/datos_diarios.RData")
+load("./data/datos_diarios_clean.RData")
+tabla <- read_delim("data/tabla.csv", delim = ";")
 
 # Definimos las paletas de colores
 source("./functions/styling.R", local = TRUE, encoding = "UTF-8")
@@ -37,11 +40,6 @@ source("./tabs/live.R", local = TRUE, encoding = "UTF-8")
 source("./tabs/info_tabs.R", local = TRUE, encoding = "UTF-8")
 
 ####### PARTE SANDRA, WILSON, GEMA
-load("./data/datos_diarios.RData")
-load("./data/datos_diarios_clean.RData")
-tabla <- read_delim("data/tabla.csv", delim = ";")
-
-##########
 #Funcion para crear el grafico de barras apiladas
 colores <- c("Buena" = "#72ae27",
              "Razonablemente Buena" = "#37a4d7",
@@ -67,4 +65,7 @@ interactive_date_heatmap <- function(p){
     config(displayModeBar = FALSE)
 }
 
-buffer_est <- read_sf("./qgis/buffer_estaciones/buffer_estaciones_bueno.shp")
+pob_afectada <- read.csv("./qgis/pob_afectada_estaciones/pob_afectada_estaciones.csv") %>% 
+  mutate(objectid = as.character(objectid))
+buffer_est <- read_sf("./qgis/buffer_estaciones/buffer_estaciones_bueno.shp") %>% 
+  left_join(pob_afectada, by = "objectid")

@@ -10,7 +10,9 @@ live <- fluidRow(
                  HTML("Esta visualización es muy similar a la principal. Aunque
                  esta también permite ver la calidad del aire en Valencia y su relación
                  con el estado del tráfico, no podemos avanzar en el tiempo. Porque estamos
-                 viendo los datos <i>en tiempo real</i>.<br><br>Los datos se 
+                 viendo los datos <i>en tiempo real</i>.<br><br>A diferencia de la primera,
+                 en esta se muestra un área alrededor de cada estación donde, si pasamos
+                 el ratón por encima, nos indica una estimación de la población afectada.<br><br>Los datos se 
                  actualizan automáticamente cada 3 minutos.*
                         ")
                )

@@ -289,7 +289,10 @@ server <- function(input, output, session) {
     leaflet(options = leafletOptions(minZoom = 13, maxZoom = 16, zoomSnap = 0.1)) %>%
       addPolylines(data = tramos_trafico, layerId = ~as.character(gid), label = ~denominacion) %>% 
       addAwesomeMarkers(data = estaciones, layerId = ~as.character(objectid)) %>% 
-      addPolygons(data = buffer_est, layerId = ~as.character(objectid)) %>% 
+      addPolygons(data = buffer_est, layerId = ~as.character(objectid),
+                  label = ~paste("Estimación de población afectada:",
+                                 format(round(pob_total_, -2), big.mark = ".", decimal.mark = ","), "personas"),
+                  labelOptions = labelOptions(textsize = "13px")) %>%
       setView(lng = "-0.36139126257400377", lat = "39.469993930673834",  zoom = 13.6) %>%
       setMaxBounds(lng1 = "-0.5017152868950778", lat1 = "39.55050724348406",
                    lng2 = "-0.24762442378004983", lat2 = "39.389409229115124") %>%
