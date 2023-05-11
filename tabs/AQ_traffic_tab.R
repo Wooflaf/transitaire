@@ -33,7 +33,8 @@ AQ_traffic_tab <- fluidRow(
            box(
              title = textOutput("station_stats"),
              width = NULL, solidHeader = F,
-             plotlyOutput("est_plotly", height = 300)
+             plotlyOutput("est_plotly", height = 300),
+             HTML("Estadísticas calculadas para todos los registros, del 2 al 10 de mayo")
            )
          ),
          div(style="display:inline-block",
