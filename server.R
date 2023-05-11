@@ -125,9 +125,6 @@ server <- function(input, output, session) {
                       dashArray = ~ifelse(grepl("(?i)paso inferior", estado), "10,15", ""),
                       data = traffic_data())
     }
-    
-    # Cuando se carguen inicialmente en el leaflet, ocultamos la pantalla de carga
-    waiter_hide()
   })
   
   ### Cambio de cartogrfía clara/oscura en función de la hora
@@ -372,6 +369,9 @@ server <- function(input, output, session) {
                     color = ~colores[calidad_ambiental],
                     fillColor = ~colores[calidad_ambiental],
                     data = air_data_live())
+    
+    # Cuando se carguen inicialmente en el leaflet, ocultamos la pantalla de carga
+    waiter_hide()
   })
   
   ### Cambio de cartografía clara/oscura en función de la hora
