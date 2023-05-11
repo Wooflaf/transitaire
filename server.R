@@ -480,8 +480,10 @@ server <- function(input, output, session) {
   #Datos filtrados para la pestaña de tabla
   datos_filtrados3 <- reactive({
     datos_diarios_clean %>% 
-      filter(Fecha >= "2019-02-06" & Fecha <= "2019-02-09", #Fecha >= input$ID_Fecha3[1] & Fecha <= input$ID_Fecha3[2]
-             Estacion %in% input$ID_Estacion3, Parametros %in% input$ID_Calidad3)  
+      filter(Fecha >= input$ID_Fecha3[1] & Fecha <= input$ID_Fecha3[2],
+             Estacion %in% input$ID_Estacion3, Parametros %in% input$ID_Calidad3) %>%
+      select(Estacion, Fecha, month, dia_sem, Parametros, Valores, Clasificacion) %>% 
+      rename(Mes = month, Dia_semana = dia_sem, Parametro = Parametros, Valor = Valores)
   })
   
   #Muestra la tabla interactiva
@@ -492,18 +494,18 @@ server <- function(input, output, session) {
       datos_filtrados3(), rownames = FALSE,
       extensions = 'Buttons',
       options = list(
-        dom = "Bfrtip",
+        dom = "Blfrtip",
         buttons = c('copy', 'csv', 'excel', 'pdf'),
         pageLength = 10,
-        lengthMenu = c(5, 10, 50, 100),
-        paging = FALSE,
+        lengthMenu = list(c(10, 50, 100, 200, -1), c('10', '50', '100', '200', 'All')),
+        paging = TRUE,
         searching = TRUE,
         fixedColumns = FALSE,
         autoWidth = TRUE,
         ordering = TRUE,
         initComplete = JS(
           "function(settings, json) {",
-          "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});",
+          "$(this.api().table().header()).css({'background-color': '#50ace3', 'color': '#000'});",
           "}"
         )
       )

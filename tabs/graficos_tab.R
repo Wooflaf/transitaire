@@ -61,7 +61,7 @@ graficos_tab <- fluidPage(
                              unique(datos_diarios$Estacion),multiple = TRUE),
                  dateRangeInput("ID_Fecha3",
                                 "Selecciona las fechas",
-                                start = min(datos_diarios$Fecha), end = max(datos_diarios$Fecha), min = min(datos_diarios$Fecha),
+                                start = "2020-01-01", end = max(datos_diarios$Fecha), min = min(datos_diarios$Fecha),
                                 max = max(datos_diarios$Fecha), format = "yyyy-mm-dd", weekstart = 1,
                                 language = "es", separator = "hasta"),
                  selectInput("ID_Calidad3",
