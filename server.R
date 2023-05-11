@@ -93,6 +93,7 @@ server <- function(input, output, session) {
   
   # Cuando cambien los datos de estaciones, eliminar los marcadores antiguos y cargar los actualizados
   observeEvent(air_data(), {
+    
     leafletProxy("map") %>%
       clearMarkers() %>% 
       addAwesomeMarkers(data = air_data(), layerId = ~objectid,
@@ -288,6 +289,7 @@ server <- function(input, output, session) {
     leaflet(options = leafletOptions(minZoom = 13, maxZoom = 16, zoomSnap = 0.1)) %>%
       addPolylines(data = tramos_trafico, layerId = ~as.character(gid), label = ~denominacion) %>% 
       addAwesomeMarkers(data = estaciones, layerId = ~as.character(objectid)) %>% 
+      addPolygons(data = buffer_est, layerId = ~as.character(objectid)) %>% 
       setView(lng = "-0.36139126257400377", lat = "39.469993930673834",  zoom = 13.6) %>%
       setMaxBounds(lng1 = "-0.5017152868950778", lat1 = "39.55050724348406",
                    lng2 = "-0.24762442378004983", lat2 = "39.389409229115124") %>%
@@ -362,7 +364,11 @@ server <- function(input, output, session) {
       setShapeStyle(layerId = ~gid,
                     color = ~pal_trafico(estado),
                     dashArray = ~ifelse(grepl("(?i)paso inferior", estado), "10,15", ""),
-                    data = traffic_data_live())
+                    data = traffic_data_live()) %>% 
+      setShapeStyle(layerId = ~objectid,
+                    color = ~colores[calidad_ambiental],
+                    fillColor = ~colores[calidad_ambiental],
+                    data = air_data_live())
   })
   
   ### Cambio de cartografía clara/oscura en función de la hora

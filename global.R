@@ -66,3 +66,5 @@ interactive_date_heatmap <- function(p){
   ggplotly(p, tooltip = "text") %>% 
     config(displayModeBar = FALSE)
 }
+
+buffer_est <- read_sf("./qgis/buffer_estaciones/buffer_estaciones_bueno.shp")
