@@ -17,7 +17,12 @@ ui <- dashboardPage(
   
   dashboardBody(
     useWaiter(),
-    autoWaiter(id = c("heatmap", "apilados", "tabla"), html = spin_6()),
+    autoWaiter(id = c("heatmap"),
+               html = div(style = "color: #37a4d7;",
+                          spin_loaders(14, color = "#3d8cbc"),
+                          br(), br(),
+                          h4("Cargando...")),
+               color = "#ecf0f5"),
     waiter_show_on_load(html = waiting_screen, color = "#edf1f5"),
     use_cicerone(),
     styles,
