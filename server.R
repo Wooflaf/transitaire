@@ -16,7 +16,7 @@ server <- function(input, output, session) {
   
   # Renderizar fecha y hora en mapa cambiando el color acorde a la hora
   output$fecha <- renderUI({
-    fecha <- str_to_sentence(format(datetime(), format = "%A, %e de %B de %Y %H:%M"))
+    fecha <- format_datetime(datetime())
     if (is_daylight(datetime())) {
       fecha_color <- p(fecha, style = "color: #000000")
     }
@@ -241,7 +241,7 @@ server <- function(input, output, session) {
   
   now <- reactive({
     invalidateLater(millis = 1000*1, session) # Refresh cada segundo de la hora
-    return(Sys.time()) 
+    return(with_tz(as.POSIXct(Sys.time(), tz = "UTC"), tzone = "Europe/Madrid")) 
   })
   
   # Variable reactiva que sirve para notificar de si hay que actualizar los datos
@@ -259,13 +259,13 @@ server <- function(input, output, session) {
   # Variable reactiva para tener el valor de la hora en que se ha actualizado
   reload_time <- reactive({
     reload()
-    return(Sys.time())
+    return(with_tz(as.POSIXct(Sys.time(), tz = "UTC"), tzone = "Europe/Madrid"))
   })
   
   # Fecha actual que cambia de color en base a la hora
   output$fecha_live <- renderUI({
     
-    fecha <- str_to_sentence(format(now(), format = "%A, %e de %B de %Y %H:%M:%S"))
+    fecha <- format_datetime(now(), include_sec = T)
     if (is_daylight(now())) {
       fecha_color <- p(fecha, style = "color: #000000")
     }
@@ -277,7 +277,7 @@ server <- function(input, output, session) {
   
   # Fecha de la última actualización de los datos
   output$last_update <- renderText({
-    fecha_reload <- str_to_sentence(format(reload_time(), format = "%A, %e de %B de %Y %H:%M"))
+    fecha_reload <- format_datetime(reload_time())
     return(str_c("*Última actualización: ", fecha_reload))
   })
   

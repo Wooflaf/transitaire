@@ -12,10 +12,8 @@ library(leaflegend) # Version 1.10
 library(plotly) # Version 4.10.1
 library(waiter) # Version 0.2.5
 library(cicerone) # Version 1.0.4
-library(shinyjs) # Version 2.1.0
 library(DT) # Version 0.27
 library(kableExtra) # Version 1.3.4
-library(patchwork) # Version 1.1.2
 
 # Cargamos los datos
 source("./data_cleaning/AQ_EU_clean.R", local = TRUE, encoding = "UTF-8")
