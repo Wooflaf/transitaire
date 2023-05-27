@@ -22,14 +22,14 @@ load("./data/datos_diarios.RData")
 load("./data/datos_diarios_clean.RData")
 tabla <- read_delim("data/tabla.csv", delim = ";")
 
-# Definimos las paletas de colores
+# Cargamos otras funciones
+source("./functions/others.R", local = TRUE, encoding = "UTF-8")
+
+# Definimos diferentes funciones y variables para definir estilos/elementos
 source("./functions/styling.R", local = TRUE, encoding = "UTF-8")
 
 # Cargamos las funciones para poder aplicar estilos dinámicamente en leaflet
 source("./functions/leaflet_dynamic_style.R", local = TRUE, encoding = "UTF-8")
-
-# Cargamos otras funciones
-source("./functions/others.R", local = TRUE, encoding = "UTF-8")
 
 # Cargamos las tabs
 source("./tabs/AQ_traffic_tab.R", local = TRUE, encoding = "UTF-8")
