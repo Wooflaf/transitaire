@@ -1,6 +1,8 @@
 ui <- dashboardPage(
+  title = "VLC TrànsitAire",
   options = list(sidebarExpandOnHover = TRUE),
-  dashboardHeader(title = "Valencia AQ"),
+  dashboardHeader(title = div(icon("cloud"), "VLC TrànsitAire"),
+                  dropdownMenu_contact, dropdownMenu_share),
   
   dashboardSidebar(
     collapsed = TRUE,
@@ -8,11 +10,16 @@ ui <- dashboardPage(
       id = "tabs",
       menuItem("Tráfico y calidad del aire", tabName = "AQ_traffic", icon = icon("car-side", class = "fa-lg")),
       menuItem("Gráficos", tabName = "graficos", icon = icon("chart-column", class = "fa-lg")),
-      menuItem("Live", tabName = "live", icon = icon("refresh", class = "fa-duotone fa-compass fa-spin fa-lg")), 
+      menuItem("En directo", tabName = "live",
+               icon = icon("refresh",
+                           class = "fa-solid fa-circle fa-fade fa-lg",
+                           style = "color: #e14747;")
+               ),
       menuItem("Información", tabName = "info", icon = icon("circle-info", class = "fa-lg"),
                menuSubItem("Más Información", tabName = "info"),
                menuSubItem("Salud", tabName = "salud"),
-               menuSubItem("Consejos", tabName = "consejos"))
+               menuSubItem("Consejos", tabName = "consejos"),
+               menuSubItem("Obtención de datos", tabName = "datos"))
     )),
   
   dashboardBody(
@@ -34,7 +41,8 @@ ui <- dashboardPage(
       tabItem(tabName = "live", live), 
       tabItem(tabName = "info", h2("Más información"), info_tab),
       tabItem(tabName = "salud", h2("Salud"), salud_tab),
-      tabItem(tabName = "consejos", h2("Consejos"), consejos_tab)
+      tabItem(tabName = "consejos", h2("Consejos"), consejos_tab),
+      tabItem(tabName = "datos", h2("Obtención de datos"), datos_tab)
     )
   )
 )

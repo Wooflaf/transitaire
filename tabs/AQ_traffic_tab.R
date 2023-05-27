@@ -16,7 +16,7 @@ AQ_traffic_tab <- fluidRow(
          ),
          div(
            id = "box-var",
-           box(title = "Variable a visualizar",
+           box(title = "Contaminante a visualizar",
                width = NULL, solidHeader = F,
                selectInput("var", NULL, 
                            choices = c("Índice de Calidad del Aire" = "AQ_index_all",

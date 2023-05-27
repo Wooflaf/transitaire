@@ -4,10 +4,8 @@ info_tab <- fluidPage(
           la calidad del aire de la ciudad de Valencia según los 
             datos publicados por las estaciones de monitoreo en la ciudad."),
            p("Para ello, se han tenido en cuenta once estaciones distribuidas 
-            por la ciudad y de cinco de los más relevantes contaminantes 
-            del aire. Todo ha sido gracias a los datos recogidos en el portal 
-            dela pagina web de datos abiertos de Valencia desde el año 2004 hasta el año 2022.
-            Los parámetros a evaluar son:"),
+            por la ciudad y cinco contaminantes 
+            del aire relevantes:"),
            p("    •	El dióxido de azufre (SO2), es un gas reactivo incoloro, se produce cuando se 
             queman combustibles que contienen azufre, como el carbón y el petróleo. Con 
             una exposición muy breve de SO2 puede causar estrechamiento de las vías respiratorias."),
@@ -15,12 +13,12 @@ info_tab <- fluidPage(
             de combustión a altas temperaturas, como en los vehículos motorizados y las plantas eléctricas. La exposición 
             al NO2 provoca efectos respiratorios adversos."),
            p("    •	El monóxido de carbono (CO) es un gas inodoro e incoloro que se forma cuando el carbono 
-            de los combustibles no se quema por completo. El monóxido de carbono ingresa al torrente 
+            de los combustibles no se quema por completo. El CO ingresa al torrente 
             sanguíneo a través de los pulmones y reduce la cantidad de oxígeno en sangre."),
            p("    •	Las Particulate matter (PM) son partículas que se encuentran en el aire, incluido el 
-            polvo, la suciedad, el hollín, el humo y las gotitas de líquido. Y son altamente peligrosas 
-            debido a que pueden alojarse profundamente en los pulmones por su pequeño tamaño"),
-           p("Todas estos parametros estan registrados bajo la misma unidad de medida, µm."),
+            polvo, la suciedad, el hollín y el humo. Son altamente peligrosas 
+            debido a que pueden alojarse profundamente en los pulmones por su pequeño tamaño."),
+           p("Todas estos contaminantes estan registrados bajo la misma unidad de medida, µm/m3."),
            p("Para más información sobre los tipos de contaminantes y sus efectos en la salud, visita la página de la", 
              a("Organización Mundial de la Salud (OMS)", 
                href = "https://www.who.int/teams/environment-climate-change-and-health/air-quality-and-health/health-impacts/types-of-pollutants"),"."),
@@ -86,7 +84,7 @@ salud_tab <- fluidPage(
 )
 
 consejos_tab <- fluidPage(
-  tabPanel("CONSEJOS",
+  tabPanel("Consejos",
            h2("Políticas para reducir la contaminación en el aire."),
            p("Tomar medidas contra la contaminación del aire, que es el segundo factor de riesgo para las 
                      enfermedades no transmisibles, es crucial para proteger la salud pública."),
@@ -94,33 +92,59 @@ consejos_tab <- fluidPage(
                    lo que requiere la adopción de medidas concertadas por parte de las instancias normativas locales, nacionales 
                    y regionales que trabajan en sectores tales como el de la energía, el transporte, la gestión de desechos,
                    la planificación urbana y la agricultura."),
-           p("Estos son algunos ejemplos de medidas posibles para mejorar:"),
            p("Existen numerosos ejemplos de políticas que han obtenido buenos resultados en la reducción de la contaminación del aire:"),
            
-           p(" •	En la",strong("industria"), ": utilización de tecnologías limpias que reducen las emisiones de las chimeneas industriales; gestión 
+           p(" •	En la",strong("industria:"), "utilización de tecnologías limpias que reducen las emisiones de las chimeneas industriales; gestión 
                    mejorada de desechos urbanos y agrícolas, incluida la recuperación del gas metano de los vertederos como una alternativa 
-                   a la incineración (para utilizarlo como biogás"),
-           p(" •	En el ",strong("sector de la energía"),": garantizar el acceso a soluciones asequibles de energía doméstica no contaminante para cocinar, 
+                   a la incineración (para utilizarlo como biogás)"),
+           p(" •	En el ",strong("sector de la energía:"),"garantizar el acceso a soluciones asequibles de energía doméstica no contaminante para cocinar, 
                    generar calor y alumbrar."),
-           p(" •	En el ",strong("transporte"),": adopción de métodos limpios de generación de electricidad; priorización del transporte urbano rápido, 
+           p(" •	En el ",strong("transporte:"),": adopción de métodos limpios de generación de electricidad; priorización del transporte urbano rápido, 
                    las sendas peatonales y los carriles para bicicletas en las ciudades, así como el transporte interurbano de cargas y 
                    pasajeros por ferrocarril; utilización de vehículos pesados de motor diésel más limpios y vehículos y combustibles 
                    de bajas emisiones, especialmente combustibles con bajo contenido de azufre"),
-           p(" •	En la ",strong("planificación urbana"),": mejoramiento de la eficiencia energética de los edificios y promoción de ciudades más 
+           p(" •	En la ",strong("planificación urbana:"),"mejoramiento de la eficiencia energética de los edificios y promoción de ciudades más 
                    compactas y con más zonas verdes para lograr una mayor eficiencia"),
-           p(" •	En la ",strong("generación de electricidad"),": aumento del uso de combustibles de bajas emisiones y fuentes de energía renovable 
+           p(" •	En la ",strong("generación de electricidad:"),"aumento del uso de combustibles de bajas emisiones y fuentes de energía renovable 
                    sin combustión (solar, eólica o hidroeléctrica); generación conjunta de calor y electricidad; y generación distribuida 
                    de energía (por ejemplo, generación de electricidad mediante redes pequeñas y paneles solares"),
-           p(" •	En la ",strong("gestión de desechos municipales y agrícolas"),": estrategias de reducción, separación, reciclado y reutilización o 
+           p(" •	En la ",strong("gestión de desechos municipales y agrícolas:"),"estrategias de reducción, separación, reciclado y reutilización o 
                    reelaboración de desechos, así como métodos mejorados de gestión biológica de desechos tales como la digestión anaeróbica 
                    para producir biogás, que constituyen alternativas viables y de bajo costo a la incineración de desechos sólidos; cuando 
                    no se pueda evitar la incineración, será crucial la utilización de tecnologías de combustión con rigurosos controles de emisión"),
-           p(" •	En las ",strong("actividades de atención de la salud"),": situar los servicios de salud en la vía del desarrollo con bajas emisiones de 
+           p(" •	En las ",strong("actividades de atención de la salud:"),"situar los servicios de salud en la vía del desarrollo con bajas emisiones de 
                    carbono puede contribuir a una prestación de servicios más resiliente y costoeficaz, además de reducir los riesgos medioambientales
                    para la salud de los pacientes, los trabajadores de la salud y la comunidad. Al apoyar políticas inocuas para el clima, el sector 
                    de la salud puede hacer gala de liderazgo público y a la vez mejorar la prestación de los servicios de salud."),
            p("Para más información, visita la página de la", 
              a("Organización Mundial de la Salud (OMS)", 
                href = "https://www.who.int/es/news-room/fact-sheets/detail/ambient-(outdoor)-air-quality-and-health"), "."),
+  )
+)
+
+datos_tab <- fluidPage(
+  tabPanel("Obtención de datos",
+           h2("Datos de tráfico"),
+           HTML("<p>Los datos del estado del tráfico los hemos obtenido a partir del
+           <a href = 'https://valencia.opendatasoft.com/explore/dataset/estat-transit-temps-real-estado-trafico-tiempo-real/'>conjunto de datos del estado del tráfico</a> del
+           <a href = 'https://valencia.opendatasoft.com/pages/home/'>Portal de Datos Abiertos del Ayuntamiento de Valencia</a>.
+           El problema para acceder a estos datos es que solo aparecen en tiempo real en la página web sin opción de acceder al hisórico;
+           se actualizan cada 3 minutos. Eso complica el uso de los mismos, ya que hace que no sea posible ver su evolución temporal.
+           Para solucionar este problema hemos automatizado su descarga y almacenamiento a través de un servidor en la nube (mediante Google Cloud).
+           La descarga se realiza cada hora todos los días y esto nos ha permitido poder tener un histórico reducido de los datos
+           (apenas 1 semana, entre el 2 y 10 de mayo). Así es como hemos podido obtener los datos para posteriormente poder visualizar
+           la evolución del tráfico en distintos días y momentos.</p>"),
+           h2("Datos de contaminación del aire"),
+           HTML("<p>Hemos obtenido 
+           <a href = 'https://valencia.opendatasoft.com/explore/dataset/rvvcca/table/'>datos de calidad del aire</a> a partir del
+           <a href = 'https://valencia.opendatasoft.com/pages/home/'>Portal de Datos Abiertos del Ayuntamiento de Valencia</a>.
+           De esta fuente hemos conseguido los datos diarios de calidad aire 2004-2022 en la ciudad de Valencia, así como
+           los datos georreferenciados de las estaciones de medida de la contaminación atmosférica
+           <br>
+           Sin embargo, para mejorar la calidad de nuestros datos hemos decidido también usar
+           <a href = 'https://discomap.eea.europa.eu/map/fme/AirQualityExport.htm'>datos provenientes de la Unión Europea</a>.
+           Esto se debe a que en esta fuente podemos obtener los datos por horas de las estaciones hasta dos días antes del día
+           de nuestra petición y, además, algunos valores faltantes están ya imputados mediante algoritmos más sofisticados de
+           lo que nosotros podríamos llegar a realizar.</p>")
   )
 )

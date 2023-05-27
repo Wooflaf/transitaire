@@ -217,13 +217,63 @@ guide <- Cicerone$
     el = "#sidebarItemExpanded > ul > li.treeview > a",
     title = "Información",
     description = "Información sobre los diferentes contaminantes, el riesgo que conllevan
-    para la salud, así como unos consejos finales para reducir este tipo de contaminación.",
+    para la salud, consejos para reducir este tipo de contaminación y, finalmente, cómo se han obtenido los datos.",
     is_id = FALSE,
     on_next = "function(){
     var body = document.body
     body.classList.add('sidebar-collapse')
     }",
     position = "right-center"
+  )
+
+### Dropdown Menus (contact and share)
+
+web_url <- "https%3A%2F%2Folafmeneses.shinyapps.io%2Ftransitaire%2F"
+share_text <- "VLC%20Tr%C3%A0nsitAire%F0%9F%8C%8D%F0%9F%9A%A6Una%20herramienta%20que%20ofrece%20una%20bella%20visualizaci%C3%B3n%20de%20la%20relaci%C3%B3n%20entre%20el%20tr%C3%A1fico%20y%20la%20calidad%20del%20aire%20en%20Valencia%20%2F%20A%20tool%20that%20beautifully%20visualizes%20the%20relationship%20between%20traffic%20and%20air%20quality%20in%20Valencia%F0%9F%9A%97%F0%9F%92%A8%20%23VLC%20%23Tr%C3%A0nsitAire"
+
+dropdownMenu_contact <- 
+  dropdownMenuCustom(type = 'message', icon = icon('comment'),
+                     customSentence = customSentence,
+                     messageItem(
+                       from = "menesesolaf@gmail.com", icon = icon("envelope"),
+                       message =  "", href = "mailto:menesesolaf@gmail.com"
+                     )
+  )
+
+dropdownMenu_share <- 
+  dropdownMenuCustom(type = 'message',
+                     customSentence = customSentence_share,
+                     icon = icon("share-alt"),
+                     messageItem(
+                       from = 'Twitter',
+                       message = "",
+                       icon = icon("twitter"),
+                       href = paste0("https://twitter.com/intent/tweet?url=", web_url, "&text=", share_text)
+                     ),
+                     messageItem(
+                       from = 'Facebook',          
+                       message = "",
+                       icon = icon("facebook"),
+                       href = paste0("https://www.facebook.com/sharer/sharer.php?u=", web_url)
+                     ),
+                     messageItem(
+                       from = 'WhatsApp',          
+                       message = "",
+                       icon = icon("whatsapp"),
+                       href = paste0("https://api.whatsapp.com/send?text=", share_text, "%20", web_url)
+                     ),
+                     messageItem(
+                       from = 'LinkedIn',
+                       message = "",
+                       icon = icon("linkedin"),
+                       href = paste0("http://www.linkedin.com/sharing/share-offsite/?url=", web_url)
+                     ),
+                     messageItem(
+                       from = 'Pinterest',
+                       message = "",
+                       icon = icon("pinterest"),
+                       href = paste0("http://pinterest.com/pin/create/link/?url=", web_url)
+                     )
   )
 
 ### Custom styles for classes
@@ -271,6 +321,10 @@ styles <- tags$head(
             height: 10%;
             width: 50%;
             font-size: 16px;
+      }
+      body {
+            font-size: 16px;
+            text-align: justify;
       }
       "
     )
